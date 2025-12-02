@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Components/Home";
+import UserState from "./Contexts/userState";
 
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home/>} />
-    </Routes>
+    <UserState>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+      </Routes>
+    </UserState>
     </BrowserRouter>
   )
 }
