@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                      // Good for Node 18–22
+    "module": "CommonJS",                    // Most stable for Express
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "strict": true,
+
+    "esModuleInterop": true,                 // Allows default imports (common in Express)
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    "moduleResolution": "node",
+
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+
+    "types": ["node"],                       // Important for backend typings
+    "sourceMap": true                        // Helps debugging
+  },
+
+  "include": ["src"],                         // Compile only your src folder
+  "exclude": ["node_modules", "dist"]
+}
