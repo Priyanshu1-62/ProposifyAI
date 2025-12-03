@@ -5,7 +5,7 @@ import { TbLayoutSidebarRightCollapseFilled, TbLayoutSidebarLeftCollapseFilled }
 function Navbar() {
   const { sidebar, setSidebar } = useContext(userContext)!;
   return (
-    <div className="flex justify-between h-[6.6vh] px-4 py-2 border border-b-gray-400">
+    <div className="flex justify-between items-center h-[6.6vh] px-4 border border-b-gray-300">
         <span>
             {sidebar && <button className="text-2xl text-gray-600 cursor-pointer" onClick={()=>{setSidebar(prev => !prev)}}><TbLayoutSidebarLeftCollapseFilled/></button>}
             {!sidebar && <button className="text-2xl text-gray-600 cursor-pointer" onClick={()=>{setSidebar(prev => !prev)}}><TbLayoutSidebarRightCollapseFilled/></button>}
