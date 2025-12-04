@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Schema, to store all users together in one table
+model User {
+  id                 String    @id @default(uuid())
+  name               String
+  email              String    @unique
+  password           String // hashed
+  plan               String // free, pro
+  subscriptionExpiry DateTime?
+  isSubscribed       Boolean?  @default(false)
+
+  respondentGroups RespondentGroup[]
+  requests         Request[]
+}
+
+// Respondent group Schema, to store all groups' enitity together in one table
+model RespondentGroup {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  respondents Respondent[]
+  requests    Request[]
+}
+
+// Respondent Schema, to store all respondents together in one table
+model Respondent {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  createdAt DateTime @default(now())
+
+  groupId String
+  group   RespondentGroup @relation(fields: [groupId], references: [id])
+
+  responses RespondentResponse[]
+}
+
+// Request Schema, to store all requests together in one table
+model Request {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  aiSummary   String?
+  aiModel     String?
+  status      String   @default("pending")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  respondentGroupId String
+  respondentGroup   RespondentGroup @relation(fields: [respondentGroupId], references: [id])
+
+  responses RespondentResponse[]
+}
+
+// Response schema, to store all responses together in one table
+model RespondentResponse {
+  id             String   @id @default(uuid())
+  responseText   String
+  aiSummary      String?
+  aiModel        String?
+  scoreBreakDown Json?
+  totalScore     Int?
+  createdAt      DateTime @default(now())
+
+  respondentId String
+  respondent   Respondent @relation(fields: [respondentId], references: [id])
+
+  requestId String
+  request   Request @relation(fields: [requestId], references: [id])
+}
