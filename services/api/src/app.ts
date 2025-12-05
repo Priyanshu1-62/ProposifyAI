@@ -19,9 +19,9 @@ app.use("/api/respondents", respondentRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/responses", responseRoutes);
 
-// default test route
+
 app.get('/', (req, res) => {
-  res.send('ProposifyAI API running...');
+  res.send('ProposifyAI API is Live...');
 });
 
 export default app;

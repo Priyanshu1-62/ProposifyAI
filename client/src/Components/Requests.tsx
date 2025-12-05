@@ -3,12 +3,12 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Optionbar from "./Optionbar";
 import userContext from "../Contexts/userContext";
-import { FcIdea } from "react-icons/fc";
+import { FcMindMap } from "react-icons/fc";
 import { MdNavigateNext } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 
-function ReqTitle() {
+function Requests() {
   const navigate = useNavigate();
   const { reqData, setReqData } = useContext(userContext)!;
   return (
@@ -17,7 +17,7 @@ function ReqTitle() {
     <div className="flex">
       <Sidebar />
       <div className="grow mt-14">
-        <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
+        <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><FcMindMap/> Requests</h2>
         <Optionbar />
         <div className="flex justify-between items-center px-16 text-sm">
           <p>Add a Title</p>
@@ -32,4 +32,4 @@ function ReqTitle() {
   )
 }
 
-export default ReqTitle
+export default Requests
