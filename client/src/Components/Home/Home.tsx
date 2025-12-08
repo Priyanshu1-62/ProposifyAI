@@ -1,6 +1,6 @@
 // import { useContext } from 'react';
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import Navbar from "../UtilityBars/Navbar";
+import Sidebar from "../UtilityBars/Sidebar";
 // import userContext from "../Contexts/userContext";
 
 function Home() {

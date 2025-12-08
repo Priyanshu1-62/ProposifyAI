@@ -3,6 +3,7 @@ import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
 
 const router = Router();
+const superuserId = process.env.SUPERUSER_ID!;
 
 router.get('/getGroup/:groupId', async (req: Request, res: Response) => {
     try {
@@ -12,16 +13,19 @@ router.get('/getGroup/:groupId', async (req: Request, res: Response) => {
         if(!group){
             return res.status(404).json({message: "Group Not Found"});
         }
-        return res.status(200).json(group);
+        return res.status(200).json({group: group});
     } 
     catch (error) {
         return res.status(500).json({message: "Internal Server Error"});
     }
 });
 
-router.get('/getGroups/:userId', async (req: Request, res: Response) => {
+router.get('/getGroups/', [], async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params;
+
+        //update this for multi user model
+        let userId = superuserId;
+
         const groups = await prisma.respondentGroup.findMany({where: {userId}});
 
         return res.status(200).json(groups);
@@ -34,19 +38,20 @@ router.get('/getGroups/:userId', async (req: Request, res: Response) => {
 router.post('/createGroup', [
     body('name')
       .trim()
-      .notEmpty()
-      .isString()
-      .withMessage('Enter a valid non-empty string')
-      .bail()
-      .isLength({max: 70})
-      .withMessage('Maximum number of allowed characters is 70')
+      .notEmpty().withMessage("Group name cannot be empty")
+      .isString().withMessage("Enter a valid string")
+      .isLength({max: 70}).withMessage('Maximum number of allowed characters is 70')
 ], async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-        const { name, userId } = req.body;
+        let { name, userId } = req.body;
+
+        //update this for multi user model
+        userId = superuserId;
+        
         const newGroup = await prisma.respondentGroup.create({data: {name, userId}});
 
         return res.status(201).json({group: newGroup});

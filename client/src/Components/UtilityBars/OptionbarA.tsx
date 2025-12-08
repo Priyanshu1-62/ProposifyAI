@@ -3,7 +3,7 @@ import { BsBalloonFill } from "react-icons/bs";
 import { TfiWrite } from "react-icons/tfi";
 import { FaPeopleArrows } from "react-icons/fa";
 
-function Optionbar() {
+function OptionbarA() {
   const location = useLocation();
   const navigate = useNavigate();
   return (
@@ -21,4 +21,4 @@ function Optionbar() {
   )
 }
 
-export default Optionbar
+export default OptionbarA

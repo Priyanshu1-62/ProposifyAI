@@ -5,6 +5,8 @@ import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
+const superuserId = process.env.SUPERUSER_ID!;
+
 router.get('/getRespondent/:respondentId', async (req: Request, res: Response) => {
     try {
         const { respondentId } = req.params;
@@ -26,7 +28,7 @@ router.get('/getRespondents/:groupId', async (req: Request, res: Response) => {
         const { groupId } = req.params;
         const respondents = await prisma.respondent.findMany({where: {groupId}});
 
-        return res.status(200).json(respondents);
+        return res.status(200).json({respondents: respondents});
     } 
     catch (error) {
         return res.status(500).json({message: "Internal Server Error"});
@@ -36,14 +38,23 @@ router.get('/getRespondents/:groupId', async (req: Request, res: Response) => {
 router.post('/createRespondent', [
     body('name')
       .trim()
-      .notEmpty()
-      .isString()
-      .isLength({max: 70})
-      .withMessage("Enter a non-empty string of length not exceeding 70 chars"),
+      .notEmpty().withMessage("Name cannot be empty")
+      .isString().withMessage("Please enter a valid string")
+      .isLength({max: 70}).withMessage("Enter a non-empty string of length not exceeding 70 chars"),
     body('email')
       .trim()
-      .isEmail()
-      .withMessage("Please enter a valid Email ID")
+      .isEmail().withMessage("Please enter a valid Email ID"),
+    body('groupId')
+      .trim()
+      .notEmpty().withMessage("Group not found")
+      .isString().withMessage("Invalid group Id")
+      .custom( async (value: string) => {
+        const group = await prisma.respondentGroup.findUnique({where: {id: value}});
+        if(!group){
+            throw new Error('Invalid Group Id'); 
+        }
+        return true;
+      })
 ], async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);

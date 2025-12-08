@@ -5,6 +5,8 @@ import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
+const superuserId = process.env.SUPERUSER_ID!;
+
 router.get('/getRequest/:requestId', async (req: Request, res: Response) => {
     try {
         const { requestId } = req.params;
@@ -21,9 +23,12 @@ router.get('/getRequest/:requestId', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/getRequests/:userId', async (req: Request, res: Response) => {
+router.get('/getRequests/', [], async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params;
+
+        //update this for multi user model
+        let userId = superuserId;
+
         const requests = await prisma.request.findMany({where: {userId}});
 
         return res.status(200).json(requests);
@@ -36,25 +41,24 @@ router.get('/getRequests/:userId', async (req: Request, res: Response) => {
 router.post('/createRequest', [
     body('title')
       .trim()
-      .notEmpty()
-      .isString()
-      .isLength({max: 70})
-      .withMessage("Enter a non-empty string of length not exceeding 70 chars"),
+      .notEmpty().withMessage("Title cannot be empty")
+      .isString().withMessage("Please enter a valid string for Title")
+      .isLength({max: 70}).withMessage("Title length cannot exceed 70 characters")
+      .bail(),
     body('description')
         .trim()
-        .notEmpty()
-        .isString()
-        .withMessage("Enter a valid non-empty string"),
+        .notEmpty().withMessage("Description cannot be empty")
+        .isString().withMessage("Please enter a valid string for description")
+        .bail(),
     body('respondentGroupId')
         .trim()
-        .notEmpty()
-        .isString()
-        .withMessage("Enter a valid request Id"),
+        .notEmpty().withMessage("You must select a respondent group")
+        .isString().withMessage("Invalid group")
+        .bail(),
     body('userId')
         .trim()
-        .notEmpty()
-        .isString()
-        .withMessage("Enter a valid User Id")
+        .notEmpty().withMessage("No user data found. Please login")
+        .isString().withMessage("Invalid User Id, please login")
 ], async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
@@ -62,7 +66,11 @@ router.post('/createRequest', [
             return res.status(400).json({error : errors.array()[0].msg});
         }
 
-        const {title, description, userId, respondentGroupId} = req.body;
+        let {title, description, userId, respondentGroupId} = req.body;
+
+        //update this for multi user model
+        userId = superuserId;
+        
         const newRequest = await prisma.request.create({data: {title, description, userId, respondentGroupId}});
 
         return res.status(201).json(newRequest);

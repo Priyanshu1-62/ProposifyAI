@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import userContext from "../Contexts/userContext";
+import userContext from "../../Contexts/userContext";
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa6";
 import { GrTasks } from "react-icons/gr";
@@ -19,10 +19,10 @@ function Sidebar() {
           <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-gray-300 hover:cursor-pointer rounded-xl" onClick={()=>{navigate("/requests")}}><GrTasks size={18}/> My Requests</button>
         </li>
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-gray-300 hover:cursor-pointer rounded-xl" onClick={()=>{navigate("")}}><FaPlus size={18}/> Add Respondent group</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-gray-300 hover:cursor-pointer rounded-xl" onClick={()=>{navigate("/respondentGroup/create")}}><FaPlus size={18}/> Add Respondent group</button>
         </li>
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-gray-300 hover:cursor-pointer rounded-xl" onClick={()=>{navigate("")}}><FaPeopleGroup size={18}/> My Respondent groups</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-gray-300 hover:cursor-pointer rounded-xl" onClick={()=>{navigate("/respondentGroups")}}><FaPeopleGroup size={18}/> My Respondent groups</button>
         </li>
       </ul>
     </div>}

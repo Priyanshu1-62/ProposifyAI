@@ -5,6 +5,8 @@ import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
+const superuserId = process.env.SUPERUSER_ID!;
+
 router.post('/createUser', [], async (req: Request, res: Response) => {
     try {
         const {name, email, password, plan} = req.body;

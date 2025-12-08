@@ -1,23 +1,40 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserState from "./Contexts/UserState";
-import ReqTitle from "./Components/ReqTitle";
-import Home from "./Components/Home";
-import ReqDescription from "./Components/ReqDescription";
-import ReqRespondent from "./Components/ReqRespondent";
-import Requests from "./Components/Requests";
+import ReqTitle from "./Components/Request/ReqTitle";
+import Home from "./Components/Home/Home";
+import ReqDescription from "./Components/Request/ReqDescription";
+import ReqRespondent from "./Components/Request/ReqRespondent";
+import Requests from "./Components/Request/Requests";
+import ResGroupCreate from "./Components/Respondent/ResGroupCreate";
+import AlertState from "./Contexts/AlertState";
+import RespondentState from "./Contexts/RespondentState";
+import ResGroupUpdate from "./Components/Respondent/ResGroupUpdate";
+import ResGroups from "./Components/Respondent/ResGroups";
+import RequestState from "./Contexts/RequestState";
+import RequestInfo from "./Components/Request/RequestInfo";
 
 function App() {
   return (
     <BrowserRouter>
-    <UserState>
-      <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/request/title" element={<ReqTitle/>} />
-        <Route path="/request/description" element={<ReqDescription/>} />
-        <Route path="/request/respondent" element={<ReqRespondent/>} />
-        <Route path="/requests" element={<Requests/>} />
-      </Routes>
-    </UserState>
+    <AlertState>
+      <UserState>
+        <RespondentState>
+          <RequestState>
+            <Routes>
+              <Route path="/" element={<Home/>} />
+              <Route path="/request/title" element={<ReqTitle/>} />
+              <Route path="/request/description" element={<ReqDescription/>} />
+              <Route path="/request/respondent" element={<ReqRespondent/>} />
+              <Route path="/requests" element={<Requests/>} />
+              <Route path="/request/:id/info" element={<RequestInfo/>} />
+              <Route path="/respondentGroup/create" element={<ResGroupCreate/>} />
+              <Route path="/respondentGroup/update/:id" element={<ResGroupUpdate/>} />
+              <Route path="/respondentGroups" element={<ResGroups/>} />
+            </Routes>
+          </RequestState>
+        </RespondentState>
+      </UserState>
+    </AlertState>
     </BrowserRouter>
   )
 }
