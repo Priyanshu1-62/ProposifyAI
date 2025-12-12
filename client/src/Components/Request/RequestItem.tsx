@@ -16,7 +16,7 @@ function RequestItem({ element }: { element: request }) {
         <h4 className="mb-6 text-neutral-600 font-bold">{element.title}</h4>
         <h6 className="text-xs">Created on: {formatted}</h6>
         <div className="flex justify-end px-2">
-          <button className="text-sx text-blue-700 border-b border-b-blue-700 hover:cursor-pointer" onClick={()=>{navigate(`/request/${element.id}/info`)}}>View</button>
+          <button className="text-sx text-blue-700 border-b border-b-blue-700 hover:cursor-pointer" onClick={()=>{navigate(`/requests/${element.id}/info`)}}>View</button>
         </div>
         <div className={`absolute -top-2 right-2 px-1 py-1 text-xs text-neutral-600 font-bold ${element.status==="pending"?"bg-yellow-400":"bg-green-400"} rounded-md shadow-xl animate-bounce`}>{element.status.toUpperCase()}</div>
     </div>

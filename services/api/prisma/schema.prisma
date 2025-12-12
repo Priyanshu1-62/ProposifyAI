@@ -71,6 +71,7 @@ model Request {
   respondentGroup   RespondentGroup @relation(fields: [respondentGroupId], references: [id])
 
   responses RespondentResponse[]
+  respondentMessages RespondentMessage[]
 }
 
 // Response schema, to store all responses together in one table
@@ -89,3 +90,43 @@ model RespondentResponse {
   requestId String
   request   Request @relation(fields: [requestId], references: [id])
 }
+
+// Respondent message schema, to store all messages together in one table
+model RespondentMessage {
+  id                    String    @id @default(uuid())
+  from                  String
+  createdAt             DateTime  @default(now())
+
+  requestId             String
+  request               Request @relation(fields: [requestId], references: [id])
+
+  inboundMessages       InboundMessage[]
+}
+
+// Inbound Message schema, to store all info in a messsage together in one table
+model InboundMessage {
+  id                   String    @id @default(uuid())
+  subject              String?
+  text                 String?
+  html                 String?
+  createdAt            DateTime  @default(now())
+        
+  respondentMessageId            String
+  respondentMessage    RespondentMessage @relation(fields: [respondentMessageId], references: [id])
+
+  attachments          Attachment[]
+}
+
+// Attachment schema, to store all attachments together in one table
+model Attachment {
+  id                   String    @id @default(uuid())
+  fileName             String
+  contentType          String
+  size                 Int
+  url                  String
+  createdAt            DateTime  @default(now())
+
+  inboundMessageId     String
+  inboundMessage       InboundMessage @relation(fields: [inboundMessageId], references: [id])
+}
+

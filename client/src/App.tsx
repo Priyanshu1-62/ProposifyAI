@@ -26,7 +26,7 @@ function App() {
               <Route path="/request/description" element={<ReqDescription/>} />
               <Route path="/request/respondent" element={<ReqRespondent/>} />
               <Route path="/requests" element={<Requests/>} />
-              <Route path="/request/:id/info" element={<RequestInfo/>} />
+              <Route path="/requests/:id/info" element={<RequestInfo/>} />
               <Route path="/respondentGroup/create" element={<ResGroupCreate/>} />
               <Route path="/respondentGroup/update/:id" element={<ResGroupUpdate/>} />
               <Route path="/respondentGroups" element={<ResGroups/>} />
