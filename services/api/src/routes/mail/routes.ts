@@ -1,6 +1,8 @@
 import { Router, Request, Response } from "express";
 import { body, validationResult } from 'express-validator';
-import sendBulkMails from "../../controllers/mail.controller";
+import handleResendOutbound from "../../controllers/mail.Outboundcontroller";
+import handleMailgunInbound from "../../controllers/mail.InboundController";
+import { mailgunVerification } from "../../middlewares/mailgunVerification";
 
 const router = Router();
 
@@ -19,10 +21,13 @@ router.post('/sendBulkMails', [
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-        return sendBulkMails(req, res);
-    } catch (error) {
-        return res.status(500).json({message: "Failed to send e-mails."})
+        return handleResendOutbound(req, res);
+    } 
+    catch (error) {
+        return res.status(500).json({message: "Failed to send e-mails."});
     }
 });
+
+router.post('/inbound', mailgunVerification, handleMailgunInbound);
 
 export default router;
