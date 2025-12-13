@@ -2,12 +2,12 @@ import { Router, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
+import { authTokenVerification } from "../../middlewares/authTokenVerification";
+import createRequestandSendMails from "../../controllers/mail.Outboundcontroller";
 
 const router = Router();
 
-const superuserId = process.env.SUPERUSER_ID!;
-
-router.get('/getRequest/:requestId', async (req: Request, res: Response) => {
+router.get('/getRequest/:requestId', authTokenVerification, async (req: Request, res: Response) => {
     try {
         const { requestId } = req.params;
         const newRequest = await prisma.request.findUnique({where: {id: requestId}});
@@ -23,13 +23,10 @@ router.get('/getRequest/:requestId', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/getRequests/', [], async (req: Request, res: Response) => {
+router.get('/getRequests/', authTokenVerification, async (req: Request, res: Response) => {
     try {
 
-        //update this for multi user model
-        let userId = superuserId;
-
-        const requests = await prisma.request.findMany({where: {userId}});
+        const requests = await prisma.request.findMany({where: {userId: req.body.userId}});
 
         return res.status(200).json(requests);
     } 
@@ -54,33 +51,21 @@ router.post('/createRequest', [
         .trim()
         .notEmpty().withMessage("You must select a respondent group")
         .isString().withMessage("Invalid group")
-        .bail(),
-    body('userId')
-        .trim()
-        .notEmpty().withMessage("No user data found. Please login")
-        .isString().withMessage("Invalid User Id, please login")
-], async (req: Request, res: Response) => {
+        .bail()
+], authTokenVerification, async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-
-        let {title, description, userId, respondentGroupId} = req.body;
-
-        //update this for multi user model
-        userId = superuserId;
-        
-        const newRequest = await prisma.request.create({data: {title, description, userId, respondentGroupId}});
-
-        return res.status(201).json(newRequest);
+        return createRequestandSendMails(req, res);
     } 
     catch (err) {
         return res.status(500).json({message: "Internal Server Error"});
     }
 });
 
-router.put('/updateRequest', [], async (req: Request, res: Response) => {
+router.put('/updateRequest', authTokenVerification, async (req: Request, res: Response) => {
     try {
         const { requestId, status } = req.body;
         const updatedRequest = await prisma.request.update({where: {id: requestId}, data: {status}});
@@ -93,7 +78,7 @@ router.put('/updateRequest', [], async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/deleteRequest/:requestId', async (req: Request, res: Response) => {
+router.delete('/deleteRequest/:requestId', authTokenVerification, async (req: Request, res: Response) => {
     try {
         const { requestId } = req.params;
         await prisma.request.delete({where: {id: requestId}});

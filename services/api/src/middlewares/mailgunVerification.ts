@@ -18,6 +18,6 @@ export function mailgunVerification(req: Request, res: Response, next: NextFunct
         return next();
     } 
     catch (error) {
-        return res.status(500).json({message: "Verification Error"});
+        return res.status(500).json({message: "Inbound mail verification Error"});
     }
 }
