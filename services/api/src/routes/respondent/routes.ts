@@ -54,7 +54,15 @@ router.post('/createRespondent', [
             throw new Error('Invalid Group Id'); 
         }
         return true;
-      })
+      }).withMessage("Invalid Group."),
+    body('email')
+        .custom( async (email: string, { req }) => {
+            const existingRespondent = await prisma.respondent.findFirst({where: {email, groupId: req.body.groupId}});
+            if(existingRespondent){
+                throw new Error("The email already exists in this respondent group");
+            }
+            return true;
+        }).withMessage("The email already exists in this respondent group")
 ], async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);

@@ -3,10 +3,10 @@ import { bulkEmailPayload } from "../types/bulkEmailPayload";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendBulkEmailResend(data: bulkEmailPayload) {
+export async function sendEmailResend(payload: bulkEmailPayload) {
     try {
-        const response = await resend.emails.send(data);
-        return response;
+        const outboundResult = await resend.emails.send(payload);
+        return outboundResult;
     } 
     catch (error) {
         throw error;

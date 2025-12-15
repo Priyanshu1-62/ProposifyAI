@@ -46,7 +46,7 @@ export async function processInboundEmail(payload: mailgunInboundPayload) {
         const result2 = await prisma.inboundMessage.create({data: inboundMessageData});
     
         await Promise.all(  //Hmmm
-            messageData.attachments.map((attacment)=>{
+            messageData.attachments.map(async (attacment)=>{
                 const attachmentData = {
                     fileName: attacment.name || null,
                     contentType: attacment["content-type"] || null,
@@ -54,7 +54,7 @@ export async function processInboundEmail(payload: mailgunInboundPayload) {
                     url: attacment.url || null,
                     inboundMessageId: result2.id
                 }
-                return prisma.attachment.create({data: attachmentData});
+                return await prisma.attachment.create({data: attachmentData});
             })
         );
         return messageData;

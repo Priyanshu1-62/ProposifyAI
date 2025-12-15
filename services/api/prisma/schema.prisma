@@ -14,6 +14,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/* ---------- ENUMS ---------- */
+
+enum EmailEventType {
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  BOUNCED
+  COMPLAINED
+  FAILED
+}
+
+enum OutboundEmailAttemptStatus {
+  SUCCESS
+  FAILED
+}
+
+enum OutboundEmailFailureReason {
+  PROVIDER_ERROR
+  RATE_LIMITED
+  NETWORK_ERROR
+  USER_CANCELLED
+  UNKNOWN
+}
+
+/* ---------- MODELS ---------- */
+
 // User Schema, to store all users together in one table
 model User {
   id                 String    @id @default(uuid())
@@ -52,6 +79,8 @@ model Respondent {
   group   RespondentGroup @relation(fields: [groupId], references: [id])
 
   responses RespondentResponse[]
+
+  @@unique([email, groupId])
 }
 
 // Request Schema, to store all requests together in one table
@@ -128,5 +157,66 @@ model Attachment {
 
   inboundMessageId     String
   inboundMessage       InboundMessage @relation(fields: [inboundMessageId], references: [id])
+}
+
+// OutboundEmail Schema, to store all outbound mails together in one table
+model OutboundEmail {
+  id                   String    @id @default(uuid())
+
+  // To manage retries and idempotency
+  resendMessageId      String    @unique 
+
+  fromEmail            String
+  toEmail              String
+  subject              String?
+
+  requestId            String
+  respondentGroupId    String
+  userId               String
+
+  createdAt            DateTime  @default(now())
+
+  events               OutboundEmailEvent[]
+  attempts             OutboundEmailAttempt[]
+
+  @@index([userId])
+  @@index([requestId])
+  @@index([respondentGroupId])
+}
+
+// OutboundEmailAttempt Schema, to store all outbound mail attempts together in one table
+model OutboundEmailAttempt {
+  id                   String    @id @default(uuid())
+
+  fromEmail            String
+  toEmail              String
+  subject              String?
+
+  requestId            String
+  respondentGroupId    String
+  userId               String
+
+  status               OutboundEmailAttemptStatus
+  failureReason        OutboundEmailFailureReason?
+
+  createdAt            DateTime  @default(now())
+
+  outboundEmailId      String?
+  outboundEmail        OutboundEmail?  @relation(fields: [outboundEmailId], references: [id])
+
+  @@index([userId])
+  @@index([requestId])
+  @@index([respondentGroupId])
+}
+
+// OutboundEmailEvent Schema, to store all outbound email events together in one table
+model OutboundEmailEvent {
+  id                   String  @id @default(uuid())
+  eventType            EmailEventType
+  occuredAt            DateTime
+  createdAt            DateTime  @default(now())
+
+  outboundEmailId      String
+  outboundEmail        OutboundEmail @relation(fields: [outboundEmailId], references: [id])
 }
 
