@@ -1,4 +1,4 @@
-import { OutboundEmailAttemptStatus, OutboundEmailFailureReason } from "../generated/prisma";
+import { OutboundEmailAttemptStatus, OutboundEmailFailureReason } from "@prisma/client";
 
 export interface outboundEmailAttemptBody {
     fromEmail: string;
