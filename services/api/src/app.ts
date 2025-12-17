@@ -30,7 +30,7 @@ app.use("/api/groups", groupRoutes);
 app.use("/api/respondents", respondentRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/responses", responseRoutes);
-app.use("/api/mail", mailRoutes);
+app.use("/api/mails", mailRoutes);
 
 
 app.get('/', (req, res) => {

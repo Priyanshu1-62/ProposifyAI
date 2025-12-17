@@ -9,7 +9,7 @@ export function mailgunVerification(req: Request, res: Response, next: NextFunct
             token: req.body?.body,
             signature: req.body?.signature,
             apiKey: process.env.MAILGUN_API_KEY!,
-            toleranceSeconds: Number(process.env.MAILGUN_WEBHOOK_TOLERANCE_SECONDS)!
+            toleranceSeconds: Number(process.env.MAILGUN_WEBHOOK_TOLERANCE_SECONDS) || 300
         };
         const result = verifyMailgunSignature(maigunSignBody);
         if(!result.ok){
@@ -18,6 +18,6 @@ export function mailgunVerification(req: Request, res: Response, next: NextFunct
         return next();
     } 
     catch (error) {
-        return res.status(500).json({message: "Inbound mail verification Error"});
+        return res.status(500).json({message: "Mailgun webhook verification Error"});
     }
 }

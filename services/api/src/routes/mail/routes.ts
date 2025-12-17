@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
 import { body, validationResult } from 'express-validator';
-import handleResendOutbound from "../../controllers/mail.Outboundcontroller";
-import handleMailgunInbound from "../../controllers/mail.InboundController";
-import { mailgunVerification } from "../../middlewares/mailgunVerification";
+import createRequestandSendMails from "../../controllers/mail.Outboundcontroller";
+import { authTokenVerification } from "../../middlewares/authTokenVerification";
+import webhookRoutes from "./webhooks";
 
 const router = Router();
+router.use("/webhooks", webhookRoutes);
 
 router.post('/sendBulkMails', [
   body("from")
@@ -15,19 +16,17 @@ router.post('/sendBulkMails', [
     .notEmpty().withMessage("Mail subject not provided"),
   body("html")
     .notEmpty().withMessage("No HTML content body provided")
-], (req: Request, res: Response) => {
+], authTokenVerification, (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-        return handleResendOutbound(req, res);
+        return createRequestandSendMails(req, res);
     } 
     catch (error) {
         return res.status(500).json({message: "Failed to send e-mails."});
     }
 });
-
-router.post('/inbound', mailgunVerification, handleMailgunInbound);
 
 export default router;
