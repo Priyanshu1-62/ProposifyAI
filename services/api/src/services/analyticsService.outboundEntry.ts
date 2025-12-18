@@ -11,6 +11,7 @@ export async function createOutboundEntry(emailPayload: bulkEmailPayload, Id: st
             fromEmail: emailPayload.from,
             toEmail: emailPayload.to,
             subject: emailPayload.subject,
+            status: "SENT",
             userId: tagMap.userId,
             requestId: tagMap.requestId,
             respondentGroupId: tagMap.respondentGroupId

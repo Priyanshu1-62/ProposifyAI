@@ -10,7 +10,7 @@ const router = Router();
 router.get('/getRequest/:requestId', authTokenVerification, async (req: Request, res: Response) => {
     try {
         const { requestId } = req.params;
-        const newRequest = await prisma.request.findUnique({where: {id: requestId}});
+        const newRequest = await prisma.request.findUnique({where: {id: requestId}}); //First check if user is owner of the resource
 
         if(!newRequest){
             return res.status(404).json({message: "request Not Found"});
@@ -23,10 +23,10 @@ router.get('/getRequest/:requestId', authTokenVerification, async (req: Request,
     }
 });
 
-router.get('/getRequests/', authTokenVerification, async (req: Request, res: Response) => {
+router.get('/getRequests/', authTokenVerification, async (req: Request, res: Response) => { 
     try {
 
-        const requests = await prisma.request.findMany({where: {userId: req.body.userId}});
+        const requests = await prisma.request.findMany({where: {userId: req.userId}});
 
         return res.status(200).json(requests);
     } 
@@ -65,7 +65,7 @@ router.post('/createRequest', [
     }
 });
 
-router.put('/updateRequest', authTokenVerification, async (req: Request, res: Response) => {
+router.put('/updateRequest', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { requestId, status } = req.body;
         const updatedRequest = await prisma.request.update({where: {id: requestId}, data: {status}});
@@ -78,7 +78,7 @@ router.put('/updateRequest', authTokenVerification, async (req: Request, res: Re
     }
 });
 
-router.delete('/deleteRequest/:requestId', authTokenVerification, async (req: Request, res: Response) => {
+router.delete('/deleteRequest/:requestId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { requestId } = req.params;
         await prisma.request.delete({where: {id: requestId}});

@@ -1,11 +1,11 @@
 import { Router, Request, Response } from "express";
 import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
+import { authTokenVerification } from "../../middlewares/authTokenVerification";
 
 const router = Router();
-const superuserId = process.env.SUPERUSER_ID!;
 
-router.get('/getGroup/:groupId', async (req: Request, res: Response) => {
+router.get('/getGroup/:groupId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { groupId } = req.params;
         const group = await prisma.respondentGroup.findUnique({where: {id: groupId}});
@@ -20,11 +20,9 @@ router.get('/getGroup/:groupId', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/getGroups/', [], async (req: Request, res: Response) => {
+router.get('/getGroups', authTokenVerification, async (req: Request, res: Response) => {
     try {
-
-        //update this for multi user model
-        let userId = superuserId;
+        let userId = req.userId;
 
         const groups = await prisma.respondentGroup.findMany({where: {userId}});
 
@@ -35,22 +33,23 @@ router.get('/getGroups/', [], async (req: Request, res: Response) => {
     }
 });
 
-router.post('/createGroup', [
+router.post('/createGroup', [ 
     body('name')
       .trim()
       .notEmpty().withMessage("Group name cannot be empty")
       .isString().withMessage("Enter a valid string")
       .isLength({max: 70}).withMessage('Maximum number of allowed characters is 70')
-], async (req: Request, res: Response) => {
+], authTokenVerification, async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-        let { name, userId } = req.body;
-
-        //update this for multi user model
-        userId = superuserId;
+        let { name } = req.body;
+        let userId = req.userId;
+        if(!userId){
+            return res.status(401).json({message: "No user found"});
+        }
         
         const newGroup = await prisma.respondentGroup.create({data: {name, userId}});
 
@@ -61,7 +60,7 @@ router.post('/createGroup', [
     }
 });
 
-router.delete('/deleteGroup/:groupId', async (req: Request, res: Response) => {
+router.delete('/deleteGroup/:groupId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { groupId } = req.params;
         await prisma.respondentGroup.delete({where: {id: groupId}});

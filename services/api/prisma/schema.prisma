@@ -25,6 +25,14 @@ enum EmailEventType {
   FAILED
 }
 
+enum OutboundEmailStatus {
+  SENT
+  FAILED
+  BOUNCED
+  COMPLAINED
+  DELIVERED
+}
+
 enum OutboundEmailAttemptStatus {
   SUCCESS
   FAILED
@@ -168,6 +176,7 @@ model OutboundEmail {
   fromEmail            String
   toEmail              String
   subject              String?
+  status               OutboundEmailStatus
 
   requestId            String
   respondentGroupId    String
@@ -212,10 +221,13 @@ model OutboundEmailAttempt {
 model OutboundEmailEvent {
   id                   String  @id @default(uuid())
   eventType            EmailEventType
-  occuredAt            DateTime
+  occurredAt            DateTime
   createdAt            DateTime  @default(now())
+  payload              String?
 
   outboundEmailId      String
   outboundEmail        OutboundEmail @relation(fields: [outboundEmailId], references: [id])
+
+  @@unique([outboundEmailId, eventType])
 }
 

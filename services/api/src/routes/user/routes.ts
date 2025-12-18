@@ -2,12 +2,11 @@ import { Router, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
+import { authTokenVerification } from "../../middlewares/authTokenVerification";
 
 const router = Router();
 
-const superuserId = process.env.SUPERUSER_ID!;
-
-router.post('/createUser', [], async (req: Request, res: Response) => {
+router.post('/createUser', authTokenVerification, async (req: Request, res: Response) => {
     try {
         const {name, email, password, plan} = req.body;
 

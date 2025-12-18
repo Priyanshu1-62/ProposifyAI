@@ -2,12 +2,11 @@ import { Router, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
+import { authTokenVerification } from "../../middlewares/authTokenVerification";
 
 const router = Router();
 
-const superuserId = process.env.SUPERUSER_ID!;
-
-router.get('/getRespondent/:respondentId', async (req: Request, res: Response) => {
+router.get('/getRespondent/:respondentId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { respondentId } = req.params;
         const respondent = await prisma.respondent.findUnique({where: {id: respondentId}});
@@ -23,7 +22,7 @@ router.get('/getRespondent/:respondentId', async (req: Request, res: Response) =
     }
 });
 
-router.get('/getRespondents/:groupId', async (req: Request, res: Response) => {
+router.get('/getRespondents/:groupId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { groupId } = req.params;
         const respondents = await prisma.respondent.findMany({where: {groupId}});
@@ -63,7 +62,7 @@ router.post('/createRespondent', [
             }
             return true;
         }).withMessage("The email already exists in this respondent group")
-], async (req: Request, res: Response) => {
+], authTokenVerification, async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -80,7 +79,7 @@ router.post('/createRespondent', [
     }
 });
 
-router.delete('/deleteRespondent/:respondentId', async (req: Request, res: Response) => {
+router.delete('/deleteRespondent/:respondentId', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { respondentId } = req.params;
         await prisma.respondent.delete({where: {id: respondentId}});
