@@ -177,6 +177,7 @@ model OutboundEmail {
   toEmail              String
   subject              String?
   status               OutboundEmailStatus
+  current_status       EmailEventType
 
   requestId            String
   respondentGroupId    String

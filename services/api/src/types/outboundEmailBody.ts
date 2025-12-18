@@ -6,6 +6,7 @@ export interface outboundEmailBody {
     toEmail: string;
     subject: string;
     status: OutboundEmailStatus
+    current_status: OutboundEmailStatus
     userId: string;
     requestId: string;
     respondentGroupId: string;

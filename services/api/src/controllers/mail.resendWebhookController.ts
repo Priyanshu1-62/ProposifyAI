@@ -4,8 +4,8 @@ import { outboundEmailEventBody } from "../types/outboundEmailEventBody";
 import { createOutboundEmailEvent } from "../services/analyticsService.createEvent";
 import { findUniqueOutbound } from "../services/analyticsService.findUniqueOutbound";
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
-import { updateOutboundStatus } from "../services/analyticsService.updateOutboundStatus";
 import { OutboundEmailStatus } from "@prisma/client";
+import { updateoutboundEmail } from "../services/analyticsService.updateOutboundEmail";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
@@ -27,9 +27,11 @@ const handleResendWebhook = async (req: Request, res: Response) => {
             outboundEmailId: outboundEmail.id
         }
         const result = await createOutboundEmailEvent(data);
+        await updateoutboundEmail(outboundEmail.id, {current_status: eventType});
+
 
         if(terminalEmailEvent.has(eventType) && outboundEmail.status == "SENT"){
-            await updateOutboundStatus(outboundEmail.id, eventType as OutboundEmailStatus);
+            await updateoutboundEmail(outboundEmail.id, {status: eventType as OutboundEmailStatus});
         }
              
         return res.status(200).json({ received: true, result });
