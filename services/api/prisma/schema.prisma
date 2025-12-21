@@ -107,7 +107,7 @@ model Request {
   respondentGroup   RespondentGroup @relation(fields: [respondentGroupId], references: [id])
 
   responses RespondentResponse[]
-  respondentMessages RespondentMessage[]
+  inboundMessages InboundMessage[]
 }
 
 // Response schema, to store all responses together in one table
@@ -127,34 +127,40 @@ model RespondentResponse {
   request   Request @relation(fields: [requestId], references: [id])
 }
 
-// Respondent message schema, to store all messages together in one table
-model RespondentMessage {
+// Inbound message schema, to store all messages together in one table
+model InboundMessage {
   id                    String    @id @default(uuid())
+
   from                  String
+  messageId             String    @unique
   createdAt             DateTime  @default(now())
 
   requestId             String
   request               Request @relation(fields: [requestId], references: [id])
 
-  inboundMessages       InboundMessage[]
+  inboundMessageContents  InboundMessageContent[]  
+  inboundMessageAttachments  InboundMessageAttachment[]
+
+  @@index([requestId, from])
+
+  // Business rule constraint: A respondent may submit exactly one proposal per request.
+  @@unique([requestId, from])
 }
 
-// Inbound Message schema, to store all info in a messsage together in one table
-model InboundMessage {
+// Inbound Message Content schema, to store all info in a messsage together in one table
+model InboundMessageContent {
   id                   String    @id @default(uuid())
   subject              String?
   text                 String?
   html                 String?
   createdAt            DateTime  @default(now())
         
-  respondentMessageId            String
-  respondentMessage    RespondentMessage @relation(fields: [respondentMessageId], references: [id])
-
-  attachments          Attachment[]
+  inboundMessageId            String
+  inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
-// Attachment schema, to store all attachments together in one table
-model Attachment {
+// Inbound Message Attachment schema, to store all attachments together in one table
+model InboundMessageAttachment {
   id                   String    @id @default(uuid())
   fileName             String
   contentType          String
@@ -162,8 +168,8 @@ model Attachment {
   url                  String
   createdAt            DateTime  @default(now())
 
-  inboundMessageId     String
-  inboundMessage       InboundMessage @relation(fields: [inboundMessageId], references: [id])
+  inboundMessageId            String
+  inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
 // OutboundEmail Schema, to store all outbound mails together in one table

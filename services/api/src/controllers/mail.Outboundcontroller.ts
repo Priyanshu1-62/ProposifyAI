@@ -17,7 +17,7 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
         }
         const emails = respondents.map(element => element.email);
         const emailPayload: bulkEmailPayload = {
-            from: "request@proposifyai.online",
+            from: `request+${newRequest.id}@proposifyai.online`,
             to: "",
             subject: req.body.title,
             text: req.body.description,
