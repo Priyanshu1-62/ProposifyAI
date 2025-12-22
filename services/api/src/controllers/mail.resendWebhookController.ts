@@ -4,13 +4,13 @@ import { outboundEmailEventBody } from "../types/outboundEmailEventBody";
 import { createOutboundEmailEvent } from "../services/analyticsService.createEvent";
 import { findUniqueOutbound } from "../services/analyticsService.findUniqueOutbound";
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
-import { OutboundEmailStatus } from "@prisma/client";
+import { EmailEventType, OutboundEmailStatus } from "@prisma/client";
 import { updateoutboundEmail } from "../services/analyticsService.updateOutboundEmail";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
         const event = JSON.parse(req.body.toString("utf-8"));
-        const eventType = resendEventTypeMap[event.type];
+        const eventType: EmailEventType = resendEventTypeMap[event.type];
 
         if(!eventType){
             return res.status(200).json({ignored: true, reason: "Received event type is not subscribed"});

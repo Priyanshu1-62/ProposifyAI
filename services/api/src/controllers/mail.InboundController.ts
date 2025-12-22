@@ -33,7 +33,7 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
             return res.status(200).json({message: "A respondent may submit exactly one proposal per request."});
         }
 
-        const inboundMessage = await createInboundMessage(req.body.from, linkedRequest.id);
+        const inboundMessage = await createInboundMessage(req.body.from, messageId, linkedRequest.id);
 
         const messageContent: inboundMessageContentBody = {
             subject: req.body.subject,
