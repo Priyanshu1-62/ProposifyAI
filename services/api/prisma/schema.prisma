@@ -85,8 +85,6 @@ model Respondent {
   groupId String
   group   RespondentGroup @relation(fields: [groupId], references: [id])
 
-  responses RespondentResponse[]
-
   @@unique([email, groupId])
 }
 
@@ -96,9 +94,6 @@ model Request {
   title       String
   description String
   createdAt   DateTime @default(now())
-  aiSummary   String?
-  aiModel     String?
-  status      String   @default("pending")
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -106,25 +101,10 @@ model Request {
   respondentGroupId String
   respondentGroup   RespondentGroup @relation(fields: [respondentGroupId], references: [id])
 
-  responses RespondentResponse[]
+  aiRequestProfileId  String?
+
   inboundMessages InboundMessage[]
-}
-
-// Response schema, to store all responses together in one table
-model RespondentResponse {
-  id             String   @id @default(uuid())
-  responseText   String
-  aiSummary      String?
-  aiModel        String?
-  scoreBreakDown Json?
-  totalScore     Int?
-  createdAt      DateTime @default(now())
-
-  respondentId String
-  respondent   Respondent @relation(fields: [respondentId], references: [id])
-
-  requestId String
-  request   Request @relation(fields: [requestId], references: [id])
+  aiRequestProfile AIRequestProfile[]
 }
 
 // Inbound message schema, to store all messages together in one table
@@ -138,8 +118,11 @@ model InboundMessage {
   requestId             String
   request               Request @relation(fields: [requestId], references: [id])
 
+  aiResponseEvaluationId  String?
+
   inboundMessageContents  InboundMessageContent[]  
   inboundMessageAttachments  InboundMessageAttachment[]
+  aiResponseEvaluation  AIResponseEvaluation[]
 
   @@index([requestId, from])
 
@@ -237,4 +220,35 @@ model OutboundEmailEvent {
 
   @@unique([outboundEmailId, eventType])
 }
+
+model AIRequestProfile {
+  id                String    @id @default(uuid())
+  createdAt         DateTime  @default(now())
+
+  aiModel           String
+  promptVersion     String
+  aiSummary         String
+  scoringCriteria  Json
+
+  requestId         String   @unique
+  request           Request  @relation(fields: [requestId], references: [id])
+}
+
+model AIResponseEvaluation {
+  id                String   @id @default(uuid())
+  createdAt         DateTime @default(now())
+
+  aiModel           String
+  promptVersion     String
+  aiSummary         String
+  overallScore      Float
+  scoreBreakdown    Json
+  confidence        Float
+  aiExplanation     String
+
+  inboundMessageId  String  @unique
+  inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
+}
+
+
 
