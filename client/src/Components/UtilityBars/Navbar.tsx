@@ -12,7 +12,7 @@ function Navbar() {
             {sidebar && <button className="text-2xl text-gray-600 cursor-pointer" onClick={()=>{setSidebar(prev => !prev)}}><TbLayoutSidebarLeftCollapseFilled/></button>}
             {!sidebar && <button className="text-2xl text-gray-600 cursor-pointer" onClick={()=>{setSidebar(prev => !prev)}}><TbLayoutSidebarRightCollapseFilled/></button>}
         </span>
-        <h4 className="font-bold text-purple-700 hover:text-purple-800 hover:cursor-pointer" onClick={()=>{navigate("/")}}>ProposifyAI</h4>
+        <h4 className="font-bold text-purple-700 hover:text-purple-800 hover:cursor-pointer" onClick={()=>{navigate("/")}}>ProposifyAI. AI should be an advisor, not a judge.</h4>
         <span className="">
 
         </span>
