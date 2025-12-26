@@ -1,9 +1,8 @@
 import { Prisma } from "@prisma/client";
-import prisma from "../lib/prisma";
-import { AIRequestProfileBody } from "../types/AIRequuestProfileBody";
+import { AIRequestProfileBody } from "../types/AIRequestProfileBody";
 import { createScoringCriteria } from "./domainService.createScoringCriteria";
 import { summarizeText } from "./domainService.summarizeText";
-
+import { createAIRequestProfile } from "./requestService.createAIRequestProfile";
 
 export async function createRequestProfile(requestId: string, description: string) {
     try {
@@ -18,7 +17,8 @@ export async function createRequestProfile(requestId: string, description: strin
             scoringCriteria: createCriteriaResult.scoringCriteria as unknown as Prisma.InputJsonValue,
             requestId
         }
-        const aiRequestProfile = await prisma.aIRequestProfile.create({data: aiRequestProfileData});
+        const aiRequestProfile = createAIRequestProfile(aiRequestProfileData);
+        return aiRequestProfile;
     } 
     catch (error) {
         throw error;    

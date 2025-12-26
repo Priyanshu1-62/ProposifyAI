@@ -6,6 +6,7 @@ import { inboundMessageContentBody } from "../types/inboundMessageContentBody";
 import { createInboundContent } from "../services/inboundService.createInboundContent";
 import { createInboundAttachment } from "../services/imboundService.createInboundAttachment";
 import { mailgunAttachmentBody } from "../types/mailgunAttachmentBody";
+import { createResponseEvaluation } from "../services/domainService.createResponseEvaluation";
 
 // Always return status 200 response to Mailgun to avoid retries.
 const handleMailgunInbound = async (req: Request, res: Response) => {
@@ -57,6 +58,9 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
                 return await createInboundAttachment(attachmentData, inboundMessage.id);
             })
         );
+
+        createResponseEvaluation(messageContent.text, linkedRequest.aiRequestProfileId, inboundMessage.id);
+
         return res.status(200).json({message: "Inbound message data stored successfully"});
     } 
     catch (error) {

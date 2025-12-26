@@ -6,6 +6,7 @@ import prisma from "../lib/prisma";
 import { createOutboundEntry } from "../services/analyticsService.outboundEntry";
 import { createOutboundAttempt } from "../services/analyticsService.createAttempt";
 import { updateOutboundAttempt } from "../services/analyticsService.updateAttempt";
+import { createRequestProfile } from "../services/domainService.createRequestProfile";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
@@ -54,7 +55,7 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
             })
         );
 
-        
+        createRequestProfile(newRequest.id, newRequest.description);
 
         return res.status(201).json(response);
     }

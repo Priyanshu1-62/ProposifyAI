@@ -228,7 +228,7 @@ model AIRequestProfile {
   aiModel           String
   promptVersion     String
   aiSummary         String
-  scoringCriteria  Json
+  scoringCriteria  Json @default("[]")
 
   requestId         String   @unique
   request           Request  @relation(fields: [requestId], references: [id])
@@ -242,7 +242,7 @@ model AIResponseEvaluation {
   promptVersion     String
   aiSummary         String
   overallScore      Float
-  scoreBreakdown    Json
+  scoreBreakdown    Json @default("[]")
   confidence        Float
   aiExplanation     String
 

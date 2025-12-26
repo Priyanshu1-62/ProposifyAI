@@ -1,7 +1,7 @@
-import { scoringCriterionBody } from "./scoringCriterionBody";
+import { Prisma } from "@prisma/client";
 
 export interface evaluateTextInputbody {
     requestSummary: string;
-    scoringCriteria: scoringCriterionBody[];
+    scoringCriteria: Prisma.InputJsonValue;
     responseSummary: string;
 }

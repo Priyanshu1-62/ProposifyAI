@@ -1,6 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { scoreBreakdonwbody } from "./scoreBreakdownBody";
-import { scoringCriterionBody } from "./scoringCriterionBody";
 
 export interface AIRequestProfileBody {
     aiModel: string;

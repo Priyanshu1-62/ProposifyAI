@@ -1,10 +1,11 @@
+import { Prisma } from "@prisma/client";
 import { AIMetadata } from "./AIMetadata";
-import { scoreBreakdonwbody } from "./scoreBreakdownBody";
 
 export interface evaluateTextOutputbody {
     overallScore: number;
-    scoreBreakdown: scoreBreakdonwbody[];
+    scoreBreakdown: Prisma.InputJsonValue
     confidence: number;
-    explanation: string;
-    metaData: AIMetadata;
+    aiExplanation: string;
+    aiModel: string;
+    promptVersion: string;
 }
