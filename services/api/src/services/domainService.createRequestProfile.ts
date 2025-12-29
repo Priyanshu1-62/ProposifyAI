@@ -21,6 +21,6 @@ export async function createRequestProfile(requestId: string, description: strin
         return aiRequestProfile;
     } 
     catch (error) {
-        throw error;    
+        throw error;    //Log it instead by using logger
     }
 }

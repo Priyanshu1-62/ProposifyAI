@@ -34,6 +34,6 @@ export async function createResponseEvaluation(messageText: string, aiRequestPro
         return aiResponseEvaluation;
     } 
     catch (error) {
-        throw error;
+        throw error;     //Log it instead by using logger
     }
 }

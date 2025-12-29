@@ -1,6 +1,7 @@
+import { AIConfig } from "../types/AIConfig";
 
 
-export async function textSummarization(text: string, maxLength: number){
+export async function aiTextSummarization(aiPayload: string, config: AIConfig){
     try {
         return "";
     } 

@@ -250,5 +250,19 @@ model AIResponseEvaluation {
   inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
+modelPromptProfile {
+  id                     String   @id @default(uuid())
+  createdAt              DateTime @default(now())
+
+  key                     String
+  version                 Int
+  prupose                 String
+  prompt                  String
+  userPromptTemplate      String
+  outputSchema            Json 
+  temperature             Float
+  topP                    Float @default(0.9)
+}
+
 
 
