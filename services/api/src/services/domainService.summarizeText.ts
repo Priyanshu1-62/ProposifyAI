@@ -4,6 +4,8 @@ import { getPromptPromptProfile } from "./promptService.getPromptProfile";
 import { promptBuilder } from "./promptService.promptBuilder";
 import { AIConfig } from "../types/AIConfig";
 import { aiTextSummarization } from "./aiService.textSummarization";
+import { validateShape } from "../utils/validateShape";
+import { summaryConfigResolver } from "./aiService.summaryConfigResolver";
 
 export async function summarizeText(input: summarizeTextInputBody): Promise<summarizeTextOutputBody>{
     try {
@@ -17,16 +19,24 @@ export async function summarizeText(input: summarizeTextInputBody): Promise<summ
         }
         const aiPayload = await promptBuilder(promptProfile.userPromptTemplate, variables);
 
-        const config: AIConfig = {
-            model: "gpt-4.1-mini",
-            temperature: promptProfile.temperature,
-            topP: promptProfile.topP,
-            maxTokens: Math.min(Math.ceil(input.text.length*0.3), 700),
-            responseFormat: promptProfile.outputSchema
-        }
+        const config = summaryConfigResolver(input.text, promptProfile.temperature, promptProfile.topP, promptProfile.outputSchema);
         const rawResult = await aiTextSummarization(aiPayload, config);
 
-        // const parsedResult = 
+        const ok = validateShape(rawResult, config.responseFormat);
+        if(!ok){
+            throw new Error("Invalid response from AI service provider");
+        }
+        
+
+        const finalResult: summarizeTextOutputBody = {
+            summary: rawResult,
+            metaData: {
+                aiModel: config.model,
+                promptVersion: 1,
+                temperature: config.temperature
+            }
+        }
+        return finalResult;
     } 
     catch (error) {
         throw error;    

@@ -1,6 +1,6 @@
 export interface AIMetadata {
     aiModel: string;
-    promptVersion: string;
+    promptVersion: number;
     temperature: number;
     inputToken?: number;
     outputToken?: number;
