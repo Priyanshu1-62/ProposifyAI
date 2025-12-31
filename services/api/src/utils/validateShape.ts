@@ -16,12 +16,21 @@ export function validateShape(testSubject: any, expectedSchema: any): boolean{
                 return false;
             }
             let res = true;
-            const expectedKeys = expectedSchema.required ?? expectedSchema.properties ?? {};
-            for(const key in expectedKeys){
-                if(!(key in testSubject)){
-                    return false;
+            if(Array.isArray(expectedSchema.required)){
+                for(const key of expectedSchema.required){
+                    if(!(key in testSubject)){
+                        return false;
+                    }
+                    res = res && validateShape(testSubject[key], expectedSchema.properties[key]);                    
                 }
-                res = res && validateShape(testSubject[key], expectedSchema.properties[key]);
+            }
+            else{
+                for(const key in expectedSchema.properties){
+                    if(!(key in testSubject)){
+                        return false;
+                    }
+                    res = res && validateShape(testSubject[key], expectedSchema.properties[key]);                    
+                }
             }
             return res;
         }
