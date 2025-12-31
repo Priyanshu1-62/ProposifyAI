@@ -6,6 +6,8 @@ import { AIConfig } from "../types/AIConfig";
 import { aiTextSummarization } from "./aiService.textSummarization";
 import { validateShape } from "../utils/validateShape";
 import { summaryConfigResolver } from "./aiService.summaryConfigResolver";
+import { coerceTypes } from "../utils/coerceTypes";
+import { normalizeOutput } from "../utils/normalizeOutput";
 
 export async function summarizeText(input: summarizeTextInputBody): Promise<summarizeTextOutputBody>{
     try {
@@ -27,6 +29,9 @@ export async function summarizeText(input: summarizeTextInputBody): Promise<summ
             throw new Error("Invalid response from AI service provider");
         }
         
+        coerceTypes(rawResult, null, null, promptProfile.outputSchema);
+
+        normalizeOutput(rawResult, promptProfile.outputSchema);
 
         const finalResult: summarizeTextOutputBody = {
             summary: rawResult,

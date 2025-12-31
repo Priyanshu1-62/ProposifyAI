@@ -1,9 +1,10 @@
 import { normalizeWeights } from "./normalizeWeights";
 
 export function normalizeOutput(testSubject: any, expectedSchema: any){
+    // Call this function only after validating shape and coercing types of testSubject w.r.t expectedSchema.
     try {
         let totalWeight = 0;
-        let wtItems: any[] = [];
+        let wtItems = new Set<any>();
         function dfs(currTestSubject: any, parTestSubject: any, key: any, currExpectedSchema: any){
             try {
                 if(currExpectedSchema.type === "array"){
@@ -24,9 +25,9 @@ export function normalizeOutput(testSubject: any, expectedSchema: any){
                     }                    
                 }
                 else{
-                    if(key === "weight"){
-                        totalWeight += currTestSubject;
-                        wtItems.push(parTestSubject);
+                    if(key === "weight" && parTestSubject){
+                        totalWeight += Number(currTestSubject);
+                        wtItems.add(parTestSubject);
                     }
                 }
             } 
@@ -34,13 +35,25 @@ export function normalizeOutput(testSubject: any, expectedSchema: any){
                 throw error;    
             }
         }
+        dfs(testSubject, null, null, expectedSchema);
 
-        dfs(testSubject, {}, "", expectedSchema);
-        if(totalWeight === 0){
+        const sumConstraint = expectedSchema?.constraints?.sum;
+        if(!sumConstraint){
+            return;
+        }
+
+        if(totalWeight <= 0){
             throw new Error("Invalid weight distribution by AI service provider");
         }
 
-        normalizeWeights(wtItems, "weight", totalWeight);
+        const EPSILON = 0.02;
+        const target = sumConstraint.equals;
+        const field = sumConstraint.field;
+        if(Math.abs(totalWeight - target) <= EPSILON){
+            return;
+        }
+
+        normalizeWeights(wtItems, field, totalWeight);
     }
     catch (error) {
         throw error;

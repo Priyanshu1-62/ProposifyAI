@@ -1,5 +1,6 @@
 
 export function coerceTypes(currTestSubject: any, parTestSubject: any, key: any, currExpectedSchema: any){
+    // Call this function only after validating shape of testSubject w.r.t expectedSchema.
     try {
         if(currExpectedSchema.type === "array"){
             for(let i=0; i<currTestSubject.length; i++){

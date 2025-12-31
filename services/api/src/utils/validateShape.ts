@@ -1,6 +1,9 @@
 
 export function validateShape(testSubject: any, expectedSchema: any): boolean{
     try {
+        if(testSubject === undefined || expectedSchema === undefined){
+            return false;
+        }
         if(expectedSchema.type === "array"){
             if(!Array.isArray(testSubject)){
                 return false;
