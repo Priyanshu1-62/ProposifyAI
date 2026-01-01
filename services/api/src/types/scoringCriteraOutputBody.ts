@@ -3,5 +3,5 @@ import { scoringCriterionBody } from "./scoringCriterionBody";
 
 export interface scoringCriteraOutputBody {
     scoringCriteria: scoringCriterionBody[];
-    metadata: AIMetadata;
+    metaData: AIMetadata;
 }
