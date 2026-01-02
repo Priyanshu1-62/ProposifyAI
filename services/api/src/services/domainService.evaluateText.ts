@@ -11,7 +11,7 @@ import { promptBuilder } from "./promptService.promptBuilder";
 
 export async function evaluateText(input: evaluateTextInputbody): Promise<evaluateTextOutputbody>{
     try {
-        const promptProfile = await getPromptProfile("EvaluateText", 1);
+        const promptProfile = await getPromptProfile("TextEvaluation", 1);
         if(!promptProfile){
           throw new Error("Unable to fetch prompt profile for text evaluation");
         }
