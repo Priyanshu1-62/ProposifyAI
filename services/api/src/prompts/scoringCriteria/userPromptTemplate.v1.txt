@@ -1,0 +1,6 @@
+Create scoring criteria for the following input text.
+
+Input text:
+```
+{{TEXT}}
+```

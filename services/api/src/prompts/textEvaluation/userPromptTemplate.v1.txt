@@ -1,0 +1,11 @@
+Evaluate the following input text using the provided scoring criteria.
+
+Scoring Criteria:
+```
+{{SCORING_CRITERIA}}
+```
+
+Input Text:
+```
+{{TEXT}}
+```

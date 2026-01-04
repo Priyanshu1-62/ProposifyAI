@@ -1,0 +1,6 @@
+Summarize the following text.
+
+Input text:
+```
+{{TEXT}}
+```
