@@ -16,13 +16,13 @@ export async function summarizeText(input: summarizeTextInputBody): Promise<summ
         }
 
         const variables: Record<string, string> = {
-
+            "TEXT": input.text
         };
 
         const aiPayload = await promptBuilder(promptProfile.userPromptTemplate, variables);
         const config = summaryConfigResolver(input.text, promptProfile.temperature, promptProfile.topP, promptProfile.outputSchema);
         
-        const rawResult = await aiTextSummarization(aiPayload, config);
+        const rawResult = await aiTextSummarization(promptProfile.systemPrompt, aiPayload, config);
 
         const ok = validateShape(rawResult, config.responseFormat);
         if(!ok){

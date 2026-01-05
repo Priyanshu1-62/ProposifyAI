@@ -235,16 +235,16 @@ model AIRequestProfile {
 }
 
 model AIResponseEvaluation {
-  id                String   @id @default(uuid())
-  createdAt         DateTime @default(now())
-
-  aiModel           String
-  promptVersion     String
-  aiSummary         String
-  overallScore      Float
-  scoreBreakdown    Json @default("[]")
-  confidence        Float
-  aiExplanation     String
+  id                     String   @id @default(uuid())
+  createdAt              DateTime @default(now())
+     
+  aiModel                String
+  promptVersion          String
+  aiSummary              String
+  overallScore           Float
+  scoreBreakdown         Json @default("[]")
+  confidence             Float
+  scoringExplanation     String
 
   inboundMessageId  String  @unique
   inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])

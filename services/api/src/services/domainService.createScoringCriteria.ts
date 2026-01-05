@@ -18,12 +18,12 @@ export async function createScoringCriteria(input: scoringCriteraInputBody): Pro
         }
 
         const variables: Record<string, string> = {
-
+            "TEXT": input.text
         }
         const aiPayload = await promptBuilder(promptProfile.userPromptTemplate, variables);
         const config = scoringCriteriaConfigResolver(input.text, promptProfile.temperature, promptProfile.topP, promptProfile.outputSchema);
 
-        const rawResult = await aiCreateScoringCriteria(aiPayload, config);
+        const rawResult = await aiCreateScoringCriteria(promptProfile.systemPrompt, aiPayload, config);
 
         const ok = validateShape(rawResult, config.responseFormat);
         if(!ok){

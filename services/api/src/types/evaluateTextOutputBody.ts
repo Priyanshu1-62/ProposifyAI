@@ -5,7 +5,7 @@ export interface evaluateTextOutputbody {
     overallScore: number;
     scoreBreakdown: Prisma.InputJsonValue
     confidence: number;
-    aiExplanation: string;
+    scoringExplanation: string;
     aiModel: string;
-    promptVersion: string;
+    promptVersion: number;
 }

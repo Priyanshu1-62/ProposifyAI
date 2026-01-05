@@ -1,5 +1,6 @@
 import { evaluateTextInputbody } from "../types/evaluateTextInputBody";
 import { evaluateTextOutputbody } from "../types/evaluateTextOutputBody";
+import { evaluateTextRawResultBody } from "../types/evaluateTextRawResultBody";
 import { coerceTypes } from "../utils/coerceTypes";
 import { normalizeOutput } from "../utils/normalizeOutput";
 import { validateShape } from "../utils/validateShape";
@@ -17,13 +18,14 @@ export async function evaluateText(input: evaluateTextInputbody): Promise<evalua
         }
 
         const variables: Record<string, string> = {
-
+          "SCORING_CRITERIA": JSON.stringify(input.scoringCriteria, null, 2),
+          "TEXT": input.responseSummary
         };
 
         const aiPayload = await promptBuilder(promptProfile.userPromptTemplate, variables);
         const config = textEvaluationConfigResolver(input.requestSummary, promptProfile.temperature, promptProfile.topP, promptProfile.outputSchema);
 
-        const rawResult = await aiTextEvaluation(aiPayload, config);
+        const rawResult = await aiTextEvaluation(promptProfile.systemPrompt, aiPayload, config);
 
         const ok = validateShape(rawResult, config.responseFormat);
         if(!ok){
@@ -34,7 +36,9 @@ export async function evaluateText(input: evaluateTextInputbody): Promise<evalua
         normalizeOutput(rawResult, config.responseFormat);
 
         const finalResult: evaluateTextOutputbody = {
-
+          ...rawResult as evaluateTextRawResultBody,
+          aiModel: config.model,
+          promptVersion: 1
         };
         return finalResult;
     } 

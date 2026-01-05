@@ -1,7 +1,5 @@
-export type scoreBreakdonwbody = Record<
-  string, {
+export interface scoreBreakdonwbody {
+    id: string;
     score: number;
-    confidence: number;
     notes?: string;
-  }
->;
+};
