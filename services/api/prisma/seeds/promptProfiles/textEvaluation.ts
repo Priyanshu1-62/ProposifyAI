@@ -1,9 +1,11 @@
-export const textEvaluationV1 = {
+import { systemPromptV1, userPromptTemplateV1 } from "../../../src/shared/prompts/textEvaluation";
+
+export const textEvaluationPromptProfileV1 = {
     key: "TextEvaluation",
     version: 1,
     purpose: "Evaluate the input text based on provided scoring criteria and create the required scoring parameters",
-    prompt: "",
-    userPromptTemplate: "",
+    systemPrompt: systemPromptV1,
+    userPromptTemplate: userPromptTemplateV1,
     outputSchema: {
         type: "object",
         required: ["scoreBreakdown", "overallScore", "confidence", "scoringExplanation"],
@@ -42,7 +44,7 @@ export const textEvaluationV1 = {
             },
             scoringExplanation: {
                 type: "string",
-                description: "A cohesive explanation that justifies each criteria's evaluation and summerizes key strength and weakness"
+                description: "A cohesive explanation that justifies each criteria's evaluation and summarizes key strength and weakness"
             }
         },
         constraints: {

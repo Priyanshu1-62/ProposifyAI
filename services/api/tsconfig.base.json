@@ -1,9 +1,9 @@
+// Monorepo-style layered TS configuration
+
 {
   "compilerOptions": {
     "target": "ES2020",                      // Good for Node 18–22
     "module": "CommonJS",                    // Most stable for Express
-    "rootDir": "./src",
-    "outDir": "./dist",
 
     "strict": true,
 
@@ -18,8 +18,5 @@
 
     "types": ["node"],                       // Important for backend typings
     "sourceMap": true                        // Helps debugging
-  },
-
-  "include": ["src"],                         // Compile only your src folder
-  "exclude": ["node_modules", "dist"]
+  }
 }

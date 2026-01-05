@@ -256,12 +256,14 @@ modelPromptProfile {
 
   key                     String
   version                 Int
-  prupose                 String
-  prompt                  String
+  purpose                 String
+  systemPrompt            String
   userPromptTemplate      String
   outputSchema            Json 
   temperature             Float
   topP                    Float @default(0.9)
+
+  @@unique([key, version])
 }
 
 

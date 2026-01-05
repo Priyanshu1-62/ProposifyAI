@@ -1,0 +1,8 @@
+// Leaf tsconfig for prisma tooling world
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [".", "../src/shared"]
+}

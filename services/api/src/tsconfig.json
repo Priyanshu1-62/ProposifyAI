@@ -1,0 +1,11 @@
+// Leaf tsconfig for src application world
+
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+      "rootDir": ".",
+      "outDir": "../dist"
+    },
+    "include": ["."],
+    "exclude": ["node_modules", "../dist"]
+}

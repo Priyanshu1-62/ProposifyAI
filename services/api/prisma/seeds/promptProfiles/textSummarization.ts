@@ -1,9 +1,11 @@
-export const textSummaryV1 = {
+import { systemPromptV1, userPromptTemplateV1 } from "../../../src/shared/prompts/textSummarization";
+
+export const textSummarizationPromptProfileV1 = {
     key: "TextSummary",
     version: 1,
     purpose: "Summerize the given text",
-    prompt: "",
-    userPromptTemplate: "",
+    systemPrompt: systemPromptV1,
+    userPromptTemplate: userPromptTemplateV1,
     outputSchema: {
         type: "object",
         required: ["summary"],
