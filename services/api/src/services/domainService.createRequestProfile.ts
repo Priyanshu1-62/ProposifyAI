@@ -11,8 +11,8 @@ export async function createRequestProfile(requestId: string, description: strin
         const createCriteriaResult = await createScoringCriteria({text: summarizationResult.summary});
 
         const aiRequestProfileData: AIRequestProfileBody = {
-            aiModel: createCriteriaResult.metadata.aiModel,
-            promptVersion: createCriteriaResult.metadata.promptVersion,
+            aiModel: createCriteriaResult.metaData.aiModel,
+            promptVersion: createCriteriaResult.metaData.promptVersion,
             aiSummary: summarizationResult.summary,
             scoringCriteria: createCriteriaResult.scoringCriteria as unknown as Prisma.InputJsonValue,
             requestId

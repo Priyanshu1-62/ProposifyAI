@@ -4,7 +4,7 @@ import { getInboundMessage } from "../services/inboundService.getInboundMessage"
 import { createInboundMessage } from "../services/inboundService.createInbound";
 import { inboundMessageContentBody } from "../types/inboundMessageContentBody";
 import { createInboundContent } from "../services/inboundService.createInboundContent";
-import { createInboundAttachment } from "../services/imboundService.createInboundAttachment";
+import { createInboundAttachment } from "../services/inboundService.createInboundAttachment";
 import { mailgunAttachmentBody } from "../types/mailgunAttachmentBody";
 import { createResponseEvaluation } from "../services/domainService.createResponseEvaluation";
 

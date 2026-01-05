@@ -226,7 +226,7 @@ model AIRequestProfile {
   createdAt         DateTime  @default(now())
 
   aiModel           String
-  promptVersion     String
+  promptVersion     Int
   aiSummary         String
   scoringCriteria  Json @default("[]")
 
@@ -239,7 +239,7 @@ model AIResponseEvaluation {
   createdAt              DateTime @default(now())
      
   aiModel                String
-  promptVersion          String
+  promptVersion          Int
   aiSummary              String
   overallScore           Float
   scoreBreakdown         Json @default("[]")

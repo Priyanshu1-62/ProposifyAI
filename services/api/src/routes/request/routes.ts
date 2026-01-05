@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import bcrypt from "bcryptjs";
 import prisma from "../../lib/prisma";
 import { body, validationResult } from 'express-validator';
 import { authTokenVerification } from "../../middlewares/authTokenVerification";
@@ -65,10 +64,11 @@ router.post('/createRequest', [
     }
 });
 
+// Currently useless
 router.put('/updateRequest', authTokenVerification, async (req: Request, res: Response) => { //First check if user is owner of the resource
     try {
         const { requestId, status } = req.body;
-        const updatedRequest = await prisma.request.update({where: {id: requestId}, data: {status}});
+        const updatedRequest = await prisma.request.update({where: {id: requestId}, data: {}});
 
         return res.status(200).json(updatedRequest);
         
