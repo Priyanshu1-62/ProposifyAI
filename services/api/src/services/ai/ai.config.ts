@@ -1,4 +1,4 @@
-export const AI_CONFIG = {
+export const AI_CONFIG_VARIANTS = {
     TEXT_ANALYSIS: {
         provider: "openrouter",
         model: "meta-llama/llama-3.1-405b-instruct"

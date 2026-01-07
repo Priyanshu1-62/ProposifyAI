@@ -3,10 +3,7 @@ import { summarizeTextOutputBody } from "../types/summarizeTextOutputBody";
 import { getPromptProfile } from "./promptService.getPromptProfile";
 import { promptBuilder } from "./promptService.promptBuilder";
 import { aiTextSummarization } from "./aiService.textSummarization";
-import { validateShape } from "../utils/validateShape";
 import { summaryConfigResolver } from "./aiService.summaryConfigResolver";
-import { coerceTypes } from "../utils/coerceTypes";
-import { normalizeOutput } from "../utils/normalizeOutput";
 
 export async function summarizeText(input: summarizeTextInputBody): Promise<summarizeTextOutputBody>{
     try {
@@ -22,18 +19,10 @@ export async function summarizeText(input: summarizeTextInputBody): Promise<summ
         const aiPayload = await promptBuilder(promptProfile.userPromptTemplate, variables);
         const config = summaryConfigResolver(input.text, promptProfile.temperature, promptProfile.topP, promptProfile.outputSchema);
         
-        const rawResult = await aiTextSummarization(promptProfile.systemPrompt, aiPayload, config);
-
-        const ok = validateShape(rawResult, config.responseFormat);
-        if(!ok){
-            throw new Error("Invalid response from AI text summarization service");
-        }
-        
-        coerceTypes(rawResult, null, null, promptProfile.outputSchema);
-        normalizeOutput(rawResult, promptProfile.outputSchema);
+        const parsedResult = await aiTextSummarization(promptProfile.systemPrompt, aiPayload, config);
 
         const finalResult: summarizeTextOutputBody = {
-            summary: rawResult,
+            summary: parsedResult,
             metaData: {
                 aiModel: config.model,
                 promptVersion: 1,
