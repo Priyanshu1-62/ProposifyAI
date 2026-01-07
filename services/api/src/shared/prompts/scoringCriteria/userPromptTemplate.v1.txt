@@ -1,6 +1,4 @@
-Create scoring criteria for the following input text.
-
-Input text:
+Input text for creating scoring criteria:
 ```
 {{TEXT}}
 ```

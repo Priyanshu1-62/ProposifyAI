@@ -9,3 +9,5 @@ main()
         console.log(e);
         process.exit(1);
 });
+
+// npx prisma db seed

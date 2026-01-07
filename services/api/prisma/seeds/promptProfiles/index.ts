@@ -16,7 +16,7 @@ export async function upsertPromptProfiles(){
     for(const profile of promptProfiles){
         await prisma.promptProfile.upsert({
             where: {key_version: {key: profile.key, version: profile.version}},
-            update: {},
+            update: {...profile},
             create: {...profile}
         });
     }

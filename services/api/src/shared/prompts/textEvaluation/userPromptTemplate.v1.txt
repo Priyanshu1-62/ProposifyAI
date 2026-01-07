@@ -1,11 +1,9 @@
-Evaluate the following input text using the provided scoring criteria.
-
 Scoring Criteria:
 ```
 {{SCORING_CRITERIA}}
 ```
 
-Input Text:
+The input text to be evaluated:
 ```
 {{TEXT}}
 ```

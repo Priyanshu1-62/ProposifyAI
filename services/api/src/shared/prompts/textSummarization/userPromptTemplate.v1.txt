@@ -1,6 +1,4 @@
-Summarize the following text.
-
-Input text:
+The input text to be summarized:
 ```
 {{TEXT}}
 ```
