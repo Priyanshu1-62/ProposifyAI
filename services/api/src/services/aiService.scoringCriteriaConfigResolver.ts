@@ -1,10 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { AIConfig } from "../types/AIConfig";
+import { AI_CONFIG_VARIANTS } from "./ai/ai.config";
 
 export function scoringCriteriaConfigResolver(text: string, temperature: number, topP: number, outputSchema: Prisma.JsonValue){
     try {
         const config: AIConfig = {
-            model: "gpt-4.1-mini",
+            model: AI_CONFIG_VARIANTS.SCORING_CRITERIA.model,
             temperature,
             topP,
             maxTokens: text.length*2,

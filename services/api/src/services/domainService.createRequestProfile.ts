@@ -17,7 +17,7 @@ export async function createRequestProfile(requestId: string, description: strin
             scoringCriteria: createCriteriaResult.scoringCriteria as unknown as Prisma.InputJsonValue,
             requestId
         }
-        const aiRequestProfile = createAIRequestProfile(aiRequestProfileData);
+        const aiRequestProfile = await createAIRequestProfile(aiRequestProfileData);
         return aiRequestProfile;
     } 
     catch (error) {

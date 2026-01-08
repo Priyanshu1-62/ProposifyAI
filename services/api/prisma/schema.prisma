@@ -46,6 +46,14 @@ enum OutboundEmailFailureReason {
   UNKNOWN
 }
 
+enum RequestOverviewStatus {
+  DRAFT
+  FAILED
+  SENT
+  EVALUATED
+  COMPLETED
+}
+
 /* ---------- MODELS ---------- */
 
 // User Schema, to store all users together in one table
@@ -155,6 +163,31 @@ model InboundMessageAttachment {
   inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
+// OutboundEmailAttempt Schema, to store all outbound mail attempts together in one table
+model OutboundEmailAttempt {
+  id                   String    @id @default(uuid())
+
+  fromEmail            String
+  toEmail              String
+  subject              String?
+
+  requestId            String
+  respondentGroupId    String
+  userId               String
+
+  status               OutboundEmailAttemptStatus
+  failureReason        OutboundEmailFailureReason?
+
+  createdAt            DateTime  @default(now())
+
+  outboundEmailId      String?
+  outboundEmail        OutboundEmail?  @relation(fields: [outboundEmailId], references: [id])
+
+  @@index([userId])
+  @@index([requestId])
+  @@index([respondentGroupId])
+}
+
 // OutboundEmail Schema, to store all outbound mails together in one table
 model OutboundEmail {
   id                   String    @id @default(uuid())
@@ -176,31 +209,6 @@ model OutboundEmail {
 
   events               OutboundEmailEvent[]
   attempts             OutboundEmailAttempt[]
-
-  @@index([userId])
-  @@index([requestId])
-  @@index([respondentGroupId])
-}
-
-// OutboundEmailAttempt Schema, to store all outbound mail attempts together in one table
-model OutboundEmailAttempt {
-  id                   String    @id @default(uuid())
-
-  fromEmail            String
-  toEmail              String
-  subject              String?
-
-  requestId            String
-  respondentGroupId    String
-  userId               String
-
-  status               OutboundEmailAttemptStatus
-  failureReason        OutboundEmailFailureReason?
-
-  createdAt            DateTime  @default(now())
-
-  outboundEmailId      String?
-  outboundEmail        OutboundEmail?  @relation(fields: [outboundEmailId], references: [id])
 
   @@index([userId])
   @@index([requestId])
@@ -250,7 +258,7 @@ model AIResponseEvaluation {
   inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
-modelPromptProfile {
+model PromptProfile {
   id                     String   @id @default(uuid())
   createdAt              DateTime @default(now())
 
@@ -266,5 +274,20 @@ modelPromptProfile {
   @@unique([key, version])
 }
 
+model RequestOverview {
+  id                      String  @id @default(uuid())
+  createdAt               DateTime  @default(now())
+
+  requestId               String
+  respondentGroupId       String
+  OutboundEmailAttemptId  String?
+  outboundEmailId         String?
+  inboundMessageId        String?
+  aiRequestProfileId      String?
+  aiResponseEvaluationId  String?
+
+  status                  RequestOverviewStatus
+  lastUpdatedAt           DateTime  @default(now()) 
+}
 
 

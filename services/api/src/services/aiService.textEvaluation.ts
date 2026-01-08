@@ -7,13 +7,12 @@ import { fetchOpenRouterAI } from "./ai/providers/openRouter/openRouter.client";
 
 export async function aiTextEvaluation(systemPrompt: string, userPrompt: string, config: AIConfig){
     try {
-        const model = AI_CONFIG_VARIANTS.TEXT_EVALUATION.model;
         const MAX_ATTEMPTS = 2;
         let lastError = "Unknown";
         let result;     
         
         for(let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++){
-            result = await fetchOpenRouterAI(systemPrompt, userPrompt, model, config);
+            result = await fetchOpenRouterAI(systemPrompt, userPrompt, config.model, config);
 
             if(result.status !== 200){
                 lastError = result.error ?? `HTTP error ${result.status}`;
