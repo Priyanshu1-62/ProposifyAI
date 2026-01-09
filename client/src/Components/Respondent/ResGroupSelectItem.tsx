@@ -1,10 +1,10 @@
-import { FaRegEdit } from "react-icons/fa";
-import type { resGroup } from "../../Models/resGroup"
-import { useNavigate } from "react-router-dom";
+// import { FaRegEdit } from "react-icons/fa";
+// import type { resGroup } from "../../Models/resGroup"
+// import { useNavigate } from "react-router-dom";
 import type { resGroupSelectItemProps } from "../../Models/resGroupSelectItemProps";
 
 function ResGroupSelectItem({ element, handleSelect }: resGroupSelectItemProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const formatted = new Date(element.createdAt).toLocaleString("en-IN", {
     day: "2-digit",
     month: "short",
