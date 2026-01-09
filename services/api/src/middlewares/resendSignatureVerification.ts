@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { resendSignatureBody } from '../types/resendSignatureBody';
+import { resendSignatureBody } from '../types/resendInterface/resendSignatureBody';
 import { verifyResendSignature } from '../utils/verifyResendSignature';
 
 export async function resendSignatureVerification(req: Request, res: Response, next: NextFunction){

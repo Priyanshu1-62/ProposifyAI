@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import { resendSignatureBody } from "../types/resendSignatureBody";
-import { verifySignatureResponse } from "../types/verifySignatureResponse";
+import { resendSignatureBody } from "../types/resendInterface/resendSignatureBody";
+import { verifySignatureResponse } from "../types/mailInterface/verifySignatureResponse";
 
 
 export function verifyResendSignature(webhookData: resendSignatureBody, rawBody: Buffer): verifySignatureResponse{

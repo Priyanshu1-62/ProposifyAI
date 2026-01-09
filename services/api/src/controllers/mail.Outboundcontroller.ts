@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { sendEmailResend } from "../services/mailService.resend";
-import { createRequest } from "../services/requestService.createRequest";
-import { bulkEmailPayload } from "../types/bulkEmailPayload";
+import { sendEmailResend } from "../services/mailService/mailService.resend";
+import { createRequest } from "../services/requestService/requestService.createRequest";
+import { bulkEmailPayload } from "../types/mailInterface/bulkEmailPayload";
 import prisma from "../lib/prisma";
-import { createOutboundEntry } from "../services/analyticsService.outboundEntry";
-import { createOutboundAttempt } from "../services/analyticsService.createAttempt";
-import { updateOutboundAttempt } from "../services/analyticsService.updateAttempt";
-import { createRequestProfile } from "../services/domainService.createRequestProfile";
+import { createOutboundEntry } from "../services/analyticsService/analyticsService.outboundEntry";
+import { createOutboundAttempt } from "../services/analyticsService/analyticsService.createAttempt";
+import { updateOutboundAttempt } from "../services/analyticsService/analyticsService.updateAttempt";
+import { createRequestProfile } from "../services/domainService/domainService.createRequestProfile";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {

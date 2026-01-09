@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { getRequest } from "../services/requestService.getRequest";
-import { getInboundMessage } from "../services/inboundService.getInboundMessage";
-import { createInboundMessage } from "../services/inboundService.createInbound";
-import { inboundMessageContentBody } from "../types/inboundMessageContentBody";
-import { createInboundContent } from "../services/inboundService.createInboundContent";
-import { createInboundAttachment } from "../services/inboundService.createInboundAttachment";
-import { mailgunAttachmentBody } from "../types/mailgunAttachmentBody";
-import { createResponseEvaluation } from "../services/domainService.createResponseEvaluation";
+import { getRequest } from "../services/requestService/requestService.getRequest";
+import { getInboundMessage } from "../services/inboundService/inboundService.getInboundMessage";
+import { createInboundMessage } from "../services/inboundService/inboundService.createInbound";
+import { inboundMessageContentBody } from "../types/inboundMailInterace/inboundMessageContentBody";
+import { createInboundContent } from "../services/inboundService/inboundService.createInboundContent";
+import { createInboundAttachment } from "../services/inboundService/inboundService.createInboundAttachment";
+import { mailgunAttachmentBody } from "../types/mailgunInterface/mailgunAttachmentBody";
+import { createResponseEvaluation } from "../services/domainService/domainService.createResponseEvaluation";
 
 // Always return status 200 response to Mailgun to avoid retries.
 const handleMailgunInbound = async (req: Request, res: Response) => {

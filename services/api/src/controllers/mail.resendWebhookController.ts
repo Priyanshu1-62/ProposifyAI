@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { resendEventTypeMap } from "../types/resendEventTypeMap";
-import { outboundEmailEventBody } from "../types/outboundEmailEventBody";
-import { createOutboundEmailEvent } from "../services/analyticsService.createEvent";
-import { findUniqueOutbound } from "../services/analyticsService.findUniqueOutbound";
+import { resendEventTypeMap } from "../types/resendInterface/resendEventTypeMap";
+import { outboundEmailEventBody } from "../types/outboundMailInterface/outboundEmailEventBody";
+import { createOutboundEmailEvent } from "../services/analyticsService/analyticsService.createEvent";
+import { findUniqueOutbound } from "../services/analyticsService/analyticsService.findUniqueOutbound";
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
 import { EmailEventType, OutboundEmailStatus } from "@prisma/client";
-import { updateoutboundEmail } from "../services/analyticsService.updateOutboundEmail";
+import { updateoutboundEmail } from "../services/analyticsService/analyticsService.updateOutboundEmail";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {

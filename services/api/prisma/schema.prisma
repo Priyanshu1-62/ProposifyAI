@@ -48,10 +48,20 @@ enum OutboundEmailFailureReason {
 
 enum RequestOverviewStatus {
   DRAFT
-  FAILED
-  SENT
-  EVALUATED
+  CREATED
+
+  PROCESSING
+  OUTBOUND_FAILED
+  EMAILS_SENT
+
+  AWAITING_RESPONSES
+  RESPONSES_RECEIVED
+
+  EVALUATING
+  EVALUATION_FAILED
+
   COMPLETED
+  CLOSED
 }
 
 /* ---------- MODELS ---------- */
@@ -98,21 +108,21 @@ model Respondent {
 
 // Request Schema, to store all requests together in one table
 model Request {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  createdAt   DateTime @default(now())
+  id                   String   @id @default(uuid())
+  createdAt            DateTime @default(now())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  title                String
+  description          String
+  userId               String
+  respondentGroupId    String
+  aiRequestProfileId   String?
 
-  respondentGroupId String
-  respondentGroup   RespondentGroup @relation(fields: [respondentGroupId], references: [id])
+  user                 User  @relation(fields: [userId], references: [id])
+  respondentGroup      RespondentGroup @relation(fields: [respondentGroupId], references: [id])
 
-  aiRequestProfileId  String?
-
-  inboundMessages InboundMessage[]
-  aiRequestProfile AIRequestProfile[]
+  inboundMessages      InboundMessage[]
+  aiRequestProfile     AIRequestProfile[]
+  requestOverview      RequestOverview[]
 }
 
 // Inbound message schema, to store all messages together in one table
@@ -278,7 +288,7 @@ model RequestOverview {
   id                      String  @id @default(uuid())
   createdAt               DateTime  @default(now())
 
-  requestId               String
+  requestId               String  @unique
   respondentGroupId       String
   OutboundEmailAttemptId  String?
   outboundEmailId         String?
@@ -288,6 +298,8 @@ model RequestOverview {
 
   status                  RequestOverviewStatus
   lastUpdatedAt           DateTime  @default(now()) 
+
+  request                 Request  @relation(fields: [requestId], references: [id])
 }
 
 

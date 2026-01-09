@@ -1,4 +1,4 @@
-import { AIConfig } from "../../../../types/AIConfig";
+import { AIConfig } from "../../../../types/aiInterface/AIConfig";
 
 export async function fetchOpenRouterAI(systemPrompt: string, userPrompt: string, model: string, config: AIConfig){
   const controller = new AbortController();

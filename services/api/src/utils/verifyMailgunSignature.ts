@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import { MailgunSignatureBody } from "../types/MailgunSignatureBody";
-import { verifySignatureResponse } from "../types/verifySignatureResponse";
+import { MailgunSignatureBody } from "../types/mailgunInterface/MailgunSignatureBody";
+import { verifySignatureResponse } from "../types/mailInterface/verifySignatureResponse";
 
 export function verifyMailgunSignature(webhookData: MailgunSignatureBody): verifySignatureResponse{
     try {

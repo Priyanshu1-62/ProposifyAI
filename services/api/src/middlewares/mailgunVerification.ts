@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { MailgunSignatureBody } from "../types/MailgunSignatureBody";
+import { MailgunSignatureBody } from "../types/mailgunInterface/MailgunSignatureBody";
 import { verifyMailgunSignature } from "../utils/verifyMailgunSignature";
 
 export function mailgunVerification(req: Request, res: Response, next: NextFunction){
