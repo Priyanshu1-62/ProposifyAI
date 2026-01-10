@@ -1,5 +1,5 @@
 ﻿# ProposifyAI
-Update: check out the live app [here](https://www.proposifyai.online) 🚀
+Update: check out the live app <a href="https://www.proposifyai.online" target="_blank" rel="noopener noreferrer">here</a> 🚀
 ---
 
 ### 🧰 Tech Stack
@@ -21,3 +21,4 @@ Update: check out the live app [here](https://www.proposifyai.online) 🚀
 - [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?logo=vercel&logoColor=white)](#)
 - [![Render](https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white)](#)
 ---
+
