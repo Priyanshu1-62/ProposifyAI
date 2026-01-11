@@ -7,10 +7,12 @@ import { createOutboundEntry } from "../services/analyticsService/analyticsServi
 import { createOutboundAttempt } from "../services/analyticsService/analyticsService.createAttempt";
 import { updateOutboundAttempt } from "../services/analyticsService/analyticsService.updateAttempt";
 import { createRequestProfile } from "../services/domainService/domainService.createRequestProfile";
+import { createRequestOverview } from "../services/requestService/requestService.createOverview";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
         const newRequest = await createRequest(req.body);
+        const requestOverview = await createRequestOverview(newRequest.id, newRequest.respondentGroupId, "CREATED");
 
         const respondents = await prisma.respondent.findMany({where: {groupId: req.body.respondentGroupId}});
         if(!respondents.length){
