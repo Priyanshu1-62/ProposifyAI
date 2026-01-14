@@ -14,11 +14,12 @@ Update: check out the live app <a href="https://www.proposifyai.online" target="
 - [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](#)
 - [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](#)
 - [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](#)
+- [![Meta Llama](https://img.shields.io/badge/MetaLlama-0467DF?logo=meta&logoColor=white)](#)
 - [![Resend](https://img.shields.io/badge/Resend-000000?logo=resend&logoColor=white)](#)
 - [![Mailgun](https://img.shields.io/badge/Mailgun-C02428?logo=mailgun&logoColor=white)](#)
-- [![Meta Llama](https://img.shields.io/badge/MetaLlama-0467DF?logo=meta&logoColor=white)](#)
 - [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)](#)
 - [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?logo=vercel&logoColor=white)](#)
 - [![Render](https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white)](#)
 ---
+
 
