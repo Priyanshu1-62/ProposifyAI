@@ -3,6 +3,7 @@ import { AIRequestProfileBody } from "../../types/requestInterface/AIRequestProf
 import { createScoringCriteria } from "./domainService.createScoringCriteria";
 import { summarizeText } from "./domainService.summarizeText";
 import { createAIRequestProfile } from "../requestService/requestService.createAIRequestProfile";
+import { updateRequestOverview } from "../requestService/requestOverview.updateOverview";
 
 export async function createRequestProfile(requestId: string, description: string) {
     try {
@@ -18,6 +19,9 @@ export async function createRequestProfile(requestId: string, description: strin
             requestId
         }
         const aiRequestProfile = await createAIRequestProfile(aiRequestProfileData);
+
+        await updateRequestOverview(aiRequestProfile.requestId, {aiRequestProfileId: aiRequestProfile.id, status: "AWAITING_RESPONSES"});
+
         return aiRequestProfile;
     } 
     catch (error) {

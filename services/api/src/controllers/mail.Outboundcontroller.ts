@@ -8,11 +8,13 @@ import { createOutboundAttempt } from "../services/analyticsService/analyticsSer
 import { updateOutboundAttempt } from "../services/analyticsService/analyticsService.updateAttempt";
 import { createRequestProfile } from "../services/domainService/domainService.createRequestProfile";
 import { createRequestOverview } from "../services/requestService/requestService.createOverview";
+import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
         const newRequest = await createRequest(req.body);
-        const requestOverview = await createRequestOverview(newRequest.id, newRequest.respondentGroupId, "CREATED");
+        
+        await createRequestOverview(newRequest.id, newRequest.respondentGroupId, "CREATED");
 
         const respondents = await prisma.respondent.findMany({where: {groupId: req.body.respondentGroupId}});
         if(!respondents.length){
@@ -56,6 +58,8 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
                 }
             })
         );
+
+        await updateRequestOverview(newRequest.id, {status: "EMAILS_SENT"});
 
         createRequestProfile(newRequest.id, newRequest.description);
 

@@ -290,11 +290,7 @@ model RequestOverview {
 
   requestId               String  @unique
   respondentGroupId       String
-  OutboundEmailAttemptId  String?
-  outboundEmailId         String?
-  inboundMessageId        String?
   aiRequestProfileId      String?
-  aiResponseEvaluationId  String?
 
   status                  RequestOverviewStatus
   lastUpdatedAt           DateTime  @default(now()) 
