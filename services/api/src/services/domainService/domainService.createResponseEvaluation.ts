@@ -5,6 +5,7 @@ import { summarizeText } from "./domainService.summarizeText";
 import { createAIResponseEvaluation } from "../inboundService/inboundService.createAIResponseEvaluation";
 import { getAIRequestProfile } from "../requestService/requestService.getAIRequestProfile";
 import { Prisma } from "@prisma/client";
+import { stdLogger as logger } from "../../utils/loggerInfra/logger";
 
 export async function createResponseEvaluation(messageText: string, aiRequestProfileId: string | null, inboundMessageId: string){
     try {
@@ -34,6 +35,15 @@ export async function createResponseEvaluation(messageText: string, aiRequestPro
         return aiResponseEvaluation;
     } 
     catch (error) {
-        throw error;     //Log it instead by using logger
+        const errorMessage = String(
+            error instanceof Error
+            ? error.message || error.name
+            : error
+        );
+
+        logger.warn(`AI response evaluation failed, continuing workflow ...`, {
+            service: "AI_RESPONSE_EVALUATION",
+            errorType: errorMessage
+        });
     }
 }

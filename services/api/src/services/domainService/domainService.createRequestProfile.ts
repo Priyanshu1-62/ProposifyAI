@@ -4,6 +4,7 @@ import { createScoringCriteria } from "./domainService.createScoringCriteria";
 import { summarizeText } from "./domainService.summarizeText";
 import { createAIRequestProfile } from "../requestService/requestService.createAIRequestProfile";
 import { updateRequestOverview } from "../requestService/requestOverview.updateOverview";
+import { stdLogger as logger } from "../../utils/loggerInfra/logger";
 
 export async function createRequestProfile(requestId: string, description: string) {
     try {
@@ -25,6 +26,15 @@ export async function createRequestProfile(requestId: string, description: strin
         return aiRequestProfile;
     } 
     catch (error) {
-        throw error;    //Log it instead by using logger
+        const errorMessage = String(
+            error instanceof Error
+            ? error.message || error.name
+            : error
+        );
+
+        logger.warn(`AI request profile enrichment failed, continuing workflow ...`, {
+            service: "AI_REQUEST_PROFILE_CREATION",
+            errorType: errorMessage
+        });
     }
 }
