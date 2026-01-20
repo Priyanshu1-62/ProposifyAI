@@ -6,6 +6,7 @@ import { findUniqueOutbound } from "../services/analyticsService/analyticsServic
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
 import { EmailEventType, OutboundEmailStatus } from "@prisma/client";
 import { updateoutboundEmail } from "../services/analyticsService/analyticsService.updateOutboundEmail";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
@@ -37,7 +38,6 @@ const handleResendWebhook = async (req: Request, res: Response) => {
         return res.status(200).json({ received: true, result });
     } 
     catch (error) {
-        console.log("Failed to process webhook", error);
         return res.status(200).json({received: true }); 
     }
 }

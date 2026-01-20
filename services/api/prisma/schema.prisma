@@ -285,17 +285,27 @@ model PromptProfile {
 }
 
 model RequestOverview {
-  id                      String  @id @default(uuid())
-  createdAt               DateTime  @default(now())
+  id                           String  @id @default(uuid())
+  createdAt                    DateTime  @default(now())
+     
+  requestId                    String  @unique
+  respondentGroupId            String
+  aiRequestProfileId           String?
 
-  requestId               String  @unique
-  respondentGroupId       String
-  aiRequestProfileId      String?
+  outboundMailSentCount        Int @default(0)
+  outboundMailFailedCount      Int @default(0)
+  outboundMailBouncedCount     Int @default(0)
+  outboundMailComplainedCount  Int @default(0)
+  outboundMailDeliveredCount   Int @default(0)
+  lastOutboundMailTimeStamp    DateTime?
 
-  status                  RequestOverviewStatus
-  lastUpdatedAt           DateTime  @default(now()) 
+  inboundMailCount             Int @default(0)
+  lastInboundMailTimeStamp     DateTime?
 
-  request                 Request  @relation(fields: [requestId], references: [id])
+  status                       RequestOverviewStatus
+  lastUpdatedAt                DateTime  @default(now()) 
+
+  request                      Request  @relation(fields: [requestId], references: [id])
 }
 
 
