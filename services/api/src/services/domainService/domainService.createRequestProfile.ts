@@ -21,7 +21,12 @@ export async function createRequestProfile(requestId: string, description: strin
         }
         const aiRequestProfile = await createAIRequestProfile(aiRequestProfileData);
 
-        await updateRequestOverview(aiRequestProfile.requestId, {aiRequestProfileId: aiRequestProfile.id, status: "AWAITING_RESPONSES"});
+        await updateRequestOverview(aiRequestProfile.requestId, 
+        {
+            aiRequestProfileId: aiRequestProfile.id, 
+            status: "AWAITING_RESPONSES", 
+            lastUpdatedAt: new Date()
+        }, {});
 
         return aiRequestProfile;
     } 

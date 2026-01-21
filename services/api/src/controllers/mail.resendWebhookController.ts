@@ -6,7 +6,9 @@ import { findUniqueOutbound } from "../services/analyticsService/analyticsServic
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
 import { EmailEventType, OutboundEmailStatus } from "@prisma/client";
 import { updateoutboundEmail } from "../services/analyticsService/analyticsService.updateOutboundEmail";
-import { stdLogger as logger } from "../utils/loggerInfra/logger";
+import eventCounterFunction from "../utils/eventCounterFunction";
+import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
+import { findUniqueOutboundEvent } from "../services/analyticsService/analyticsService.findUniqueOutbuondEvent";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
@@ -22,11 +24,30 @@ const handleResendWebhook = async (req: Request, res: Response) => {
             return res.status(200).json({ignored: true, reason: "No corresponding email exists"});
         }
 
+        const isRetriedResendWebhook = await findUniqueOutboundEvent(outboundEmail.id, eventType);
+        if(isRetriedResendWebhook){
+            return res.status(200).json({ignored: true, reason: "A webhook for same event already arrived earlier."});
+        }
+
         const data: outboundEmailEventBody = { 
             eventType,
             occurredAt: new Date(event.data.created_at),
             outboundEmailId: outboundEmail.id
         }
+
+        if(eventType in eventCounterFunction){
+            const counterFunction = eventCounterFunction[eventType];
+            if(counterFunction) updateRequestOverview(outboundEmail.requestId, 
+                {
+                    lastOutboundMailTimeStamp: new Date(), 
+                    lastUpdatedAt: new Date()
+                }, 
+                {
+                    [counterFunction]: 1
+                }
+            );
+        }
+
         const result = await createOutboundEmailEvent(data);
         await updateoutboundEmail(outboundEmail.id, {current_status: eventType});
 

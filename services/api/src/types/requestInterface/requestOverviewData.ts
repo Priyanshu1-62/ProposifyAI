@@ -1,6 +1,9 @@
 import { RequestOverviewStatus } from "@prisma/client"
+import { requestOverviewIncKeys } from "./requestOverviewIncKeys";
 
-export interface requestOverviewBody {
+type requestOverviewDataIncFields = Partial<Record<requestOverviewIncKeys, Record<"increment", number>>>;
+
+export interface requestOverviewData extends requestOverviewDataIncFields {
     requestId?:                    string;
     respondentGroupIdd?:           string;
     aiRequestProfileId?:           string;
@@ -8,11 +11,4 @@ export interface requestOverviewBody {
     lastUpdatedAt?:                Date;
     lastOutboundMailTimeStamp?:    Date;
     lastInboundMailTimeStamp?:     Date;
-
-    outboundMailSentCount?:        number;
-    outboundMailFailedCount?:      number;
-    outboundMailBouncedCount?:     number;
-    outboundMailComplainedCount?:  number;
-    outboundMailDeliveredCount?:   number;
-    inboundMailCount?:             number;  
 }

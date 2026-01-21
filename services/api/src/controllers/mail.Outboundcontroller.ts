@@ -42,11 +42,27 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
                     attempt = await createOutboundAttempt(payload);
                     const outboundResult = await sendEmailResend(payload);
                     if(outboundResult.data){
+                        updateRequestOverview(newRequest.id, 
+                            {
+                                lastOutboundMailTimeStamp: new Date(), 
+                                lastUpdatedAt: new Date()
+                            }, 
+                            {outboundMailSentCount: 1}
+                        );
+
                         const outboundEntry = await createOutboundEntry(payload, outboundResult.data.id);
                         const result = await updateOutboundAttempt(attempt.id, {outboundEmailId: outboundEntry.id, status: "SUCCESS"});
                         return result;
                     }
                     else{
+                        updateRequestOverview(newRequest.id, 
+                            {
+                                lastOutboundMailTimeStamp: new Date(), 
+                                lastUpdatedAt: new Date()
+                            }, 
+                            {outboundMailFailedCount: 1}
+                        );
+                        
                         const result = await updateOutboundAttempt(attempt.id, {status: "FAILED", failureReason: "PROVIDER_ERROR"});
                         return result;
                     }
@@ -59,7 +75,7 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
             })
         );
 
-        await updateRequestOverview(newRequest.id, {status: "EMAILS_SENT"});
+        await updateRequestOverview(newRequest.id, {status: "EMAILS_SENT"}, {});
 
         createRequestProfile(newRequest.id, newRequest.description);
 

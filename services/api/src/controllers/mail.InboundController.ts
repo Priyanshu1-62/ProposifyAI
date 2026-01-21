@@ -7,6 +7,7 @@ import { createInboundContent } from "../services/inboundService/inboundService.
 import { createInboundAttachment } from "../services/inboundService/inboundService.createInboundAttachment";
 import { mailgunAttachmentBody } from "../types/mailgunInterface/mailgunAttachmentBody";
 import { createResponseEvaluation } from "../services/domainService/domainService.createResponseEvaluation";
+import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 
 // Always return status 200 response to Mailgun to avoid retries.
 const handleMailgunInbound = async (req: Request, res: Response) => {
@@ -33,6 +34,16 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
         if(isReSubmission){
             return res.status(200).json({message: "A respondent may submit exactly one proposal per request."});
         }
+
+        updateRequestOverview(requestId,
+            {
+                lastInboundMailTimeStamp: new Date(),
+                lastUpdatedAt: new Date()
+            },
+            {
+                inboundMailCount: 1
+            }
+        );
 
         const inboundMessage = await createInboundMessage(req.body.from, messageId, linkedRequest.id);
 
