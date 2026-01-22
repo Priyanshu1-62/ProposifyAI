@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { getRequest } from "../services/requestService/requestService.getRequest";
-import { getInboundMessage } from "../services/inboundService/inboundService.getInboundMessage";
-import { createInboundMessage } from "../services/inboundService/inboundService.createInbound";
+import { getInboundMessage } from "../services/inboundMailService/inboundService.getInboundMessage";
+import { createInboundMessage } from "../services/inboundMailService/inboundService.createInbound";
 import { inboundMessageContentBody } from "../types/inboundMailInterace/inboundMessageContentBody";
-import { createInboundContent } from "../services/inboundService/inboundService.createInboundContent";
-import { createInboundAttachment } from "../services/inboundService/inboundService.createInboundAttachment";
+import { createInboundContent } from "../services/inboundMailService/inboundService.createInboundContent";
+import { createInboundAttachment } from "../services/inboundMailService/inboundService.createInboundAttachment";
 import { mailgunAttachmentBody } from "../types/mailgunInterface/mailgunAttachmentBody";
 import { createResponseEvaluation } from "../services/domainService/domainService.createResponseEvaluation";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
@@ -35,7 +35,7 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
             return res.status(200).json({message: "A respondent may submit exactly one proposal per request."});
         }
 
-        updateRequestOverview(requestId,
+        await updateRequestOverview(requestId,
             {
                 lastInboundMailTimeStamp: new Date(),
                 lastUpdatedAt: new Date()
@@ -70,7 +70,7 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
             })
         );
 
-        createResponseEvaluation(messageContent.text, linkedRequest.aiRequestProfileId, inboundMessage.id);
+        createResponseEvaluation(messageContent.text, requestId, inboundMessage.id);
 
         return res.status(200).json({message: "Inbound message data stored successfully"});
     } 

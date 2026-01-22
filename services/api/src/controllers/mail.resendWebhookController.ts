@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { resendEventTypeMap } from "../types/resendInterface/resendEventTypeMap";
 import { outboundEmailEventBody } from "../types/outboundMailInterface/outboundEmailEventBody";
-import { createOutboundEmailEvent } from "../services/analyticsService/analyticsService.createEvent";
-import { findUniqueOutbound } from "../services/analyticsService/analyticsService.findUniqueOutbound";
+import { createOutboundEmailEvent } from "../services/outboundMailService/outboundService.createEvent";
+import { findUniqueOutbound } from "../services/outboundMailService/outboundService.findUniqueOutbound";
 import terminalEmailEvent from "../utils/verifyTerminalEmailEvent";
 import { EmailEventType, OutboundEmailStatus } from "@prisma/client";
-import { updateoutboundEmail } from "../services/analyticsService/analyticsService.updateOutboundEmail";
+import { updateoutboundEmail } from "../services/outboundMailService/outboundService.updateOutboundEmail";
 import eventCounterFunction from "../utils/eventCounterFunction";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
-import { findUniqueOutboundEvent } from "../services/analyticsService/analyticsService.findUniqueOutbuondEvent";
+import { findUniqueOutboundEvent } from "../services/outboundMailService/outboundService.findUniqueOutbuondEvent";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
@@ -37,7 +37,7 @@ const handleResendWebhook = async (req: Request, res: Response) => {
 
         if(eventType in eventCounterFunction){
             const counterFunction = eventCounterFunction[eventType];
-            if(counterFunction) updateRequestOverview(outboundEmail.requestId, 
+            if(counterFunction) await updateRequestOverview(outboundEmail.requestId, 
                 {
                     lastOutboundMailTimeStamp: new Date(), 
                     lastUpdatedAt: new Date()

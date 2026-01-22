@@ -3,11 +3,11 @@ import { sendEmailResend } from "../services/mailService/mailService.resend";
 import { createRequest } from "../services/requestService/requestService.createRequest";
 import { bulkEmailPayload } from "../types/mailInterface/bulkEmailPayload";
 import prisma from "../lib/prisma";
-import { createOutboundEntry } from "../services/analyticsService/analyticsService.outboundEntry";
-import { createOutboundAttempt } from "../services/analyticsService/analyticsService.createAttempt";
-import { updateOutboundAttempt } from "../services/analyticsService/analyticsService.updateAttempt";
+import { createOutboundEntry } from "../services/outboundMailService/outboundService.outboundEntry";
+import { createOutboundAttempt } from "../services/outboundMailService/outboundService.createAttempt";
+import { updateOutboundAttempt } from "../services/outboundMailService/outboundService.updateAttempt";
 import { createRequestProfile } from "../services/domainService/domainService.createRequestProfile";
-import { createRequestOverview } from "../services/requestService/requestService.createOverview";
+import { createRequestOverview } from "../services/requestService/requestOverview.createOverview";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {

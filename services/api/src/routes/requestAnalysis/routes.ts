@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { authTokenVerification } from "../../middlewares/authTokenVerification";
-import requestAnalysisController from "../../controllers/requestAnalysisController";
+import requestAnalysisController from "../../controllers/request.AnalysisController";
 
 const router = Router();
 

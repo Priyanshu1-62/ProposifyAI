@@ -2,17 +2,14 @@ import { AIResponseEvaluationBody } from "../../types/evaluationInterface/AIResp
 import { evaluateTextInputbody } from "../../types/evaluationInterface/evaluateTextInputBody";
 import { evaluateText } from "./domainService.evaluateText";
 import { summarizeText } from "./domainService.summarizeText";
-import { createAIResponseEvaluation } from "../inboundService/inboundService.createAIResponseEvaluation";
-import { getAIRequestProfile } from "../requestService/requestService.getAIRequestProfile";
+import { createAIResponseEvaluation } from "../inboundMailService/inboundService.createAIResponseEvaluation";
+import { getAIRequestProfile } from "../requestService/requestProfile.getAIRequestProfile";
 import { Prisma } from "@prisma/client";
 import { stdLogger as logger } from "../../utils/loggerInfra/logger";
 
-export async function createResponseEvaluation(messageText: string, aiRequestProfileId: string | null, inboundMessageId: string){
+export async function createResponseEvaluation(messageText: string, requestId: string, inboundMessageId: string){
     try {
-        if(!aiRequestProfileId){
-            return;
-        }
-        const aiRequestProfile = await getAIRequestProfile(aiRequestProfileId);
+        const aiRequestProfile = await getAIRequestProfile(requestId);
         if(!aiRequestProfile){
             return;
         }

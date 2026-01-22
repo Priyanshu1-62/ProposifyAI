@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { AIRequestProfileBody } from "../../types/requestInterface/AIRequestProfileBody";
 import { createScoringCriteria } from "./domainService.createScoringCriteria";
 import { summarizeText } from "./domainService.summarizeText";
-import { createAIRequestProfile } from "../requestService/requestService.createAIRequestProfile";
+import { createAIRequestProfile } from "../requestService/requestProfile.createAIRequestProfile";
 import { updateRequestOverview } from "../requestService/requestOverview.updateOverview";
 import { stdLogger as logger } from "../../utils/loggerInfra/logger";
 
