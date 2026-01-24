@@ -1,7 +1,7 @@
-import { EmailEventType } from "@prisma/client";
+import { OutboundEmailStatus } from "@prisma/client";
 
 export interface outboundEmailEventBody {
-    eventType: EmailEventType;
+    eventType: OutboundEmailStatus;
     occurredAt: Date;
     outboundEmailId: string;
 }

@@ -9,6 +9,7 @@ import { updateOutboundAttempt } from "../services/outboundMailService/outboundS
 import { createRequestProfile } from "../services/domainService/domainService.createRequestProfile";
 import { createRequestOverview } from "../services/requestService/requestOverview.createOverview";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
+import { updateRespondent } from "../services/respondentService/respondentService.updateRespondent";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
@@ -42,7 +43,7 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
                     attempt = await createOutboundAttempt(payload);
                     const outboundResult = await sendEmailResend(payload);
                     if(outboundResult.data){
-                        updateRequestOverview(newRequest.id, 
+                        await updateRequestOverview(newRequest.id, 
                             {
                                 lastOutboundMailTimeStamp: new Date(), 
                                 lastUpdatedAt: new Date()
@@ -50,18 +51,22 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
                             {outboundMailSentCount: 1}
                         );
 
+                        await updateRespondent(email, req.body.respondentGroupId, {outboundStatus: "SENT"});
+
                         const outboundEntry = await createOutboundEntry(payload, outboundResult.data.id);
                         const result = await updateOutboundAttempt(attempt.id, {outboundEmailId: outboundEntry.id, status: "SUCCESS"});
                         return result;
                     }
                     else{
-                        updateRequestOverview(newRequest.id, 
+                        await updateRequestOverview(newRequest.id, 
                             {
                                 lastOutboundMailTimeStamp: new Date(), 
                                 lastUpdatedAt: new Date()
                             }, 
                             {outboundMailFailedCount: 1}
                         );
+
+                        await updateRespondent(email, req.body.respondentGroupId, {outboundStatus: "FAILED"});
                         
                         const result = await updateOutboundAttempt(attempt.id, {status: "FAILED", failureReason: "PROVIDER_ERROR"});
                         return result;
@@ -77,12 +82,13 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
 
         await updateRequestOverview(newRequest.id, {status: "EMAILS_SENT"}, {});
 
+        // TODO: Replace this by (an intent store + worker) combi to get durable list of pending/failed tasks to be done as server restarts.
         createRequestProfile(newRequest.id, newRequest.description);
 
         return res.status(201).json(response);
     }
     catch(error) {
-        return res.status(500).json({message: "Failed to make the request."})
+        return res.status(500).json({message: "Failed to make the request."});
     }
 }
 

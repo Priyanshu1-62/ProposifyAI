@@ -8,6 +8,7 @@ import { createInboundAttachment } from "../services/inboundMailService/inboundS
 import { mailgunAttachmentBody } from "../types/mailgunInterface/mailgunAttachmentBody";
 import { createResponseEvaluation } from "../services/domainService/domainService.createResponseEvaluation";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
+import { updateRespondent } from "../services/respondentService/respondentService.updateRespondent";
 
 // Always return status 200 response to Mailgun to avoid retries.
 const handleMailgunInbound = async (req: Request, res: Response) => {
@@ -45,6 +46,8 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
             }
         );
 
+        await updateRespondent(req.body.from, linkedRequest.respondentGroupId, {inboundStatus: "RECEIVED"});
+
         const inboundMessage = await createInboundMessage(req.body.from, messageId, linkedRequest.id);
 
         const messageContent: inboundMessageContentBody = {
@@ -70,7 +73,7 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
             })
         );
 
-        createResponseEvaluation(messageContent.text, requestId, inboundMessage.id);
+        createResponseEvaluation(req.body.from, linkedRequest.respondentGroupId, messageContent.text, requestId, inboundMessage.id);
 
         return res.status(200).json({message: "Inbound message data stored successfully"});
     } 

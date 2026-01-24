@@ -26,6 +26,7 @@ enum EmailEventType {
 }
 
 enum OutboundEmailStatus {
+  PENDING
   SENT
   FAILED
   BOUNCED
@@ -34,6 +35,7 @@ enum OutboundEmailStatus {
 }
 
 enum OutboundEmailAttemptStatus {
+  PENDING
   SUCCESS
   FAILED
 }
@@ -44,6 +46,17 @@ enum OutboundEmailFailureReason {
   NETWORK_ERROR
   USER_CANCELLED
   UNKNOWN
+}
+
+enum InboundEmailStatus {
+  WAITING
+  RECEIVED
+}
+
+enum InboundEvaluationStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }
 
 enum RequestOverviewStatus {
@@ -95,13 +108,17 @@ model RespondentGroup {
 
 // Respondent Schema, to store all respondents together in one table
 model Respondent {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  createdAt DateTime @default(now())
+  id                       String   @id @default(uuid())
+  name                     String
+  email                    String
+  createdAt                DateTime @default(now())
 
-  groupId String
-  group   RespondentGroup @relation(fields: [groupId], references: [id])
+  outboundStatus           OutboundEmailStatus @default(PENDING)
+  inboundStatus            InboundEmailStatus @default(WAITING)
+  inboundEvaluationStatus  InboundEvaluationStatus @default(PENDING)
+
+  groupId                  String
+  group                    RespondentGroup @relation(fields: [groupId], references: [id])
 
   @@unique([email, groupId])
 }
@@ -127,20 +144,20 @@ model Request {
 
 // Inbound message schema, to store all messages together in one table
 model InboundMessage {
-  id                    String    @id @default(uuid())
+  id                         String    @id @default(uuid())
+     
+  from                       String
+  messageId                  String    @unique
+  createdAt                  DateTime  @default(now())
+     
+  requestId                  String
+  request                    Request @relation(fields: [requestId], references: [id])
 
-  from                  String
-  messageId             String    @unique
-  createdAt             DateTime  @default(now())
+  aiResponseEvaluationId     String?
 
-  requestId             String
-  request               Request @relation(fields: [requestId], references: [id])
-
-  aiResponseEvaluationId  String?
-
-  inboundMessageContents  InboundMessageContent[]  
+  inboundMessageContents     InboundMessageContent[]  
   inboundMessageAttachments  InboundMessageAttachment[]
-  aiResponseEvaluation  AIResponseEvaluation[]
+  aiResponseEvaluation       AIResponseEvaluation[]
 
   @@index([requestId, from])
 
@@ -156,8 +173,8 @@ model InboundMessageContent {
   html                 String?
   createdAt            DateTime  @default(now())
         
-  inboundMessageId            String
-  inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
+  inboundMessageId     String
+  inboundMessage       InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
 // Inbound Message Attachment schema, to store all attachments together in one table
@@ -169,8 +186,8 @@ model InboundMessageAttachment {
   url                  String
   createdAt            DateTime  @default(now())
 
-  inboundMessageId            String
-  inboundMessage    InboundMessage @relation(fields: [inboundMessageId], references: [id])
+  inboundMessageId     String
+  inboundMessage       InboundMessage @relation(fields: [inboundMessageId], references: [id])
 }
 
 // OutboundEmailAttempt Schema, to store all outbound mail attempts together in one table
@@ -185,7 +202,7 @@ model OutboundEmailAttempt {
   respondentGroupId    String
   userId               String
 
-  status               OutboundEmailAttemptStatus
+  status               OutboundEmailAttemptStatus @default(PENDING)
   failureReason        OutboundEmailFailureReason?
 
   createdAt            DateTime  @default(now())
@@ -209,7 +226,7 @@ model OutboundEmail {
   toEmail              String
   subject              String?
   status               OutboundEmailStatus
-  current_status       EmailEventType
+  current_status       OutboundEmailStatus
 
   requestId            String
   respondentGroupId    String
@@ -228,7 +245,7 @@ model OutboundEmail {
 // OutboundEmailEvent Schema, to store all outbound email events together in one table
 model OutboundEmailEvent {
   id                   String  @id @default(uuid())
-  eventType            EmailEventType
+  eventType            OutboundEmailStatus
   occurredAt            DateTime
   createdAt            DateTime  @default(now())
   payload              String?

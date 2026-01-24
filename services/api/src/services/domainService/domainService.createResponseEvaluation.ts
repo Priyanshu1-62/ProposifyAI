@@ -6,8 +6,9 @@ import { createAIResponseEvaluation } from "../inboundMailService/inboundService
 import { getAIRequestProfile } from "../requestService/requestProfile.getAIRequestProfile";
 import { Prisma } from "@prisma/client";
 import { stdLogger as logger } from "../../utils/loggerInfra/logger";
+import { updateRespondent } from "../respondentService/respondentService.updateRespondent";
 
-export async function createResponseEvaluation(messageText: string, requestId: string, inboundMessageId: string){
+export async function createResponseEvaluation(fromEmail: string, respondentGroupId: string, messageText: string, requestId: string, inboundMessageId: string){
     try {
         const aiRequestProfile = await getAIRequestProfile(requestId);
         if(!aiRequestProfile){
@@ -29,9 +30,14 @@ export async function createResponseEvaluation(messageText: string, requestId: s
             inboundMessageId
         };
         const aiResponseEvaluation = await createAIResponseEvaluation(aiResponseEvaluationData);
+
+        await updateRespondent(fromEmail, respondentGroupId, {inboundEvaluationStatus: "SUCCESS"});
+        
         return aiResponseEvaluation;
     } 
     catch (error) {
+        await updateRespondent(fromEmail, respondentGroupId, {inboundEvaluationStatus: "FAILED"});
+
         const errorMessage = String(
             error instanceof Error
             ? error.message || error.name
