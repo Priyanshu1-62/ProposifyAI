@@ -15,6 +15,12 @@ datasource db {
 
 /* ---------- ENUMS ---------- */
 
+enum OAuthProvider {
+  GOOGLE
+  GITHUB
+  MICROSOFT
+}
+
 enum EmailEventType {
   SENT
   DELIVERED
@@ -82,15 +88,25 @@ enum RequestOverviewStatus {
 // User Schema, to store all users together in one table
 model User {
   id                 String    @id @default(uuid())
-  name               String
-  email              String    @unique
-  password           String // hashed
-  plan               String // free, pro
-  subscriptionExpiry DateTime?
-  isSubscribed       Boolean?  @default(false)
+  name               String?
+  email              String?   @unique
+  password           String? 
 
-  respondentGroups RespondentGroup[]
-  requests         Request[]
+  oauthUserProfile   OAuthUserProfile[]
+  respondentGroups   RespondentGroup[]
+  requests           Request[]
+}
+
+//OAuthUserProfile Schema, to store all OAuth profiles together in one table
+model OAuthUserProfile {
+  id                 String @id @default(uuid())
+  provider           OAuthProvider
+  providerUserId     String
+
+  userId             String
+  user               User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerUserId])
 }
 
 // Respondent group Schema, to store all groups' enitity together in one table

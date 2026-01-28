@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { stdLogger as logger } from "../utils/loggerInfra/logger";
 import { exchangeAuthCodeForTokens } from "../services/oAuthService/googleOAuth.getAccessToken";
 import { verifyGoogleOAuthIDToken } from "../utils/verifyGoogleOAuthIDToken";
-import { authenticateOAuthUserProfile } from "../services/domainService/domainService.authenticateOAuthUserProfile";
-import { oAuthUserProfileBody } from "../types/oAuthInterface/oAuthUserProfileBody";
+import { authenticateOAuthUserIdentity } from "../services/domainService/domainService.authenticateOAuthUserIdentity";
+import { oAuthUserIdentity } from "../types/oAuthInterface/oAuthUserIdentity";
 
 const googleCallbackController = async (req: Request, res: Response) => {
     try {
@@ -21,7 +21,7 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const userGoogleProfile = await verifyGoogleOAuthIDToken(id_token);
 
-        const oAuthUserProfile: oAuthUserProfileBody = {
+        const oAuthUserIdentity: oAuthUserIdentity = {
             provider: "GOOGLE",
             providerUserId: userGoogleProfile.googleId,
 
@@ -33,9 +33,9 @@ const googleCallbackController = async (req: Request, res: Response) => {
             rawUserProfile: userGoogleProfile
         }
 
-        await authenticateOAuthUserProfile(oAuthUserProfile);
+        await authenticateOAuthUserIdentity(oAuthUserIdentity);
 
-        return res.status(200).json({oAuthUserProfile});
+        return res.status(200).json({oAuthUserIdentity});
     } 
     catch (error) {
         logger.error("Google OAuth callback error", {

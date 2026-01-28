@@ -1,13 +1,7 @@
-export type oAuthProvider = "GOOGLE" | "GITHUB" | "MICROSOFT";
+import { OAuthProvider } from "@prisma/client";
 
 export interface oAuthUserProfileBody {
-    provider: oAuthProvider;
-    providerUserId: string;
-
-    name? : string;
-    email?: string;
-    emailVerified?: boolean;
-    avatarUrl?: string;
-
-    rawUserProfile?: object;
+    provider: OAuthProvider
+    providerUserId : string;
+    userId: string;
 }
