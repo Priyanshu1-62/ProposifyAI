@@ -2,7 +2,7 @@ import { oAuthUserProfileBody } from "../../types/oAuthInterface/oAuthUserProfil
 
 export async function authenticateOAuthUserProfile(oAuthUserProfile: oAuthUserProfileBody){
     try {
-        // Interface body design
+        
     } 
     catch (error) {
         // Throw or not?

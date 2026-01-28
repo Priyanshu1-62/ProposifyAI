@@ -3,6 +3,7 @@ import { stdLogger as logger } from "../utils/loggerInfra/logger";
 import { exchangeAuthCodeForTokens } from "../services/oAuthService/googleOAuth.getAccessToken";
 import { verifyGoogleOAuthIDToken } from "../utils/verifyGoogleOAuthIDToken";
 import { authenticateOAuthUserProfile } from "../services/domainService/domainService.authenticateOAuthUserProfile";
+import { oAuthUserProfileBody } from "../types/oAuthInterface/oAuthUserProfileBody";
 
 const googleCallbackController = async (req: Request, res: Response) => {
     try {
@@ -20,10 +21,21 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const userGoogleProfile = await verifyGoogleOAuthIDToken(id_token);
 
-        authenticateOAuthUserProfile(userGoogleProfile);
+        const oAuthUserProfile: oAuthUserProfileBody = {
+            provider: "GOOGLE",
+            providerUserId: userGoogleProfile.googleId,
 
-        
-        return res.status(200).json({userGoogleProfile});
+            name: userGoogleProfile.name,
+            email: userGoogleProfile.email,
+            emailVerified: userGoogleProfile.emailVerified,
+            avatarUrl: userGoogleProfile.picture,
+
+            rawUserProfile: userGoogleProfile
+        }
+
+        await authenticateOAuthUserProfile(oAuthUserProfile);
+
+        return res.status(200).json({oAuthUserProfile});
     } 
     catch (error) {
         logger.error("Google OAuth callback error", {
