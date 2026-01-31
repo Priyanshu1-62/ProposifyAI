@@ -3,7 +3,10 @@ import qs from "qs";
 
 export async function exchangeAuthCodeForTokens(code: string){
     try {
-        const tokenEndpoint = "https://oauth2.googleapis.com/token";
+        const tokenEndpoint = process.env.GOOGLE_TOKEN_ENDPOINT;
+        if(!tokenEndpoint){
+            throw new Error("Google Token Endpoint not provided.");
+        }
 
         const payload = {
             code,

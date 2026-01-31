@@ -26,7 +26,7 @@ export async function authenticateOAuthUserIdentity(oauthUserIdentity: oAuthUser
             existingOAuthUser = await createOAuthUserProfile(oAuthUserData);
         }
 
-        
+        return existingOAuthUser;
     } 
     catch (error) {
         // Throw or not?

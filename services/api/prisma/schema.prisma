@@ -88,11 +88,13 @@ enum RequestOverviewStatus {
 // User Schema, to store all users together in one table
 model User {
   id                 String    @id @default(uuid())
+  createdAt          DateTime @default(now())
   name               String?
   email              String?   @unique
   password           String? 
 
   oauthUserProfile   OAuthUserProfile[]
+  refershTokenVault  RefreshTokenVault[]
   respondentGroups   RespondentGroup[]
   requests           Request[]
 }
@@ -100,6 +102,7 @@ model User {
 //OAuthUserProfile Schema, to store all OAuth profiles together in one table
 model OAuthUserProfile {
   id                 String @id @default(uuid())
+  createdAt          DateTime @default(now())
   provider           OAuthProvider
   providerUserId     String
 
@@ -107,6 +110,17 @@ model OAuthUserProfile {
   user               User @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerUserId])
+}
+
+model RefreshTokenVault {
+  id                 String @id @default(uuid())
+  createdAt          DateTime @default(now())
+  expiresAt          DateTime 
+  isRevoked          Boolean @default(false)
+  tokenHash          String
+   
+  userId             String
+  user               User @relation(fields: [userId], references: [id])
 }
 
 // Respondent group Schema, to store all groups' enitity together in one table
