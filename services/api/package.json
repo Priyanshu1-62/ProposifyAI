@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "ts-node-dev --project src/tsconfig.json --respawn --transpile-only src/server.ts",
     "build": "tsc -p src/tsconfig.json",
     "start": "node dist/server.js"
   },

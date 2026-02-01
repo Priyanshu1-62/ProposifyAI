@@ -24,7 +24,7 @@ import respondentRoutes from "./routes/respondent/routes";
 import requestRoutes from "./routes/request/routes";
 import responseRoutes from "./routes/respondentResponse/routes";
 import mailRoutes from "./routes/mail/routes";
-import oAuthRoutes from "./routes/auth/oAuth/routes";
+import authRoutes from "./routes/auth/routes";
 
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
@@ -32,7 +32,7 @@ app.use("/api/respondents", respondentRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/responses", responseRoutes);
 app.use("/api/mails", mailRoutes);
-app.use("/api/auth", oAuthRoutes);
+app.use("/api/auth", authRoutes);
 
 
 app.get('/', (req, res) => {
