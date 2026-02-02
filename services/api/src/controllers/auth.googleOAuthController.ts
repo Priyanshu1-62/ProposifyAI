@@ -19,6 +19,8 @@ const googleOAuthController = async (req: Request, res: Response) => {
         logger.error("Google OAuth error", {
             service: "GOOGLE_OAUTH"
         });
+
+        // Instead of status 500, you can pass 302 redirect coupled with location of OAuth error display page.
         return res.status(500).json({error: "Internal Server Errror"});
     }
 }
