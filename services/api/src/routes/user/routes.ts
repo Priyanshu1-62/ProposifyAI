@@ -17,7 +17,7 @@ router.post('/createUser', authTokenVerification, async (req: Request, res: Resp
         }
 
         const hash = await bcrypt.hash(password, 10);
-        const user = await prisma.user.create({data: {name, email, password: hash, plan}});
+        const user = await prisma.user.create({data: {name, email, password: hash}});
 
         return res.status(201).json({id: user.id, name, email, plan});
     } 
