@@ -22,12 +22,16 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const tokens = await exchangeAuthCodeForTokens(code);
 
+        console.log("Tokens granted", tokens);
+
         const { id_token } = tokens;
         if(!id_token){
             return res.status(400).json({error: "Missing Google ID Token"});
         }
 
         const userGoogleProfile = await verifyGoogleOAuthIDToken(id_token);
+
+        console.log("ID token verified", userGoogleProfile);
 
         const oAuthUserIdentity: oAuthUserIdentity = {
             provider: "GOOGLE",
@@ -42,7 +46,12 @@ const googleCallbackController = async (req: Request, res: Response) => {
         }
 
         const existingOAuthUser = await authenticateOAuthUserIdentity(oAuthUserIdentity);
+
+        console.log("user in db: ", existingOAuthUser);
+
         const refreshToken = await createRefreshToken(existingOAuthUser.userId);
+
+        console.log("Refresh token created", refreshToken);
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
