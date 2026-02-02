@@ -1,10 +1,18 @@
+import { useContext } from "react";
 import { startGoogleOAuth } from "../../services/oAuthService/startGoogleOAuth";
 import GeometryShapePattern from "../Decor/GeometryShapePattern"
 import { FcGoogle } from "react-icons/fc";
+import alertContext from "../../Contexts/alertContext";
 
 function Auth() {
+  const { handleAlert } = useContext(alertContext)!;
   const handleGoogleOAuthOnClick = () => {
-    startGoogleOAuth();
+    try {
+        startGoogleOAuth();
+    } 
+    catch (error) {
+        handleAlert({color: "red", msg: "Unable to initiate Google OAuth process."});
+    }
   }
   return (
     <div className="flex justify-center items-center w-screen h-dvh px-6 md:px-10 lg:px-16">
