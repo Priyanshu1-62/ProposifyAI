@@ -8,14 +8,14 @@ import { createRefreshToken } from "../services/tokenService/refreshToken.create
 
 const googleCallbackController = async (req: Request, res: Response) => {
     try {
-
+        console.log("Initiating callback process: ");
         const { code, state } = req.query;
         
         if((!code) || typeof code !== "string"){
-            return res.status(400).json({error: "Missing or invalid Google Authorization token."});
+            return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=invalid_google_oauth_token`);
         }
         if((!state) || typeof state !== "string"){
-            return res.status(400).json({error: "Missing or invalid Google OAuth state."});
+            return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=invalid_google_oauth_state`);
         }
 
         // TODO: Use state for CSRF protection
@@ -26,7 +26,7 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const { id_token } = tokens;
         if(!id_token){
-            return res.status(400).json({error: "Missing Google ID Token"});
+            return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=missing_google_oauth_id_token`);
         }
 
         const userGoogleProfile = await verifyGoogleOAuthIDToken(id_token);
@@ -66,7 +66,8 @@ const googleCallbackController = async (req: Request, res: Response) => {
         logger.error("Google OAuth callback error", {
             service: "GOOGLE_OAUTH_CALLBACK"
         });
-        return res.status(500).json({error: "Internal Server Errror"});
+
+        return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=google_oauth_callback_failed`);
     }
 }
 
