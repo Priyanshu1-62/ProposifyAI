@@ -62,9 +62,20 @@ const googleCallbackController = async (req: Request, res: Response) => {
         
         return res.redirect(302, process.env.FRONTEND_HOME_URL!);
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
         logger.error("Google OAuth callback error", {
-            service: "GOOGLE_OAUTH_CALLBACK"
+            service: "GOOGLE_OAUTH_CALLBACK",
+            error
         });
 
         return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=google_oauth_callback_failed`);

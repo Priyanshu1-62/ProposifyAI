@@ -4,6 +4,7 @@ import { createUserBody } from "../../types/userInterface/createUserBody";
 import { createOAuthUserProfile } from "../oAuthService/oAuth.createOAuthUserProfile";
 import { getOAuthUserProfile } from "../oAuthService/oAuth.getOAuthUserProile";
 import { createUser } from "../userService/userService.createUser";
+import { getUserByEmail } from "../userService/userService.getUserByEmail";
 
 export async function authenticateOAuthUserIdentity(oauthUserIdentity: oAuthUserIdentity){
     try {
@@ -15,12 +16,24 @@ export async function authenticateOAuthUserIdentity(oauthUserIdentity: oAuthUser
                 name: oauthUserIdentity.name,
                 email: oauthUserIdentity.email
             }
-            const newUser = await createUser(userData);
 
             const oAuthUserData: oAuthUserProfileBody = {
                 provider: oauthUserIdentity.provider,
                 providerUserId: oauthUserIdentity.providerUserId,
-                userId: newUser.id
+                userId: ""
+            }
+
+            if(userData.email){
+                const existingUser = await getUserByEmail(userData.email);
+
+                if(existingUser){
+                    oAuthUserData.userId = existingUser.id;
+                }
+            }
+
+            if(oAuthUserData.userId === ""){
+                const newUser = await createUser(userData);
+                oAuthUserData.userId = newUser.id;
             }
 
             existingOAuthUser = await createOAuthUserProfile(oAuthUserData);
@@ -29,7 +42,6 @@ export async function authenticateOAuthUserIdentity(oauthUserIdentity: oAuthUser
         return existingOAuthUser;
     } 
     catch (error) {
-        // Throw or not?
         throw error;
     }
 }

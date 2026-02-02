@@ -6,4 +6,10 @@ export interface LogMeta {
     model?: string;
     errorType?: string;
     details?: Record<string, unknown>;
+    error?: {
+        name?: string;
+        message?: string;
+        stack?: string;
+        code?: string | number;
+    };
 }

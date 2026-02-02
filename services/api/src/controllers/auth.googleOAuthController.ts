@@ -15,9 +15,20 @@ const googleOAuthController = async (req: Request, res: Response) => {
         
         return res.redirect(302, googleAuthUrl);
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
         logger.error("Google OAuth error", {
-            service: "GOOGLE_OAUTH"
+            service: "GOOGLE_OAUTH",
+            error
         });
 
         return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=google_oauth_initiation_failed`);
