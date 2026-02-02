@@ -39,4 +39,8 @@ app.get('/', (req, res) => {
   res.send('ProposifyAI API is Live...');
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).send("Server is awake and healthy !!");
+});
+
 export default app;
