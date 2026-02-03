@@ -1,5 +1,5 @@
 import dns from "dns";
-dns.setDefaultResultOrder("ipv4first"); // Adding priority order for DNS resolution ordering fix for Render-Supabase
+dns.setDefaultResultOrder("ipv4first"); // Adding priority order for DNS resolution ordering fix for Render-Supabase comms
 
 import app from './app';
 
