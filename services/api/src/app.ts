@@ -36,17 +36,17 @@ app.use("/api/auth", authRoutes);
 
 
 app.get('/', (req, res) => {
-  res.send('ProposifyAI API is Live...');
+ return res.status(200).send('ProposifyAI API is Live...');
 });
 
 app.get("/health", (req, res) => {
   console.log("Health check log !!");
-  res.status(200).send("Server is awake and healthy !!");
+  return res.status(200).send("Server is awake and healthy !!");
 });
 
 app.get("/api/auth/oauth/google/callback-test", (req, res) => {
   console.log("CALLBACK TEST HIT");
-  res.send("Callback test reached");
+  return res.status(200).send("Callback test reached");
 });
 
 export default app;
