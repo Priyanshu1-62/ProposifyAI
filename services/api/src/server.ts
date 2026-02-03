@@ -1,3 +1,6 @@
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first"); // Adding priority order for DNS resolution ordering fix for Render-Supabase
+
 import app from './app';
 
 const PORT = process.env.PORT || 5000;
