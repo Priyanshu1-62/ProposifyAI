@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { startGoogleOAuth } from "../../services/oAuthService/startGoogleOAuth";
+import { startGoogleOAuth } from "../../services/oAuthService/oauth.startGoogleOAuth";
 import GeometryShapePattern from "../Decor/GeometryShapePattern"
 import { FcGoogle } from "react-icons/fc";
 import alertContext from "../../Contexts/alertContext";

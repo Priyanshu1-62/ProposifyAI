@@ -44,9 +44,4 @@ app.get("/health", (req, res) => {
   return res.status(200).send("Server is awake and healthy !!");
 });
 
-app.get("/api/auth/oauth/google/callback-test", (req, res) => {
-  console.log("CALLBACK TEST HIT");
-  return res.status(200).send("Callback test reached");
-});
-
 export default app;

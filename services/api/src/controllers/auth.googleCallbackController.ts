@@ -8,7 +8,6 @@ import { createRefreshToken } from "../services/tokenService/refreshToken.create
 
 const googleCallbackController = async (req: Request, res: Response) => {
     try {
-        console.log("Initiating callback process: ");
         const { code, state } = req.query;
         
         if((!code) || typeof code !== "string"){
@@ -22,16 +21,12 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const tokens = await exchangeAuthCodeForTokens(code);
 
-        console.log("Tokens granted", tokens);
-
         const { id_token } = tokens;
         if(!id_token){
             return res.redirect(302, `${process.env.FRONTEND_AUTH_URL!}?error=missing_google_oauth_id_token`);
         }
 
         const userGoogleProfile = await verifyGoogleOAuthIDToken(id_token);
-
-        console.log("ID token verified", userGoogleProfile);
 
         const oAuthUserIdentity: oAuthUserIdentity = {
             provider: "GOOGLE",
@@ -47,11 +42,7 @@ const googleCallbackController = async (req: Request, res: Response) => {
 
         const existingOAuthUser = await authenticateOAuthUserIdentity(oAuthUserIdentity);
 
-        console.log("user in db: ", existingOAuthUser);
-
         const refreshToken = await createRefreshToken(existingOAuthUser.userId);
-
-        console.log("Refresh token created", refreshToken);
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
