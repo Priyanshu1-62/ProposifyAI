@@ -23,7 +23,7 @@ function Auth() {
                     RFP Management Tool
                 </h1>
                 <h3>
-                    Some information to fill. This checks how much width is consumed by this element. This much text should be sufficient to cause text wrap.
+                    Describe requests in natural language, manage respondents effortlessly, send invitations in a single click, track email delivery status in real time, and compare responses through AI-powered evaluation.
                 </h3>
             </div>            
             <div className="w-full px-14 md:px-10 lg:px-20">
