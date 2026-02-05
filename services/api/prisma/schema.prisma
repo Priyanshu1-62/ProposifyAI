@@ -117,7 +117,7 @@ model RefreshTokenVault {
   createdAt          DateTime @default(now())
   expiresAt          DateTime 
   isRevoked          Boolean @default(false)
-  tokenHash          String
+  tokenHash          String  @unique
    
   userId             String
   user               User @relation(fields: [userId], references: [id])
