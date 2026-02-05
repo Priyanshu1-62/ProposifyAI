@@ -1,5 +1,6 @@
 import type { apiResult } from "../Models/apiResult";
 import type { respondent } from "../Models/respondent";
+import { fetchAccessToken } from "../services/tokenService/fetchAccessToken";
 import alertContext from "./alertContext";
 import respondentContext from "./respondentContext";
 import { useContext, type PropsWithChildren } from 'react';
@@ -11,7 +12,16 @@ function RespondentState(props: PropsWithChildren) {
 
   const getRespondentGroup = async (id: string) => {
     try {
-        const response = await fetch(`${apiURL}/api/groups/getGroup/${id}`);
+        const token = fetchAccessToken();
+        const response = await fetch(`${apiURL}/api/groups/getGroup/${id}`, {
+          method: "GET",
+            headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            credentials: "include"
+        });
+
         const data = await response.json();
         const result: apiResult = {ok: response.ok, status: response.status, data, success: "Respondent group fetched successfully !"};
         handleApiResponse(result);
@@ -26,7 +36,16 @@ function RespondentState(props: PropsWithChildren) {
 
   const getRespondentGroups = async () => {
     try {
-        const response = await fetch(`${apiURL}/api/groups/getGroups`);
+        const token = fetchAccessToken();
+        const response = await fetch(`${apiURL}/api/groups/getGroups`, {
+          method: "GET",
+            headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            credentials: "include"
+        });
+
         const data = await response.json();
         const result: apiResult = {ok: response.ok, status: response.status, data, success: "Respondent groups fetched successfully !"};
         handleApiResponse(result);
@@ -41,7 +60,16 @@ function RespondentState(props: PropsWithChildren) {
 
   const getRespondents = async (id: string) => {
     try {
-      const response = await fetch(`${apiURL}/api/respondents/getRespondents/${id}`);
+      const token = fetchAccessToken();
+      const response = await fetch(`${apiURL}/api/respondents/getRespondents/${id}`, {
+        method: "GET",
+            headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            credentials: "include"
+      });
+
       const data = await response.json();
       const result: apiResult = {ok: response.ok, status: response.status, data, success: "Respondents fetched successfully !"};
       handleApiResponse(result);
@@ -56,11 +84,17 @@ function RespondentState(props: PropsWithChildren) {
 
   const createRespondentGroup = async (name: string) => {
     try {
+        const token = fetchAccessToken();
         const response = await fetch(`${apiURL}/api/groups/createGroup`, {
             method: "POST",
-            headers: { 'content-type': 'application/json' },
+            headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}` 
+            },
+            credentials: "include",
             body: JSON.stringify({name, userId: 123})
         });
+
         const data = await response.json();
         const result: apiResult = {ok: response.ok, status: response.status, data, success: "Respondent group created successfully !"};
         handleApiResponse(result);
@@ -75,11 +109,17 @@ function RespondentState(props: PropsWithChildren) {
 
   const addRespondent = async (respondentData: respondent) => {
     try {
+        const token = fetchAccessToken();
         const response = await fetch(`${apiURL}/api/respondents/createRespondent`, {
             method: "POST",
-            headers: { 'content-type': 'application/json' },
+            headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`  
+            },
+            credentials: "include",
             body: JSON.stringify(respondentData)
         });
+        
         const data = await response.json();
         const result = {ok: response.ok, status: response.status, data, success: "Respondent added to group successfully !"};
         handleApiResponse(result);

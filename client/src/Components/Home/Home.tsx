@@ -2,10 +2,14 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../UtilityBars/Navbar";
 import Sidebar from "../UtilityBars/Sidebar";
+import { useEffect } from "react";
 // import userContext from "../Contexts/userContext";
 
 function Home() {
   const navigate = useNavigate();
+  useEffect(()=>{
+    
+  }, []);
   return (
     <>
     <Navbar />
