@@ -13,10 +13,21 @@ function Home() {
   return (
     <>
     <Navbar />
-    <div className="flex">
+    <div className="h-[93.4vh] flex">
       <Sidebar/>
-      <div className="grow flex justify-center items-center">
-        <div className="flex">
+      <div className="grow w-full h-full flex flex-col justify-center items-center overflow-auto">
+        <div className="w-fit flex flex-col md:flex-row">
+          <div className="flex-1">
+            <img className="h-[28vh] md:w-[30vw] md:h-auto" src="./create_request.png" alt="Create Request"></img>
+          </div>
+          <div className="flex-1">
+            <img className="h-[28vh] md:w-[30vw] md:h-auto" src="./track _invitations.png" alt="track _invitations"></img>
+          </div>
+          <div className="flex-1">
+            <img className="h-[28vh] md:w-[30vw] md:h-auto" src="./review_responses.png" alt="review_responses"></img>
+          </div>
+        </div>
+        <div className="flex text-shadow-lg">
           <p>Create a new &nbsp;</p>
           <button className="text-blue-600 underline underline-offset-2 hover:text-blue-700 hover:cursor-pointer" onClick={()=>{navigate("/request/title")}}>Request</button>
         </div>

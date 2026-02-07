@@ -1,7 +1,7 @@
 import type { apiClientInputBody } from "../../Models/apiClientInputbody";
 import type { apiResult } from "../../Models/apiResult";
-import { fetchAccessToken } from "../tokenService/fetchAccessToken";
-import { refreshAccessToken } from "../tokenService/refreshAccessToken";
+import { fetchAccessToken } from "../sessionService/fetchAccessToken";
+import { refreshAccessToken } from "../sessionService/refreshAccessToken";
 import { fetchJsonApiInit } from "./fetchJsonApiInit";
 
 export async function fetchJsonApiClient(apiInput: apiClientInputBody){

@@ -10,7 +10,7 @@ function GeometryShapePattern() {
                     <div className="absolute h-full w-[12%] right-0 bg-[#f5cb5c] hover:bg-[#f4e2b1] transition-all ease-in duration-150 delay-75"></div>
                     <div className="absolute bottom-0 w-full h-[12%] bg-[#f5cb5c] hover:bg-[#f4e2b1] transition-all ease-in duration-150 delay-75"></div>
                 </div>
-                <div className="w-[10vw] h-[10vw] rounded-l-[4rem] rounded-t-[4rem] bg-[#b9c6ae] hover:bg-[#e6ebe2] transition-all ease-in duration-150 delay-75"></div>
+                <div className="w-[10vw] h-[10vw] rounded-l-[4rem] rounded-t-[4rem] bg-[#b9c6ae] hover:bg-[#d7e2ce] transition-all ease-in duration-150 delay-75"></div>
             </div>
             <div className="flex flex-col justify-center items-center">
                 <div className="w-[10vw] h-[10vw] flex justify-center items-center">
