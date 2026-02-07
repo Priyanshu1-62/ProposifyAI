@@ -5,5 +5,5 @@ import type { apiResult } from "./apiResult";
 export interface AlertContext {
   alertInfo: AlertInfo;
   handleAlert: (data: AlertInfo) => void;
-  handleApiResponse: (result: apiResult) => void;
+  handleApiResponse: (result: apiResult, msg: string) => void;
 }

@@ -3,33 +3,45 @@ import Navbar from "../UtilityBars/Navbar";
 import Sidebar from "../UtilityBars/Sidebar";
 import OptionbarA from "../UtilityBars/OptionbarA";
 import userContext from "../../Contexts/userContext";
-import respondentContext from "../../Contexts/respondentContext";
 import { FcIdea } from "react-icons/fc";
 import { MdOutgoingMail } from "react-icons/md";
 import type { resGroup } from "../../Models/resGroup";
 import ResGroupSelectItem from "../Respondent/ResGroupSelectItem";
-import requestContext from "../../Contexts/requestContext";
 import { useNavigate } from "react-router-dom";
 import Alerts from "../Alert/Alerts";
+import alertContext from "../../Contexts/alertContext";
+import { createRequest } from "../../services/requestService/createRequest";
+import { getRespondentGroups } from "../../services/respondentService/getRespondentGroups";
 
 function ReqRespondent() {
   const navigate = useNavigate();
   const { reqData, setReqData } = useContext(userContext)!;
-  const { getRespondentGroups } = useContext(respondentContext)!;
-  const { createRequest } = useContext(requestContext)!;
   const [groupsData, setGroupsData] = useState<resGroup[]>([]);
+  const { handleApiResponse } = useContext(alertContext)!;
 
   const handleSubmit = async () => {
     const result = await createRequest(reqData);
+
+    handleApiResponse(result, "Result created successfully !!");
+
     if(result.ok){
       setReqData({title: "", description: "", respondentGroupId: ""});
       navigate('/requests');
+    }
+    else if(result.status === 401){
+      navigate("/");
     }
   }
 
   const getGroups = async () => {
     const result = await getRespondentGroups();
-    setGroupsData(result.data);
+
+    if(result.ok){
+      setGroupsData(result.data);
+    }
+    else if(result.status === 401){
+      navigate("/");
+    }
   }
   
   useEffect(()=>{

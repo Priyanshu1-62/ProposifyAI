@@ -4,21 +4,28 @@ import Sidebar from "../UtilityBars/Sidebar";
 import userContext from "../../Contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import { MdNavigateNext } from "react-icons/md";
-import respondentContext from "../../Contexts/respondentContext";
 import Alerts from "../Alert/Alerts";
+import { createRespondentGroup } from "../../services/respondentService/createRespondentGroup";
+import alertContext from "../../Contexts/alertContext";
 
 
 function ResGroupCreate() {
   const navigate = useNavigate();
   const { resGroupName, setResGroupName } = useContext(userContext)!;
-  const { createRespondentGroup } = useContext(respondentContext)!;
+  const { handleApiResponse } = useContext(alertContext)!;
 
   const handleCreate = async () => {
     const result = await createRespondentGroup(resGroupName);
+
+    handleApiResponse(result, "Group created successfully !!");
+
     if(result.ok){
       setResGroupName("");
       console.log(result);
       navigate(`/respondentGroup/update/${result.data.group.id}`);
+    }
+    else if(result.status === 401){
+      navigate("/");
     }
   }
   return (

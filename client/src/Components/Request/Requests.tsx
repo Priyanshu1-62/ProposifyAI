@@ -7,20 +7,28 @@ import Sidebar from "../UtilityBars/Sidebar";
 import { MdNavigateNext } from "react-icons/md";
 // import { useNavigate } from "react-router-dom";
 import Alerts from "../Alert/Alerts";
-import requestContext from "../../Contexts/requestContext";
 import RequestItem from "./RequestItem";
 import type { request } from "../../Models/request";
+import alertContext from "../../Contexts/alertContext";
+import { getRequests } from "../../services/requestService/getRequests";
+import { useNavigate } from "react-router-dom";
 
 
 function Requests() {
-  // const navigate = useNavigate();
-  const { getRequests } = useContext(requestContext)!;
+  const navigate = useNavigate();
   const [requestsData, setRequestsData] = useState<request[]>([]);
+  const { handleApiResponse } = useContext(alertContext)!;
 
   const getRequestsData = async () => {
     const result = await getRequests();
+
+    handleApiResponse(result, "Requests fetched successfully !!");
+
     if(result.ok){
       setRequestsData(result.data);
+    }
+    else if(result.status === 401){
+      navigate("/");
     }
   }
 

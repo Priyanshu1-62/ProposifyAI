@@ -10,18 +10,29 @@ import { FcParallelTasks } from "react-icons/fc";
 // import { useNavigate } from "react-router-dom";
 // import ResItem from "./ResItem";
 // import type { respondent } from "../../Models/respondent";
-import respondentContext from "../../Contexts/respondentContext";
 import ResGroupItem from "./ResGroupItem";
 import type { resGroup } from "../../Models/resGroup";
+import { getRespondentGroups } from "../../services/respondentService/getRespondentGroups";
+import alertContext from "../../Contexts/alertContext";
+import { useNavigate } from "react-router-dom";
 
 
 function ResGroups() {
-  const { getRespondentGroups } = useContext(respondentContext)!;
+  const navigate = useNavigate();
   const [groupsData, setGroupsData] = useState<resGroup[]>([]);
+  const { handleApiResponse } = useContext(alertContext)!;
 
   const getGroups = async () => {
     const result = await getRespondentGroups();
-    setGroupsData(result.data);
+
+    handleApiResponse(result, "Groups fetched successfully !!");
+
+    if(result.ok){
+      setGroupsData(result.data);
+    }
+    else if(result.status === 401){
+      navigate("/");
+    }
   }
   
   useEffect(()=>{

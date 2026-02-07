@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../UtilityBars/Navbar";
 import Sidebar from "../UtilityBars/Sidebar";
 import { FcCollaboration } from "react-icons/fc";
@@ -9,20 +9,20 @@ import { useNavigate } from "react-router-dom";
 import ResItem from "./ResItem";
 import type { respondent } from "../../Models/respondent";
 import Alerts from "../Alert/Alerts";
-import respondentContext from "../../Contexts/respondentContext";
 import { useParams } from "react-router-dom";
 import type { resGroup } from "../../Models/resGroup";
+import { addRespondent } from "../../services/respondentService/addRespondent";
+import { getRespondentGroup } from "../../services/respondentService/getRespondentGroup";
+import { getRespondents } from "../../services/respondentService/getRespondents";
 
 
 function ResGroup() {
   const id = useParams().id!;
   const navigate = useNavigate();
-  const { getRespondentGroup, getRespondents, addRespondent } = useContext(respondentContext)!;
   const [ currData, setCurrData ] = useState<respondent>({name: "", email: "", groupId: ""});
   const [addingRespondent, setAddingRespondent] = useState(false);
   const [groupData, setGroupData] = useState<resGroup>({id: id, name: "", createdAt: "", userId: ""});
   const [respondents, setRespondents] = useState([]);
-
  
   const handleCreateRespondent = () => {
     setCurrData({name: "", email: "", groupId: id});
@@ -32,9 +32,13 @@ function ResGroup() {
   const handleAddRespondent = async (e: React.FormEvent) => {
     e.preventDefault()
     const result = await addRespondent(currData);
+
     if(result.ok){
       await getRespondentsData(id);
       handleResetForm();
+    }
+    else if(result.status === 401){
+      navigate("/");
     }
   }
 
@@ -47,12 +51,18 @@ function ResGroup() {
     if(result.status == 200){
         setGroupData(result.data.group);
     }
+    else if(result.status === 401){
+      navigate("/");
+    }
   }
 
   const getRespondentsData = async (id: string) => {
     const result = await getRespondents(id);
     if(result.status == 200){
         setRespondents(result.data.respondents);
+    }
+    else if(result.status === 401){
+      navigate("/");
     }
   }
 
