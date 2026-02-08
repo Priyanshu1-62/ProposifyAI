@@ -77,13 +77,13 @@ function ResGroup() {
     <div className="h-[93.4vh] flex">
       <Sidebar />
       <div className="grow mt-14 overflow-y-auto">
-        <h2 className="flex gap-2 items-center px-14 text-xl text-neutral-700 font-bold"><FcCollaboration size={24}/>{groupData.name?groupData.name:""}</h2>
-        <div className="flex flex-row gap-1 items-center px-16 mt-10 text-sm">
+        <h2 className="flex gap-2 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcCollaboration size={24}/>{groupData.name?groupData.name:""}</h2>
+        <div className="flex flex-row gap-1 items-center px-6 md:px-10 lg:px-14 mt-10 text-sm">
           <p>Add respondents, then use the group to</p>
           <button className="text-blue-600 border-b border-blue-600 hover:cursor-pointer" onClick={()=>{navigate('/request/title')}}>create</button>
           <p>a request.</p>
         </div>
-        <div className="mx-16 mt-5 text-sm">
+        <div className="mx-6 md:mx-10 lg:mx-14 mt-5 text-sm">
           <div className="flex justify-between px-2 bg-stone-200 border border-t-8 border-t-teal-600 rounded-t-md">
             <div className="flex justify-center py-2 border-r basis-[20%] grow">Sr. No</div>
             <div className="flex justify-center py-2 border-r basis-[40%] grow">Name of Respondent</div>

@@ -44,8 +44,8 @@ function ResGroups() {
     <div className="h-[93.4vh] flex">
       <Sidebar />
       <div className="grow mt-14 overflow-y-auto">
-        <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><FcParallelTasks size={24}/> Respondent Groups</h2>
-        <div className="px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+        <h2 className="flex gap-1 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcParallelTasks size={24}/> Respondent Groups</h2>
+        <div className="px-6 md:px-10 lg:px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {groupsData.map((element: resGroup) => {
             return <ResGroupItem key={element.id} element={element}/>
           })}
