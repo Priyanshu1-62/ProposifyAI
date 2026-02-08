@@ -9,6 +9,7 @@ import { mailgunAttachmentBody } from "../types/mailgunInterface/mailgunAttachme
 import { createResponseEvaluation } from "../services/domainService/domainService.createResponseEvaluation";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 import { updateRespondent } from "../services/respondentService/respondentService.updateRespondent";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 // Always return status 200 response to Mailgun to avoid retries.
 const handleMailgunInbound = async (req: Request, res: Response) => {
@@ -77,7 +78,21 @@ const handleMailgunInbound = async (req: Request, res: Response) => {
 
         return res.status(200).json({message: "Inbound message data stored successfully"});
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Inbound handling error", {
+            service: "INBOUND_MAIL",
+            error
+        });
         return res.status(200).json({status: "failure", error});
     }
 }

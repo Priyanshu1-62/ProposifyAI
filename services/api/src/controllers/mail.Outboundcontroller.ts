@@ -10,6 +10,7 @@ import { createRequestProfile } from "../services/domainService/domainService.cr
 import { createRequestOverview } from "../services/requestService/requestOverview.createOverview";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 import { updateRespondent } from "../services/respondentService/respondentService.updateRespondent";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
@@ -87,7 +88,21 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
 
         return res.status(201).json(response);
     }
-    catch(error) {
+    catch(err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Outbound handling error", {
+            service: "MAIL_OUTBOUND",
+            error
+        });
         return res.status(500).json({message: "Failed to make the request."});
     }
 }

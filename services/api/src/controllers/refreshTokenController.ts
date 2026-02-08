@@ -36,8 +36,8 @@ const refreshTokencontroller = async (req: Request, res: Response) => {
                 message: String(err),
               };
 
-        logger.error("Google OAuth callback error", {
-            service: "GOOGLE_OAUTH_CALLBACK",
+        logger.error("Auth Token refresh error", {
+            service: "REFRESH_AUTH_TOKEN",
             error
         });
 

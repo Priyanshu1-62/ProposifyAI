@@ -10,6 +10,7 @@ import eventCounterFunction from "../utils/eventCounterFunction";
 import { updateRequestOverview } from "../services/requestService/requestOverview.updateOverview";
 import { findUniqueOutboundEvent } from "../services/outboundMailService/outboundService.findUniqueOutbuondEvent";
 import { updateRespondent } from "../services/respondentService/respondentService.updateRespondent";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 const handleResendWebhook = async (req: Request, res: Response) => {
     try {
@@ -61,7 +62,21 @@ const handleResendWebhook = async (req: Request, res: Response) => {
              
         return res.status(200).json({ received: true, result });
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Resend webhook hanlding error", {
+            service: "RESEND_WEBHOOK_ERROR",
+            error
+        });
         return res.status(200).json({received: true }); 
     }
 }

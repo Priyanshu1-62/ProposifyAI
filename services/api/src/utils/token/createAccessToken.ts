@@ -5,7 +5,7 @@ export function createAccessToken(payload: accessTokenPayloadBody){
     try {
         return jwt.sign(
             payload,
-            process.env.ACCESS_TOKEN_SECRET!,
+            (process.env.JWT_ACCESS_TOKEN_SECRET!),
             {
                 expiresIn: "15m"
             }
