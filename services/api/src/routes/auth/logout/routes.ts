@@ -4,6 +4,6 @@ import { refreshTokenVerification } from "../../../middlewares/refreshTokenVerif
 
 const router = Router();
 
-router.get('/logout', refreshTokenVerification, logoutController);
+router.post('/logout', refreshTokenVerification, logoutController);
 
 export default router;

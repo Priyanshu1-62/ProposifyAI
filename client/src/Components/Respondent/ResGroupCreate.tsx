@@ -32,14 +32,14 @@ function ResGroupCreate() {
     <>
     <Navbar />
     <Alerts />
-    <div className="flex">
+    <div className="h-[93.4vh] flex">
       <Sidebar />
-      <div className="grow flex justify-center items-center bg-gray-100">
-        <div className="flex flex-col gap-3 md:gap-4 lg:gap-6 w-1/2 px-6 md:px-10 lg:px-14 py-6 text-sm font-bold text-neutral-600 bg-white border-t-2 border-l-2 border-gray-500">
-          <p>Group Name</p>
-          <input name="title" value={resGroupName} onChange={(e)=>setResGroupName(e.target.value)} className="grow px-3 py-2 bg-gray-200 rounded-md placeholder:text-sm focus:outline-none truncate" type="text" placeholder="The name can be used to search for this group..."></input>
+      <div className="grow flex justify-center items-center px-6 md:px-10 lg:px-14">
+        <div className="w-full md:w-1/2 flex flex-col gap-3 md:gap-4 lg:gap-6 px-6 md:px-10 lg:px-14 py-6 text-sm font-bold text-[#373f51] bg-[#b298dc] rounded-2xl shadow-2xl">
+          <i className="text-lg">Group Name</i>
+          <input name="title" value={resGroupName} onChange={(e)=>setResGroupName(e.target.value)} className="grow px-3 py-2 text-[#424a5f] bg-[#f8c7fa] rounded-md placeholder:text-sm focus:outline-none truncate" type="text" placeholder="The name can be used to search for this group..."></input>
           <div className="flex justify-end">
-            <button className="flex gap-1 items-center px-3 lg:px-4 py-2 text-white bg-blue-600 hover:cursor-pointer hover:bg-blue-700 active:bg-blue-800 hover:shadow-xl rounded-md" onClick={handleCreate}>Create <MdNavigateNext size={18}/></button>
+            <button className="flex gap-1 items-center px-3 lg:px-4 py-2 text-white bg-[#373f51] hover:cursor-pointer hover:bg-[#ada9b7] active:bg-blue-800 hover:shadow-xl rounded-md" onClick={handleCreate}>Create <MdNavigateNext size={18}/></button>
           </div>
         </div>
       </div>
