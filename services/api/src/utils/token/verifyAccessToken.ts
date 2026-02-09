@@ -5,7 +5,7 @@ export function verifyAccessToken(token: string){
     try {
         const payload = jwt.verify(
             token,
-            process.env.ACCESS_TOKEN_SECRET!
+            (process.env.JWT_ACCESS_TOKEN_SECRET!)
         );
         return payload as accessTokenPayloadBody;
     } 

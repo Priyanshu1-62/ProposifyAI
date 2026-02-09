@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../utils/token/verifyAccessToken";
 import { accessTokenPayloadBody } from "../types/tokenInterface/accessTokenPayloadBody";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 export function authTokenVerification(req: Request, res: Response, next: NextFunction){
     try {
@@ -21,7 +22,21 @@ export function authTokenVerification(req: Request, res: Response, next: NextFun
             return res.status(401).json({message: "Invalid or expired access token"});
         }
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Access token verification error", {
+            service: "ACCESS_TPKEN_VERIFICATION",
+            error
+        });
         return res.status(500).json({message: "Auth token verification Error"});
     }
 }

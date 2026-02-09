@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { resendSignatureBody } from '../types/resendInterface/resendSignatureBody';
 import { verifyResendSignature } from '../utils/verifyResendSignature';
+import { stdLogger as logger } from '../utils/loggerInfra/logger';
 
 export async function resendSignatureVerification(req: Request, res: Response, next: NextFunction){
     try {
@@ -40,7 +41,21 @@ export async function resendSignatureVerification(req: Request, res: Response, n
         }
         return next();
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Resend signature verification error", {
+            service: "RESEND_SIGNATURE_VERIFICATION",
+            error
+        });
         return res.status(500).json({message: "Resend webhook verification Error"});
     }
 }

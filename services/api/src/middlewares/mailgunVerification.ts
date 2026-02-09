@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { MailgunSignatureBody } from "../types/mailgunInterface/MailgunSignatureBody";
 import { verifyMailgunSignature } from "../utils/verifyMailgunSignature";
+import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 export function mailgunVerification(req: Request, res: Response, next: NextFunction){
     try {
@@ -17,7 +18,21 @@ export function mailgunVerification(req: Request, res: Response, next: NextFunct
         }
         return next();
     } 
-    catch (error) {
+    catch (err) {
+        const error = err instanceof Error
+            ? {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+              }
+            : {
+                message: String(err),
+              };
+
+        logger.error("Mailgun webhook verification error", {
+            service: "MAILGUN_WEBHOOK_VERIFICATION",
+            error
+        });
         return res.status(500).json({message: "Mailgun webhook verification Error"});
     }
 }

@@ -21,7 +21,7 @@ const requestAnalysisController = async (req: Request, res: Response) => {
               };
 
         logger.error("Request analysis error", {
-            service: "REQUEST_ANALUSIS_ERROR",
+            service: "REQUEST_ANALYSIS",
             error
         });
         return res.status(500).json({message: "Internal Server Error"});
