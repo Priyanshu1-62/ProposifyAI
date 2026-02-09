@@ -6,6 +6,7 @@ import alertContext from "../../Contexts/alertContext";
 
 function Auth() {
   const { handleAlert } = useContext(alertContext)!;
+  
   const handleGoogleOAuthOnClick = () => {
     try {
         startGoogleOAuth();

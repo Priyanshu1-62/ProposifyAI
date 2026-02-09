@@ -45,11 +45,15 @@ function ResGroups() {
       <Sidebar />
       <div className="grow mt-14 overflow-y-auto">
         <h2 className="flex gap-1 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcParallelTasks size={24}/> Respondent Groups</h2>
-        <div className="px-6 md:px-10 lg:px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+        {!!groupsData.length && <div className="px-6 md:px-10 lg:px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {groupsData.map((element: resGroup) => {
             return <ResGroupItem key={element.id} element={element}/>
           })}
-        </div>
+        </div>}
+        {(!groupsData.length) && <div className="h-full flex justify-center items-center text-sm">
+          <p>No Groups found. &nbsp;</p>
+          <button className="text-blue-600 hover:cursor-pointer hover:text-blue-800 active:text-blue-950 underline underline-offset-2" onClick={()=>{navigate("/respondentGroup/create")}}>Create one.</button>
+        </div>}
       </div>
     </div>
     </>

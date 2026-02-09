@@ -22,7 +22,7 @@ function Requests() {
   const getRequestsData = async () => {
     const result = await getRequests();
 
-    handleApiResponse(result, "Requests fetched successfully !!");
+    handleApiResponse(result, "Requests fetched successfully !!"); // TODO: Remove this.
 
     if(result.ok){
       setRequestsData(result.data);
@@ -43,11 +43,15 @@ function Requests() {
       <Sidebar />
       <div className="h-[93.4vh] grow mt-14 overflow-y-auto">
         <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><MdNavigateNext size={24}/> My Requests</h2>
-        <div className="px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+        {!!requestsData.length && <div className="px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {requestsData.map((element: request) => {
             return <RequestItem key={element.id} element={element}/>
           })}
-        </div>
+        </div>}
+        {(!requestsData.length) && <div className="h-full flex justify-center items-center text-sm">
+          <p>No requests found. &nbsp;</p>
+          <button className="text-blue-600 hover:cursor-pointer hover:text-blue-800 active:text-blue-950 underline underline-offset-2" onClick={()=>{navigate("/request/title")}}>Create one.</button>
+        </div>}
       </div>
     </div>
     </>

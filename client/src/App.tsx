@@ -12,12 +12,15 @@ import ResGroups from "./Components/Respondent/ResGroups";
 import RequestInfo from "./Components/Request/RequestInfo";
 import Auth from "./Components/Auth/Auth";
 import LoadingSpinner from "./Components/LoadingSpinner/LoadingSpinner";
+import { useAppSelector } from "./app/hooks";
+import { selectIsLoading } from "./features/appState/appState.selectors";
 
 function App() {
+  const isLoading = useAppSelector(selectIsLoading);
   return (
     <>
-    {false && <LoadingSpinner />}
-    <div className={``}>
+    {isLoading && <LoadingSpinner />}
+    <div className={`${isLoading ? "opacity-35 pointer-events-none" : "opacity-100"} transition-opacity duration-200`}>
       <BrowserRouter>
       <AlertState>
         <UserState>

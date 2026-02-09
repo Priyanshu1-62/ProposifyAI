@@ -1,6 +1,13 @@
+import { store } from "../../app/store";
+import { setLoading } from "../../features/appState/appState.slice";
+
 const apiURL = import.meta.env.VITE_API_URL;
 
 export async function refreshAccessToken(){
+
+    const dispatch = store.dispatch;
+    dispatch(setLoading(true));
+
     try {
         const response = await fetch(`${apiURL}/api/auth/token/refresh`, {
             method: "POST",
@@ -14,5 +21,8 @@ export async function refreshAccessToken(){
     } 
     catch (error) {
         throw error;
+    }
+    finally {
+        dispatch(setLoading(false));
     }
 }

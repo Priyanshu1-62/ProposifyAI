@@ -101,7 +101,7 @@ function ResGroup() {
               <input name="email" value={currData.email} onChange={(e) => setCurrData(prev => ({...prev, "email": e.target.value}))} className="py-2 px-2 basis-[40%] grow placeholder:text-sm focus:outline-none" type="text" placeholder="Enter Email Address"></input>
             </div>
             <div className="flex gap-4 my-5">
-              <button type="submit" className="flex gap-1 items-center px-4 py-2 bg-emerald-400 border-2 border-green-300 hover:bg-emerald-500 hover:cursor-pointer hover:shadow-xl active:bg-emerald-600 rounded-2xl"><MdDownloadDone size={18}/> Add to Group</button>
+              <button type="submit" className="flex gap-1 items-center px-4 py-2 border-2 border-green-300 hover:bg-emerald-500 hover:cursor-pointer hover:shadow-xl active:bg-emerald-600 rounded-2xl"><MdDownloadDone size={18}/> Add to Group</button>
               <button type="button" className="flex gap-1 items-center px-4 py-2 bg-red-400 border-2 border-pink-300 hover:bg-red-500 hover:cursor-pointer hover:shadow-xl active:bg-red-600 rounded-2xl" onClick={handleResetForm}><RxCross2 size={18}/> Cancel</button>
             </div>
           </form>
