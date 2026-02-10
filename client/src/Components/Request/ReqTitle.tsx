@@ -24,7 +24,7 @@ function ReqTitle() {
           <button className="flex gap-1 items-center px-4 py-2 text-white bg-blue-600 hover:cursor-pointer hover:bg-blue-700 active:bg-blue-800 hover:shadow-xl rounded-md" onClick={()=>{navigate("/request/description")}}>Next <MdNavigateNext size={18}/></button>
         </div>
         <div className="mt-8 mx-6 md:mx-10 lg:mx-14">
-          <input name="title" value={reqData.title} onChange={(e)=>setReqData(prev => ({...prev, title:e.target.value}))} className="w-full px-3 py-2 bg-gray-200 text-sm placeholder:text-sm focus:outline-none" type="text" placeholder="The title can be used to search for this request..."></input>
+          <input name="title" value={reqData.title} onChange={(e)=>setReqData(prev => ({...prev, title:e.target.value}))} className="w-full px-3 py-2 bg-[#cbeef3] text-sm placeholder:text-sm focus:outline-none" type="text" placeholder="The title can be used to search for this request..."></input>
         </div>
       </div>
     </div>

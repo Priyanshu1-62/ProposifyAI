@@ -27,7 +27,7 @@ function Auth() {
                     Describe requests in natural language, manage respondents effortlessly, send invitations in a single click, track email delivery status in real time, and compare responses through AI-powered evaluation.
                 </h3>
             </div>            
-            <div className="w-full px-14 md:px-10 lg:px-20">
+            <div className="w-full px-7 md:px-8 lg:px-20">
                 <button className="w-full flex justify-between items-center py-2 px-3 bg-[#d8e3cf] rounded-2xl hover:cursor-pointer hover:bg-[#b9c4b0] active:bg-[#b9c6ae] transition-all delay-75" onClick={handleGoogleOAuthOnClick}>
                     <FcGoogle className="text-xl lg:text-2xl"/>
                     <p className="lg:text-lg text-stone-700 font-bold">Continue With Google</p>

@@ -39,7 +39,7 @@ function ResGroupCreate() {
           <i className="text-lg">Group Name</i>
           <input name="title" value={resGroupName} onChange={(e)=>setResGroupName(e.target.value)} className="grow px-3 py-2 text-[#424a5f] bg-[#f8c7fa] rounded-md placeholder:text-sm focus:outline-none truncate" type="text" placeholder="The name can be used to search for this group..."></input>
           <div className="flex justify-end">
-            <button className="flex gap-1 items-center px-3 lg:px-4 py-2 text-white bg-[#373f51] hover:cursor-pointer hover:bg-[#ada9b7] active:bg-blue-800 hover:shadow-xl rounded-md" onClick={handleCreate}>Create <MdNavigateNext size={18}/></button>
+            <button className="flex gap-1 items-center px-3 lg:px-4 py-2 text-white bg-[#373f51] hover:cursor-pointer hover:bg-[#4d566c] active:bg-[#647293] hover:shadow-xl rounded-md" onClick={handleCreate}>Create <MdNavigateNext size={18}/></button>
           </div>
         </div>
       </div>

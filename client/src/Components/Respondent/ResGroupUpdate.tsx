@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Navbar from "../UtilityBars/Navbar";
 import Sidebar from "../UtilityBars/Sidebar";
 import { FcCollaboration } from "react-icons/fc";
@@ -14,11 +14,13 @@ import type { resGroup } from "../../Models/resGroup";
 import { addRespondent } from "../../services/respondentService/addRespondent";
 import { getRespondentGroup } from "../../services/respondentService/getRespondentGroup";
 import { getRespondents } from "../../services/respondentService/getRespondents";
+import alertContext from "../../Contexts/alertContext";
 
 
 function ResGroup() {
   const id = useParams().id!;
   const navigate = useNavigate();
+  const { handleApiResponse } = useContext(alertContext)!;
   const [ currData, setCurrData ] = useState<respondent>({name: "", email: "", groupId: ""});
   const [addingRespondent, setAddingRespondent] = useState(false);
   const [groupData, setGroupData] = useState<resGroup>({id: id, name: "", createdAt: "", userId: ""});
@@ -39,6 +41,9 @@ function ResGroup() {
     }
     else if(result.status === 401){
       navigate("/");
+    }
+    else{
+      handleApiResponse(result, "Respondent added successfully !!");
     }
   }
 
@@ -78,15 +83,15 @@ function ResGroup() {
       <Sidebar />
       <div className="grow mt-14 overflow-y-auto">
         <h2 className="flex gap-2 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcCollaboration size={24}/>{groupData.name?groupData.name:""}</h2>
-        <div className="flex flex-row gap-1 items-center px-6 md:px-10 lg:px-14 mt-10 text-sm">
-          <p>Add respondents, then use the group to</p>
+        <div className="flex flex-wrap gap-1 px-6 md:px-10 lg:px-14 mt-10 text-sm">
+          <p>Add respondents, then use the group to &nbsp;</p>
           <button className="text-blue-600 border-b border-blue-600 hover:cursor-pointer" onClick={()=>{navigate('/request/title')}}>create</button>
           <p>a request.</p>
         </div>
-        <div className="mx-6 md:mx-10 lg:mx-14 mt-5 text-sm">
+        <div className="mx-6 md:mx-10 lg:mx-14 mt-5 text-xs">
           <div className="flex justify-between px-2 bg-stone-200 border border-t-8 border-t-teal-600 rounded-t-md">
             <div className="flex justify-center py-2 border-r basis-[20%] grow">Sr. No</div>
-            <div className="flex justify-center py-2 border-r basis-[40%] grow">Name of Respondent</div>
+            <div className="flex justify-center py-2 border-r basis-[40%] grow">Respondent Name</div>
             <div className="flex justify-center py-2 basis-[40%] grow">Email Address</div>
           </div>
           {respondents.map((element, index)=>{
@@ -107,7 +112,7 @@ function ResGroup() {
           </form>
           </>
           }
-          {!addingRespondent && <button className="flex gap-1 items-center my-5 px-4 py-2  hover:cursor-pointer hover:shadow-xl active:bg-amber-600 rounded-2xl" onClick={handleCreateRespondent}><FaRegAddressCard size={18}/> Add a Respondent</button>}
+          {!addingRespondent && <button className="flex gap-1 items-center my-5 px-4 py-2  hover:cursor-pointer hover:shadow-xl active:bg-gray-200 rounded-2xl" onClick={handleCreateRespondent}><FaRegAddressCard size={18}/> Add a Respondent</button>}
         </div>
       </div>
     </div>

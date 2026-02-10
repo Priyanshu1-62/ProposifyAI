@@ -22,7 +22,7 @@ router.get('/getRequest/:requestId', authTokenVerification, async (req: Request,
     }
 });
 
-router.get('/getRequests/', authTokenVerification, async (req: Request, res: Response) => { 
+router.get('/getRequests', authTokenVerification, async (req: Request, res: Response) => { 
     try {
 
         const requests = await prisma.request.findMany({where: {userId: req.userId}});
@@ -34,7 +34,7 @@ router.get('/getRequests/', authTokenVerification, async (req: Request, res: Res
     }
 });
 
-router.post('/createRequest', [
+router.post('/createRequest', authTokenVerification, [
     body('title')
       .trim()
       .notEmpty().withMessage("Title cannot be empty")
@@ -51,12 +51,13 @@ router.post('/createRequest', [
         .notEmpty().withMessage("You must select a respondent group")
         .isString().withMessage("Invalid group")
         .bail()
-], authTokenVerification, async (req: Request, res: Response) => {
+], async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
+        
         return createRequestandSendMails(req, res);
     } 
     catch (err) {

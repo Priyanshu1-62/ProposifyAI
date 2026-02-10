@@ -14,7 +14,7 @@ import { stdLogger as logger } from "../utils/loggerInfra/logger";
 
 const createRequestandSendMails = async (req: Request, res: Response) => {
     try {
-        const newRequest = await createRequest(req.body);
+        const newRequest = await createRequest({...req.body, user: {connect: {id: req.userId}}});
         
         await createRequestOverview(newRequest.id, newRequest.respondentGroupId, "CREATED");
 
