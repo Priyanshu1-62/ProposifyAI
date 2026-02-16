@@ -21,17 +21,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 import userRoutes from "./routes/user/routes";
-import groupRoutes from "./routes/respondentGroup/routes";
-import respondentRoutes from "./routes/respondent/routes";
+import authRoutes from "./routes/auth/routes";
 import requestRoutes from "./routes/request/routes";
+import requestAnalysisRoutes from "./routes/requestAnalysis/routes";
+import respondentRoutes from "./routes/respondent/routes";
+import groupRoutes from "./routes/respondentGroup/routes";
 import responseRoutes from "./routes/respondentResponse/routes";
 import mailRoutes from "./routes/mail/routes";
-import authRoutes from "./routes/auth/routes";
 
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/respondents", respondentRoutes);
 app.use("/api/requests", requestRoutes);
+app.use("./api/requestAnalysis", requestAnalysisRoutes);
 app.use("/api/responses", responseRoutes);
 app.use("/api/mails", mailRoutes);
 app.use("/api/auth", authRoutes);

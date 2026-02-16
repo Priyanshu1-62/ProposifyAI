@@ -19,7 +19,7 @@ const createRequestandSendMails = async (req: Request, res: Response) => {
         }
         const newRequest = await createRequest(req.userId, req.body);
         
-        await createRequestOverview(newRequest.id, newRequest.respondentGroupId, "CREATED");
+        await createRequestOverview(newRequest.id, newRequest.title, newRequest.description, newRequest.respondentGroupId, "CREATED", newRequest.userId);
 
         const respondents = await prisma.respondent.findMany({where: {groupId: req.body.respondentGroupId}});
         if(!respondents.length){

@@ -337,6 +337,8 @@ model RequestOverview {
   createdAt                    DateTime  @default(now())
      
   requestId                    String  @unique
+  title                        String
+  description                  String
   respondentGroupId            String
   aiRequestProfileId           String?
 
