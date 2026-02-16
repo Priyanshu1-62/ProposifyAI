@@ -97,6 +97,7 @@ model User {
   refershTokenVault  RefreshTokenVault[]
   respondentGroups   RespondentGroup[]
   requests           Request[]
+  requestOverviews   RequestOverview[]
 }
 
 //OAuthUserProfile Schema, to store all OAuth profiles together in one table
@@ -353,6 +354,10 @@ model RequestOverview {
   lastUpdatedAt                DateTime  @default(now()) 
 
   request                      Request  @relation(fields: [requestId], references: [id])
+
+  userId                       String
+  user                         User  @relation(fields: [userId], references: [id])
+
 }
 
 
