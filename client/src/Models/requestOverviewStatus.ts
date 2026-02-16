@@ -1,0 +1,12 @@
+export type requestOverviewStatus = 
+  "DRAFT" |
+  "CREATED" |
+  "PROCESSING" |
+  "OUTBOUND_FAILED" |
+  "EMAILS_SENT" |
+  "AWAITING_RESPONSES" |
+  "RESPONSES_RECEIVED" |
+  "EVALUATING" |
+  "EVALUATION_FAILED" |
+  "COMPLETED" |
+  "CLOSED";
