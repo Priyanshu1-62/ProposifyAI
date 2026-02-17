@@ -10,7 +10,7 @@ const requestOverviewsController = async (req: Request, res: Response) => {
         }
         
         const requestOverviews = await getRequestOverviews(userId);
-        return requestOverviews
+        return res.status(200).json(requestOverviews);
     } 
     catch (err) {
         const error = err instanceof Error
