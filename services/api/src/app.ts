@@ -33,7 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/respondents", respondentRoutes);
 app.use("/api/requests", requestRoutes);
-app.use("./api/requestAnalysis", requestAnalysisRoutes);
+app.use("/api/requestAnalysis", requestAnalysisRoutes);
 app.use("/api/responses", responseRoutes);
 app.use("/api/mails", mailRoutes);
 app.use("/api/auth", authRoutes);

@@ -6,7 +6,7 @@ import { createAIRequestProfile } from "../requestService/requestProfile.createA
 import { updateRequestOverview } from "../requestService/requestOverview.updateOverview";
 import { stdLogger as logger } from "../../utils/loggerInfra/logger";
 
-export async function createRequestProfile(requestId: string, description: string) {
+export async function createLLMRequestProfile(requestId: string, description: string) {
     try {
         const summarizationResult = await summarizeText({text: description});
 
