@@ -135,6 +135,8 @@ model RespondentGroup {
 
   respondents Respondent[]
   requests    Request[]
+
+  @@unique([userId, name])
 }
 
 // Respondent Schema, to store all respondents together in one table

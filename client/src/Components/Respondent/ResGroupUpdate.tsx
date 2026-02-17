@@ -89,7 +89,7 @@ function ResGroup() {
           <p>a request.</p>
         </div>
         <div className="mx-6 md:mx-10 lg:mx-14 mt-5 text-xs">
-          <div className="flex justify-between px-2 bg-stone-200 border border-t-8 border-t-teal-600 rounded-t-md">
+          <div className="flex px-2 bg-stone-200 border border-t-8 border-t-teal-600 rounded-t-md">
             <div className="flex justify-center py-2 border-r basis-[20%] grow">Sr. No</div>
             <div className="flex justify-center py-2 border-r basis-[40%] grow">Respondent Name</div>
             <div className="flex justify-center py-2 basis-[40%] grow">Email Address</div>
@@ -99,11 +99,11 @@ function ResGroup() {
           })}
           {addingRespondent && 
           <>
-          <form onSubmit={handleAddRespondent} className="">
-            <div className="flex justify-between px-2 text-sm border-2 border-blue-600 border-t-blue-300">
+          <form onSubmit={handleAddRespondent} className="text-xs">
+            <div className="flex px-2 border-2 border-blue-600 border-t-blue-300">
               <div className="flex justify-center py-2 border-r basis-[20%] grow">{respondents.length + 1}</div>
-              <input name="name" value={currData.name} onChange={(e) => setCurrData(prev => ({...prev, "name": e.target.value}))} className="py-2 px-2 border-r basis-[40%] grow placeholder:text-sm focus:outline-none" type="text" placeholder="Enter Respondent name"></input>
-              <input name="email" value={currData.email} onChange={(e) => setCurrData(prev => ({...prev, "email": e.target.value}))} className="py-2 px-2 basis-[40%] grow placeholder:text-sm focus:outline-none" type="text" placeholder="Enter Email Address"></input>
+              <input name="name" value={currData.name} onChange={(e) => setCurrData(prev => ({...prev, "name": e.target.value}))} className="py-2 px-2 border-r min-w-0 basis-[40%] grow placeholder:text-xs focus:outline-none" type="text" placeholder="Name"></input>
+              <input name="email" value={currData.email} onChange={(e) => setCurrData(prev => ({...prev, "email": e.target.value}))} className="py-2 px-2 min-w-0 basis-[40%] grow placeholder:text-xs focus:outline-none" type="text" placeholder="Email"></input>
             </div>
             <div className="flex gap-4 my-5">
               <button type="submit" className="flex gap-1 items-center px-4 py-2 border-2 border-green-300 hover:bg-emerald-500 hover:cursor-pointer hover:shadow-xl active:bg-emerald-600 rounded-2xl"><MdDownloadDone size={18}/> Add to Group</button>

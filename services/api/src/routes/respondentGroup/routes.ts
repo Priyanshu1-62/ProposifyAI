@@ -45,10 +45,16 @@ router.post('/createGroup', [
         if(!errors.isEmpty()){
             return res.status(400).json({error : errors.array()[0].msg});
         }
-        let { name } = req.body;
+
+        let { name } = req.body as { name: string };
         let userId = req.userId;
         if(!userId){
             return res.status(401).json({message: "No user found"});
+        }
+
+        const existingGroup = await prisma.respondentGroup.findUnique({where: {userId_name: {userId, name}}});
+        if(existingGroup){
+            return res.status(409).json({message: "A group with same name already exist !!"});
         }
         
         const newGroup = await prisma.respondentGroup.create({data: {name, userId}});
