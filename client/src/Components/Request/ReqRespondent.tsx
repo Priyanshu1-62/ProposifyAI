@@ -53,20 +53,26 @@ function ReqRespondent() {
     <Alerts />
     <div className="flex">
       <Sidebar />
-      <div className="grow mt-14 mb-4">
+      <div className="h-[93.4vh] grow flex flex-col pt-14 pb-4">
         <h2 className="flex gap-1 px-6 md:px-10 lg:px-14 items-center text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
         <RequestOptionbar />
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-14 text-sm">
           <p>Select Group</p>
-          <button className="flex gap-1 items-center px-4 py-2 text-white bg-teal-600 hover:cursor-pointer hover:bg-teal-700 active:bg-teal-800 hover:shadow-xl rounded-md" onClick={handleSubmit}>Send Proposals <MdOutgoingMail size={18}/></button>
+          <button className="flex gap-1 items-center px-4 py-2 text-white bg-teal-600 hover:cursor-pointer hover:bg-teal-700 active:bg-teal-800 hover:shadow-xl rounded-md" onClick={handleSubmit}>Send Requests <MdOutgoingMail size={18}/></button>
         </div>
-        <div className="h-[93.4vh] grow overflow-y-auto">
+        {!!groupsData.length && <div className="grow overflow-y-auto">
           <div className="px-6 md:px-10 lg:px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
             {groupsData.map((element: resGroup) => {
               return <ResGroupSelectItem key={element.id} element={element} handleSelect={(id) => {setReqData(prev => ({...prev, respondentGroupId: id}))}}/>
             })}
           </div>
-      </div>
+        </div>}
+        {!groupsData.length && <div className="w-full grow flex justify-center items-center text-sm">
+          <div className="flex">
+            <p>No Groups found, &nbsp;</p>
+            <button className="text-blue-500 underline underline-offset-2 hover:cursor-pointer hover:text-blue-900" onClick={()=>{navigate("/respondentGroup/create")}}>create one.</button>
+          </div>
+        </div>}      
       </div>
     </div>
     </>

@@ -18,13 +18,13 @@ function Home() {
       <div className="grow w-full h-full flex flex-col justify-center items-center py-32 overflow-auto">
         <div className="w-fit flex flex-col md:flex-row">
           <div className="flex-1">
-            <img className="h-[21vh] md:w-[30vw] md:h-auto" src="./create_request.png" alt="Create Request"></img>
+            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./create_request.png" alt="Create Request"></img>
           </div>
           <div className="flex-1">
-            <img className="h-[21vh] md:w-[30vw] md:h-auto" src="./track _invitations.png" alt="track _invitations"></img>
+            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./track _invitations.png" alt="track _invitations"></img>
           </div>
           <div className="flex-1">
-            <img className="h-[21vh] md:w-[30vw] md:h-auto" src="./review_responses.png" alt="review_responses"></img>
+            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./review_responses.png" alt="review_responses"></img>
           </div>
         </div>
         <div className="flex">

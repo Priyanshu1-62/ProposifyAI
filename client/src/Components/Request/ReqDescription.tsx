@@ -15,7 +15,7 @@ function ReqDescription() {
     <Navbar />
     <div className="flex">
       <Sidebar />
-      <div className="grow mt-14 mb-4">
+      <div className="h-[93.4vh] grow pt-14 pb-4 overflow-y-auto">
         <h2 className="flex gap-1 px-6 md:px-10 lg:px-14 items-center text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
         <RequestOptionbar />
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-14 text-sm">

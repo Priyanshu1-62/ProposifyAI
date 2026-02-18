@@ -16,7 +16,7 @@ function ReqTitle() {
     <Navbar />
     <div className="flex">
       <Sidebar />
-      <div className="grow mt-14">
+      <div className="h-[93.4vh] grow pt-14">
         <h2 className="flex gap-1 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
         <RequestOptionbar />
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-14 text-sm">
