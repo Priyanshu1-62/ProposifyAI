@@ -12,7 +12,7 @@ function AlertState(props: PropsWithChildren) {
     setAlertInfo(data);
     setTimeout(()=>{
       setAlertInfo(demoAlert);
-    }, 2000);
+    }, 3000);
   }
 
   function handleApiResponse(result: apiResult, msg: string) {
