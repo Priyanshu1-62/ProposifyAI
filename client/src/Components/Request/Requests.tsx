@@ -34,9 +34,9 @@ function Requests() {
     <>
     <Navbar />
     <Alerts />
-    <div className="h-[93.4vh] flex">
+    <div className="">
       <Sidebar />
-      <div className="h-[93.4vh] grow flex flex-col pt-14 overflow-y-auto">
+      <div className="h-[93.4vh] flex flex-col pt-14 overflow-y-auto">
         <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><FaClipboardList className="text-cyan-800" size={24}/> My Requests</h2>
         {!!requestsData.length && <div className="px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {requestsData.map((element) => {

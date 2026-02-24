@@ -79,9 +79,9 @@ function ResGroup() {
     <>
     <Navbar />
     <Alerts />
-    <div className="h-[93.4vh] flex">
+    <div className="">
       <Sidebar />
-      <div className="grow mt-14 overflow-y-auto">
+      <div className="h-[93.4vh] mt-14 overflow-y-auto">
         <h2 className="flex gap-2 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcCollaboration size={24}/>{groupData.name?groupData.name:""}</h2>
         <div className="flex flex-wrap gap-1 px-6 md:px-10 lg:px-14 mt-10 text-sm">
           <p>Add respondents, then use the group to &nbsp;</p>

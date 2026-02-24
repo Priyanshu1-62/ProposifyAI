@@ -32,9 +32,9 @@ function ResGroupCreate() {
     <>
     <Navbar />
     <Alerts />
-    <div className="h-[93.4vh] flex">
+    <div className="">
       <Sidebar />
-      <div className="grow flex justify-center items-center px-6 md:px-10 lg:px-14">
+      <div className="h-[93.4vh] flex justify-center items-center px-6 md:px-10 lg:px-14">
         <div className="w-full md:w-1/2 flex flex-col gap-3 md:gap-4 lg:gap-6 px-6 md:px-10 lg:px-14 py-6 text-sm font-bold text-[#373f51] bg-[#b298dc] rounded-2xl shadow-2xl">
           <i className="text-lg">Group Name</i>
           <input name="title" value={resGroupName} onChange={(e)=>setResGroupName(e.target.value)} className="grow px-3 py-2 text-[#424a5f] bg-[#f8c7fa] rounded-md placeholder:text-sm focus:outline-none truncate" type="text" placeholder="The name can be used to search for this group..."></input>

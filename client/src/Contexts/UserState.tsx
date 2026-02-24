@@ -7,7 +7,7 @@ import type { respondent } from '../Models/respondent';
 function UserState(props: PropsWithChildren) {
   const dummyReqData: reqData = {title: "", description: "", respondentGroupId: ""};
   const dummyResData: respondent[] = [];
-  const [sidebar, setSidebar] = useState<boolean>(false);
+  const [sidebar, setSidebar] = useState<boolean>(true);
   const [reqData, setReqData] = useState(dummyReqData);
   const [resData, setResData] = useState(dummyResData);
   const [loading, setLoading] = useState(false);
