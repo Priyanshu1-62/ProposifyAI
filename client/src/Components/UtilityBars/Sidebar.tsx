@@ -39,6 +39,7 @@ function Sidebar() {
     setSidebar(false);
     navigate("/respondentGroups");
   }
+  
   return (
     <>
     <div className={`z-2 absolute top-[6.6vh] w-60 h-[93.4vh] flex flex-col justify-between py-2 px-2 text-xs text-white bg-[#3c3744] border-r-2 border-[#564f62] ${sidebar ? "translate-x-0" : "-translate-x-full"} transition-all ease-in-out duration-200 delay-100 shadow-xl shadow-stone-900`}>
