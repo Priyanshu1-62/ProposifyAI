@@ -160,13 +160,45 @@ The backend is structured into independently scalable pipelines:
 git clone https://github.com/Priyanshu1-62/ProposifyAI
 
 # Install dependencies
+# # For Client
+cd ./client
+npm install
+
+# # For server
+cd ./services/api
 npm install
 
 # Setup environment variables
-# (Create .env file)
+# # /client/env
+VITE_API_URL=<backend_URL>
+VITE_GOOGLE_OAUTH_API_URL=<Google_OAuth_API_URL>
+
+# # /services/api
+PORT=5000
+OPENAI_API_KEY=<Enter_your_API_KEY>
+OPENROUTER_API_KEY=<Enter_your_API_KEY>
+AI_MODEL_FREE_TIER=<Enter_your_URL>
+RESEND_API_KEY=<Enter_your_API_KEY>
+RESEND_WEBHOOK_SECRET=<Enter_your_SECRET>
+RESEND_WEBHOOK_TOLERANCE_SECONDS=<Enter_your_LIMIT>
+BREVO_API_KEY=<Enter_your_API_KEY>
+MAILGUN_API_KEY=<Enter_your_API_KEY>
+MAILGUN_WEBHOOK_TOLERANCE_SECONDS=<Enter_your_LIMIT>
+DATABASE_URL=<Enter_your_URL>
+GOOGLE_CLIENT_ID=<Enter_your_ID>
+GOOGLE_CLIENT_SECRET=<Enter_your_SECRET>
+GOOGLE_REDIRECT_URI=<Enter_your_URL>
+GOOGLE_TOKEN_ENDPOINT=<Enter_your_ENDPOINT>
+GOOGLE_AUTHORIZATION_URL_BASE=<Enter_your_URL>
+FRONTEND_HOME_URL=<Enter_your_URL>
+FRONTEND_AUTH_URL=<Enter_your_URL>
+JWT_ACCESS_TOKEN_SECRET=<Enter_your_SECRET>
+ENVIRONMENT=<DEV / PROD>
 
 # Run backend
+cd ./services/api
 npm run dev
 
 # Run frontend
+cd ./client
 npm run dev

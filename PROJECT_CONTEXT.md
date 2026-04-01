@@ -60,6 +60,7 @@ External Services:
 - CSS Grid + auto-fill/fit + minmax()
 - Nearest parent state lifting
 - Redux Toolkit for state management
+- Alerts and Spinners for enhancing perceived responsiveness
 
 ## Email Workflow
 
