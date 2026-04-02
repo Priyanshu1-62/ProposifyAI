@@ -4,6 +4,7 @@ import GeometryShapePattern from "../Decor/GeometryShapePattern"
 import { FcGoogle } from "react-icons/fc";
 import alertContext from "../../Contexts/alertContext";
 import { AiFillGithub } from "react-icons/ai";
+import { AnimatedBackground } from "../Animation/AnimatedBackground";
 
 function Auth() {
   const { handleAlert } = useContext(alertContext)!;
@@ -18,23 +19,24 @@ function Auth() {
   }
   return (
     <div className="flex flex-col w-screen h-dvh px-6 md:px-10 lg:px-12">
-        <div className="flex justify-between items-center pt-7">
+        <AnimatedBackground />
+        <div className="flex justify-between items-center pt-7 text-white">
             <div className="flex items-center gap-2">
                 <img src="/favicon.ico" alt="ProposifyAI logo" className="w-5"></img>
-                <h3 className="font-bold text-stone-800">ProposifyAI</h3>
+                <h3 className="font-bold">ProposifyAI</h3>
             </div>
             <div>
-                <a href="https://github.com/Priyanshu1-62" target="_blank" rel="noopener noreferrer" className="text-3xl"><AiFillGithub /></a>
+                <a href="https://github.com/Priyanshu1-62" target="_blank" rel="noopener noreferrer" className="text-2xl lg:text-3xl"><AiFillGithub /></a>
             </div>
         </div>
         <div className="grow flex justify-center items-center">
             <div className="h-full flex-1 flex flex-col justify-around items-center py-12 md:py-14 lg:py-20">
-                <div className="">
-                    <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 lg:mb-6">
+                <div className="text-white">
+                    <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 lg:mb-6 bg-linear-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
                         <span className="text-[#dd2d4a]">AI-Powered &nbsp;</span>
                         RFP Management Tool
                     </h1>
-                    <h3>
+                    <h3 className="text-gray-300">
                         Describe requests in natural language, manage respondents effortlessly, send invitations in a single click, track email delivery status in real time, and compare responses through AI-powered evaluation.
                     </h3>
                 </div>            
