@@ -27,10 +27,7 @@ function Home() {
             <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./review_responses.png" alt="review_responses"></img>
           </div>
         </div>
-        <div className="flex">
-          <p>Create a new &nbsp;</p>
-          <button className="text-blue-600 underline underline-offset-2 hover:text-blue-700 hover:cursor-pointer text-shadow-lg" onClick={()=>{navigate("/request/title")}}>Request</button>
-        </div>
+        <button className="px-6 py-3 text-white bg-linear-to-r from-[#3c3744] to-purple-500 rounded-lg" onClick={()=>{navigate("/request/title")}}>Create a new Request</button>
       </div>
     </div>
     </>
