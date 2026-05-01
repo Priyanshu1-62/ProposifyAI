@@ -42,13 +42,13 @@ The system is designed with **deterministic pipelines**, **strict type safety**,
 
 ## ⚙️ Core Features
 
-- 🔐 OAuth 2.0 authentication with JWT-based authorization
-- 📩 Stateful email workflows (outbound, inbound, webhook-driven)
-- 🔁 Idempotent processing for emails and webhooks
-- 🧠 AI-powered transformation of natural language into structured RFP data
-- 📊 Automated proposal evaluation using scoring criteria
-- 📦 Fully normalized and queryable data pipelines
-- 🧾 Observability through request lifecycle tracking
+-  OAuth 2.0 authentication with JWT-based authorization
+-  Stateful email workflows (outbound, inbound, webhook-driven)
+-  Idempotent processing for emails and webhooks
+-  AI-powered transformation of natural language into structured RFP data
+-  Automated proposal evaluation using scoring criteria
+-  Fully normalized and queryable data pipelines
+-  Observability through request lifecycle tracking
 
 ---
 
@@ -144,7 +144,7 @@ The backend is structured into independently scalable pipelines:
 
 ---
 
-## 🔮 Future Improvements
+## 📊 Future Improvements
 
 - Complete dashboard UI
 - Add caching layer (Redis)
