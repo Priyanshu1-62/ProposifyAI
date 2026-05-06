@@ -27,8 +27,6 @@ jobs:
         context: ./client
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/proposifyai-client:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
   
     - name: Build And Push Server Image
       uses: docker/build-push-action@v6
@@ -36,7 +34,5 @@ jobs:
         context: ./services/api
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/proposifyai-server:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
 
-# TODO: Add cache-from and cache-to properties in each Image building stage to use GitHub Cache Storage to cache Image Layers. 
+# TODO: Add cache-from: type=gha and cache-to: type=gha,mode=max properties with Docker Buildx setup in each Image building step to use GitHub Cache Storage for Image Layer caching. 
