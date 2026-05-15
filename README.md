@@ -3,6 +3,7 @@
 > AI-powered RFP (Request For Proposal) management system designed to automate the entire lifecycle — from creation to evaluation.
 
 🔗 **Live App**: https://www.proposifyai.online
+🔗 **ProposifyAI Server**: https://github.com/Priyanshu1-62/ProposifyAI-Server
 
 ---
 
