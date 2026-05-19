@@ -20,6 +20,22 @@ The system is designed with **deterministic pipelines**, **strict type safety**,
 
 ---
 
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="./client/src/assets/screenshots/ProposifyAI-Auth_Page.png" width="100%" />
+</p>
+
+<br/>
+
+<p align="center">
+  <img src="./client/src/assets/screenshots/ProposifyAI-Select_Respondents.png" width="49%" />
+  <img src="./client/src/assets/screenshots/ProposifyAI-Loading_Spinner.png" width="49%" />
+</p>
+
+---
+
 ## 🧱 Architecture
 
 ### Frontend

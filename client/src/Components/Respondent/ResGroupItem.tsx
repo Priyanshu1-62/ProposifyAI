@@ -12,10 +12,10 @@ function ResGroupItem({ element }: {element: resGroup}) {
     minute: "2-digit"
   });
   return (
-    <div className="text-sm px-5 py-5 border border-gray-300 border-b-gray-600 rounded-full hover:bg-neutral-200 hover:shadow-lg transition-all duration-300 ease-in-out">
+    <div className="text-sm px-5 py-5 text-blue-100 border border-gray-600 border-b-gray-300 rounded-full hover:bg-gray-800 hover:shadow-lg transition-all duration-300 ease-in-out">
         <div className="flex justify-between">
-            <h4 className="text-neutral-600 font-bold truncate">{element.name}</h4>
-            <button className="text-blue-900 hover:cursor-pointer" onClick={()=>{navigate(`/respondentGroup/update/${element.id}`)}}><FaRegEdit size={16}/></button>
+            <h4 className="font-bold truncate">{element.name}</h4>
+            <button className="text-blue-500 hover:cursor-pointer" onClick={()=>{navigate(`/respondentGroup/update/${element.id}`)}}><FaRegEdit size={16}/></button>
         </div>
         <div className="mt-6 text-xs">
             <p>Created on: {formatted}</p>
