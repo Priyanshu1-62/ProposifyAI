@@ -53,8 +53,8 @@ function ReqRespondent() {
     <Alerts />
     <div className="">
       <Sidebar />
-      <div className="h-[93.4vh] flex flex-col pt-14 pb-4">
-        <h2 className="flex gap-1 px-6 md:px-10 lg:px-14 items-center text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
+      <div className="h-[93.4vh] flex flex-col pt-14 pb-4 text-blue-100">
+        <h2 className="flex gap-1 px-6 md:px-10 lg:px-14 items-center text-xl font-bold"><FcIdea/> Create a Request</h2>
         <RequestOptionbar />
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-14 text-sm">
           <p>Select Group</p>

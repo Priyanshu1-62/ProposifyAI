@@ -14,13 +14,15 @@ import Auth from "./Components/Auth/Auth";
 import LoadingSpinner from "./Components/LoadingSpinner/LoadingSpinner";
 import { useAppSelector } from "./app/hooks";
 import { selectIsLoading } from "./features/appState/appState.selectors";
+import { AnimatedBackground } from "./Components/Animation/AnimatedBackground";
 
 function App() {
   const isLoading = useAppSelector(selectIsLoading);
   return (
     <>
     {isLoading && <LoadingSpinner />}
-    <div className={`${isLoading ? "opacity-35 pointer-events-none" : "opacity-100"} transition-opacity duration-200`}>
+    <div className={`${isLoading ? "cursor-not-allowed pointer-events-none" : ""} transition-all duration-200`}>
+      <AnimatedBackground />
       <BrowserRouter>
       <AlertState>
         <UserState>

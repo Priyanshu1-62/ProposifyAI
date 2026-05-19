@@ -16,15 +16,15 @@ function ReqTitle() {
     <Navbar />
     <div className="">
       <Sidebar />
-      <div className="h-[93.4vh] pt-14">
-        <h2 className="flex gap-1 items-center px-6 md:px-10 lg:px-14 text-xl text-neutral-700 font-bold"><FcIdea/> Create a Request</h2>
+      <div className="h-[93.4vh] pt-14 text-blue-100">
+        <h2 className="flex gap-1 items-center px-6 md:px-10 lg:px-14 text-xl font-bold"><FcIdea/> Create a Request</h2>
         <RequestOptionbar />
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-14 text-sm">
           <p>Add a Title</p>
           <button className="flex gap-1 items-center px-4 py-2 text-white bg-blue-600 hover:cursor-pointer hover:bg-blue-700 active:bg-blue-800 hover:shadow-xl rounded-md" onClick={()=>{navigate("/request/description")}}>Next <MdNavigateNext size={18}/></button>
         </div>
         <div className="mt-8 mx-6 md:mx-10 lg:mx-14">
-          <input name="title" value={reqData.title} onChange={(e)=>setReqData(prev => ({...prev, title:e.target.value}))} className="w-full px-3 py-2 bg-[#cbeef3] text-sm placeholder:text-sm focus:outline-none" type="text" placeholder="The title can be used to search for this request..."></input>
+          <input name="title" value={reqData.title} onChange={(e)=>setReqData(prev => ({...prev, title:e.target.value}))} className="w-full px-3 py-2 bg-[#cbeef3] text-sm text-gray-900 placeholder:text-sm placeholder:text-gray-800 focus:outline-none" type="text" placeholder="The title can be used to search for this request..."></input>
         </div>
       </div>
     </div>
