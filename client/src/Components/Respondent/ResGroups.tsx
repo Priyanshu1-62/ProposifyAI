@@ -54,7 +54,7 @@ function ResGroups() {
         </div>}
         {(!groupsData.length) && <div className="grow flex justify-center items-center text-sm">
           <p>No Groups found. &nbsp;</p>
-          <button className="text-blue-600 hover:cursor-pointer hover:text-blue-800 active:text-blue-950 underline underline-offset-2" onClick={()=>{navigate("/respondentGroup/create")}}>Create one.</button>
+          <button className="text-yellow-400 hover:cursor-pointer hover:text-yellow-600 active:text-yellow-700 underline underline-offset-2" onClick={()=>{navigate("/respondentGroup/create")}}>Create one.</button>
         </div>}
       </div>
     </div>

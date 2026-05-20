@@ -36,8 +36,8 @@ function Requests() {
     <Alerts />
     <div className="">
       <Sidebar />
-      <div className="h-[93.4vh] flex flex-col pt-14 overflow-y-auto">
-        <h2 className="flex gap-1 items-center px-14 text-xl text-neutral-700 font-bold"><FaClipboardList className="text-cyan-800" size={24}/> My Requests</h2>
+      <div className="h-[93.4vh] flex flex-col pt-14 overflow-y-auto text-blue-100">
+        <h2 className="flex gap-1 items-center px-14 text-xl font-bold"><FaClipboardList className="text-cyan-800" size={24}/> My Requests</h2>
         {!!requestsData.length && <div className="px-14 mt-10 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {requestsData.map((element) => {
             return <RequestOverviewItem key={element.id} element={element}/>
@@ -45,7 +45,7 @@ function Requests() {
         </div>}
         {(!requestsData.length) && <div className="grow flex justify-center items-center text-sm">
           <p>No requests found. &nbsp;</p>
-          <button className="text-blue-600 hover:cursor-pointer hover:text-blue-800 active:text-blue-950 underline underline-offset-2" onClick={()=>{navigate("/request/title")}}>Create one.</button>
+          <button className="text-yellow-400 hover:cursor-pointer hover:text-yellow-600 active:text-yellow-700 underline underline-offset-2" onClick={()=>{navigate("/request/title")}}>Create one.</button>
         </div>}
       </div>
     </div>
