@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../UtilityBars/Navbar";
 import Sidebar from "../UtilityBars/Sidebar";
 import { useEffect } from "react";
+import FeatureSection from "../Feature/FeatureSection";
 
 function Home() {
   const navigate = useNavigate();
@@ -19,18 +20,8 @@ function Home() {
           <p className="md:text-lg text-gray-400 text-center mb-12">Transform your ideas into professional proposal workflow with the power of AI.
           Get started in seconds.</p>
         </div>
-        <div className="w-fit flex flex-col md:flex-row">
-          <div className="flex-1">
-            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./create_request.png" alt="Create Request"></img>
-          </div>
-          <div className="flex-1">
-            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./track _invitations.png" alt="track _invitations"></img>
-          </div>
-          <div className="flex-1">
-            <img className="h-[21vh] md:w-[22vw] md:h-auto" src="./review_responses.png" alt="review_responses"></img>
-          </div>
-        </div>
-        <button className="px-6 py-3 text-white rounded-lg bg-linear-to-r from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 hover:cursor-pointer transition-all ease-in-out duration-200 delay-100" onClick={()=>{navigate("/request/title")}}>Get Started</button>
+        <button className="mt-16 px-6 py-3 text-white rounded-lg bg-linear-to-r from-purple-600 via-pink-600 to-red-600 hover:cursor-pointer hover:-translate-y-0.5 hover:scale-105 transition-all ease-in-out duration-200 delay-10" onClick={()=>{navigate("/request/title")}}>Get Started</button>
+        <FeatureSection />
       </div>
     </div>
     </>
