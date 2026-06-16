@@ -28,7 +28,7 @@ function FeatureCard({index, icon: Icon, title, description}: FeatureCardProps) 
     >
       <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-white/20 transition-all duration-300">
         <motion.div
-          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-4 sm:mb-6"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-linear-to-br from-purple-600 via-pink-600 to-red-600 flex items-center justify-center mb-4 sm:mb-6"
           whileHover={{ rotate: 360, scale: 1.1 }}
           transition={{ duration: 0.6 }}
           animate={{

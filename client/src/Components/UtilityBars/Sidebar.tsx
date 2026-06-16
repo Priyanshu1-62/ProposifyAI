@@ -42,22 +42,22 @@ function Sidebar() {
   
   return (
     <>
-    <div className={`z-2 absolute top-[6.6vh] w-60 h-[93.4vh] flex flex-col justify-between py-2 px-2 text-xs text-white bg-[#2b2732] border-r-2 border-[#564f62] ${sidebar ? "translate-x-0" : "-translate-x-full"} transition-all ease-in-out duration-200 delay-100 shadow-xl shadow-stone-900`}>
+    <div className={`z-2 absolute top-[6.6vh] w-60 h-[93.4vh] flex flex-col justify-between py-2 px-2 text-xs text-white bg-linear-to-br from-indigo-600 to-cyan-600 border-r-2 border-[#564f62] ${sidebar ? "translate-x-0" : "-translate-x-full"} transition-all ease-in-out duration-200 delay-100 shadow-xl shadow-stone-900`}>
       <ul className="flex flex-col gap-2 mt-2">
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-[#686274] active:bg-[#797385] hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateCreateRequest}><FaPlus size={18}/> Create Request</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 bg-linear-to-br hover:from-indigo-900 hover:to-cyan-900 hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateCreateRequest}><FaPlus size={18}/> Create Request</button>
         </li>
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-[#686274] active:bg-[#797385] hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateRequests}><GrTasks size={18}/> My Requests</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 bg-linear-to-br hover:from-indigo-900 hover:to-cyan-900 hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateRequests}><GrTasks size={18}/> My Requests</button>
         </li>
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-[#686274] active:bg-[#797385] hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateCreateRespondentGroup}><FaPlus size={18}/> Add Respondent group</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 bg-linear-to-br hover:from-indigo-900 hover:to-cyan-900 hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateCreateRespondentGroup}><FaPlus size={18}/> Add Respondent group</button>
         </li>
         <li>
-          <button className="w-full flex gap-2 items-center px-2 py-2 hover:bg-[#686274] active:bg-[#797385] hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateRespondentGroups}><FaPeopleGroup size={18}/> My Respondent groups</button>
+          <button className="w-full flex gap-2 items-center px-2 py-2 bg-linear-to-br hover:from-indigo-900 hover:to-cyan-900 hover:cursor-pointer rounded-xl transition-all delay-75" onClick={navigateRespondentGroups}><FaPeopleGroup size={18}/> My Respondent groups</button>
         </li>
       </ul>
-      <div className='w-full flex gap-4 justify-around items-center px-2 py-2 hover:bg-[#686274] active:bg-[#797385] hover:cursor-pointer rounded-xl transition-all delay-75' onClick={handleLogout}>
+      <div className='w-full flex gap-4 justify-around items-center px-2 py-2 bg-linear-to-br hover:from-indigo-900 hover:to-cyan-900 hover:cursor-pointer rounded-xl transition-all delay-75' onClick={handleLogout}>
         <BiLogOut className="font-bold"  size={21}/>
         <p>Log Out</p>
         <BiLogOut className='invisible'  size={21}/>

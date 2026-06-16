@@ -2,20 +2,20 @@ import { Zap, Brain, Shield } from 'lucide-react';
 import FeatureCard from './FeatureCard';
 const features = [
     {
-        icon: Zap,
-        title: 'Lightning Fast',
-        description: 'Generate comprehensive proposals in seconds, not hours. Our AI understands your requirements and creates tailored content instantly.',
+      icon: Zap,
+      title: 'Lightning Fast',
+      description: 'Create comprehensive proposals in seconds, not hours. Manage reusable vendor groups seamlessly.',
     },
     {
-        icon: Brain,
-        title: 'AI-Powered Intelligence',
-        description: 'Leverage advanced machine learning to craft persuasive, context-aware proposals that resonate with your audience.',
-      },
-      {
-        icon: Shield,
-        title: 'Enterprise Security',
-        description: 'Your data is protected with bank-level encryption and compliance with industry standards. Privacy is our priority.',
-      },
+      icon: Shield,
+      title: 'Enterprise Security',
+      description: 'Your data is protected with bank-level encryption and compliance with industry standards. Privacy is our priority.',
+    },
+    {
+      icon: Brain,
+      title: 'AI-Powered Analytics',
+      description: 'Track proposal performance with detailed analytics. Learn what works and optimize your success rate.',
+    },
 ];
 
 function FeatureSection() {
