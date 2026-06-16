@@ -1,10 +1,7 @@
 import { motion, useMotionValue, useTransform, useSpring } from 'motion/react';
 import type { FeatureCardProps } from "../../Models/FeatureCardProps"
-import { useState } from 'react';
 
 function FeatureCard({index, icon: Icon, title, description}: FeatureCardProps) {
-
-  const [scrollVelocity, setScrollVelocity] = useState<number>(0);
 
   const y = useMotionValue(0);
   const scale = useTransform(y, [-300, 0, 300], [0.95, 1, 0.95]);
@@ -31,9 +28,6 @@ function FeatureCard({index, icon: Icon, title, description}: FeatureCardProps) 
           className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-linear-to-br from-purple-600 via-pink-600 to-red-600 flex items-center justify-center mb-4 sm:mb-6"
           whileHover={{ rotate: 360, scale: 1.1 }}
           transition={{ duration: 0.6 }}
-          animate={{
-            rotate: scrollVelocity > 1 ? [0, 10, 0] : 0,
-          }}
         >
           <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
         </motion.div>
