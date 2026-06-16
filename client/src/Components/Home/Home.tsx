@@ -20,7 +20,7 @@ function Home() {
           <p className="md:text-lg text-gray-400 text-center mb-12">Transform your ideas into professional proposal workflow with the power of AI.
           Get started in seconds.</p>
         </div>
-        <button className="mt-16 px-6 py-3 text-white rounded-lg bg-linear-to-r from-purple-600 via-pink-600 to-red-600 hover:cursor-pointer hover:-translate-y-0.5 hover:scale-105 transition-all ease-in-out duration-200 delay-10" onClick={()=>{navigate("/request/title")}}>Get Started</button>
+        <button className="mt-16 px-6 py-3 text-white rounded-lg bg-linear-to-r from-purple-600 via-pink-600 to-red-600 hover:cursor-pointer hover:-translate-y-1 transition-all ease-in-out duration-400" onClick={()=>{navigate("/request/title")}}>Get Started</button>
         <FeatureSection />
       </div>
     </div>
