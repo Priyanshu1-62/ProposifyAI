@@ -117,4 +117,8 @@ External Services:
 
 ## Work in progress
 
-- Working on heading bar for Auth Page
+- 
+
+## TODO
+
+- [ ] Migrate Prisma ownership from services/api to packages/database.

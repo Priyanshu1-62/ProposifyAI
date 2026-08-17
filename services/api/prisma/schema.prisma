@@ -363,5 +363,3 @@ model RequestOverview {
   user                         User  @relation(fields: [userId], references: [id])
 
 }
-
-

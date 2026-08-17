@@ -286,6 +286,15 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
 
+  packages/database:
+    dependencies:
+      '@prisma/client':
+        specifier: ^6.19.3
+        version: 6.19.3(prisma@6.19.3(typescript@7.0.2))(typescript@7.0.2)
+      prisma:
+        specifier: ^6.19.3
+        version: 6.19.3(typescript@7.0.2)
+
   services/api:
     dependencies:
       '@getbrevo/brevo':
@@ -3176,6 +3185,11 @@ snapshots:
       prisma: 6.19.3(typescript@5.9.3)
       typescript: 5.9.3
 
+  '@prisma/client@6.19.3(prisma@6.19.3(typescript@7.0.2))(typescript@7.0.2)':
+    optionalDependencies:
+      prisma: 6.19.3(typescript@7.0.2)
+      typescript: 7.0.2
+
   '@prisma/config@6.19.3':
     dependencies:
       c12: 3.1.0
@@ -4732,6 +4746,15 @@ snapshots:
       '@prisma/engines': 6.19.3
     optionalDependencies:
       typescript: 5.9.3
+    transitivePeerDependencies:
+      - magicast
+
+  prisma@6.19.3(typescript@7.0.2):
+    dependencies:
+      '@prisma/config': 6.19.3
+      '@prisma/engines': 6.19.3
+    optionalDependencies:
+      typescript: 7.0.2
     transitivePeerDependencies:
       - magicast
 
