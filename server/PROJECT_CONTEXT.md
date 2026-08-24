@@ -1,9 +1,3 @@
-# Proposify AI — Server Context
-
-Living doc. Update it as we go so a new chat (or future-you) can pick up
-without re-explaining everything. Keep it lean — enough to paint the
-picture, not a full changelog.
-
 ## What this project is
 
 Proposify AI — an RFP (request-for-proposal) management system: email
@@ -14,7 +8,7 @@ programming + microservice-style architecture), **not** a 1:1 language
 port — aiming for production-grade structure.
 
 **Approach for this rebuild:** the user is scaffolding and writing the
-code themselves to actually learn it. Claude's role is to explain
+code themselves to actually learn it. LLM's role is to explain
 *why* (dependency choices, config, architecture trade-offs), point out
 bugs/misconfigurations and explain the reasoning, and answer questions —
 **not** to generate files/code directly, unless explicitly asked for a
@@ -137,26 +131,3 @@ ProposifyAI/
 4. Fix the docker-compose Kafka listener (internal listener for
    container-to-container, e.g. kafka-ui).
 5. Get `email-worker` booting standalone (currently untested).
-
-## Known gotchas hit so far (don't repeat)
-
-- Windows/PowerShell: `mvn` isn't a global command unless Maven's
-  installed separately — use the Maven **wrapper** (`mvnw.cmd`) instead.
-  Wrapper files (`mvnw`, `mvnw.cmd`, `.mvn/`) were copied from
-  `core-api/` up into `server/` so `-pl` commands work from the
-  multi-module root.
-- Parent `<parent>` block in a child pom **always** needs
-  `groupId` + `artifactId` + `version`, even with `relativePath` set —
-  omitting `version` breaks the build (`'parent.version' is missing`).
-- Spring Boot only wraps multi-library integrations as
-  `spring-boot-starter-X`. Single-library integrations (Kafka, Flyway)
-  have no starter — add the library directly
-  (`org.springframework.kafka:spring-kafka`,
-  `org.flywaydb:flyway-core`) and Boot autoconfigures off classpath
-  presence.
-- `spring-dotenv` vs `springboot4-dotenv`: **use the Boot-version-specific
-  artifact.** The generic one doesn't hook into Boot 4's
-  autoconfiguration/EnvironmentPostProcessor chain and fails silently
-  (no error — placeholders like `${SUPABASE_DB_URL}` just never
-  resolve, surfacing as a confusing downstream error like `'url' must
-  start with "jdbc"`).
