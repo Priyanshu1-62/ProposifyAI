@@ -282,3 +282,6 @@ them in a new module (e.g. email-worker):
 4. Get `email-worker` booting standalone (currently untested) — watch
    for the same Boot 4 per-feature-autoconfiguration-module gotcha
    with Kafka.
+5. Design DB in a manner that end-user can select same group for different 
+   requests and have independent and different information avaliable for 
+   each respondent in the group when viewed for each request.
