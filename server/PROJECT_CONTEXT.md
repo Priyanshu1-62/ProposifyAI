@@ -41,11 +41,81 @@ ProposifyAI/
 - **Kafka**: KRaft mode, no Zookeeper
 - **`ddl-auto: validate`** — Flyway owns schema, Hibernate only checks
 - **Enums**: `VARCHAR` + `CHECK` via `CREATE DOMAIN`, not native Postgres enums (easier to evolve, maps to plain `@Enumerated(STRING)`)
-- **FK `respondent.group_id` → `respondent_group`**: deferred, table doesn't exist yet. `group_id` is bare TEXT, no referential integrity. TODO once table exists.
 
 ---
 
-## 4. Key learnings & gotchas
+## 4. Data flow (product-level)
+
+1. User creates a `request` (title + natural-language description) against a chosen `respondent_group`.
+2. Async: description summarized by LLM → `scoring_criterion` rows generated from summary.
+3. Async: emails sent to every respondent in the group → per-invite email status tracked, updated via webhooks.
+4. Vendor replies with a proposal (natural language) → summarized → scored against the request's `scoring_criterion` rows → per-criterion breakdown + overall score shown in UI.
+5. User closes the request once enough proposals are in.
+
+---
+
+## 5. Low-level DB design (locked in)
+
+### Entities
+
+| Entity | Purpose |
+|---|---|
+| `app_user` | Owner of groups/requests, authenticated via OAuth2 |
+| `oauth_identity` | Per-provider social login identity, 1:N from `app_user` |
+| `respondent_group` | Reusable, user-owned named list of respondents |
+| `respondent` | Individual vendor contact; belongs to one group; soft-deletable |
+| `request` | The RFP; snapshots which group it targeted |
+| `scoring_criterion` | LLM-generated evaluation criteria, owned by a `request` |
+| `request_respondent` | Join row = one invite; holds email status + correlation token |
+| `email_event` | Append-only webhook log per invite (SENT/DELIVERED/BOUNCED/...) |
+| `proposal` | Vendor's incoming reply for one invite (1:1, enforced) |
+| `proposal_score` | Score + reasoning per (proposal, criterion) pair |
+
+### Key relationships & why
+
+- `request_respondent` is the pivot table: `respondent` is reusable across requests, but email status and proposal are per-request, so they hang off the join row, not off `respondent` directly.
+- `request.group_id` is a durable snapshot of "who was targeted" — independent of later edits to `respondent_group` membership.
+- `proposal` → `request_respondent` is `UNIQUE`, enforcing **one accepted proposal per invite**; later resubmissions are silently rejected (DB-level guarantee, race-proof).
+- `correlation_token` lives on `request_respondent` as its own `UUID NOT NULL UNIQUE` column (not the PK) — needed so it can be rotated independently of row identity if a reply goes unmatched. Used to match inbound vendor replies back to the correct invite regardless of email provider.
+- `email_event.provider_event_id` (not `request_respondent_id`) is the idempotency key — a single invite legitimately produces multiple lifecycle events (QUEUED→SENT→DELIVERED), so only the *provider's* per-webhook event ID can dedupe safely.
+
+### FK cascade rules
+
+| Child → Parent | Rule | Why |
+|---|---|---|
+| `oauth_identity.user_id` → `app_user` | CASCADE | Identity meaningless without user |
+| `respondent_group.owner_user_id` → `app_user` | RESTRICT | Never silently drop groups on user delete |
+| `respondent.group_id` → `respondent_group` | **CASCADE** | Safe because orphan groups (only ones hard-deleted) have no respondents referenced elsewhere |
+| `request.owner_user_id` → `app_user` | RESTRICT | Requests are permanent records |
+| `request.group_id` → `respondent_group` | RESTRICT | Safety net; group deletion path never hard-deletes a group referenced by any request anyway |
+| `scoring_criterion.request_id` → `request` | CASCADE | Criteria owned wholly by request |
+| `request_respondent.request_id` → `request` | CASCADE | Invites owned wholly by request |
+| `request_respondent.respondent_id` → `respondent` | RESTRICT | Never hard-delete a respondent with invite history — soft-delete only |
+| `email_event.request_respondent_id` → `request_respondent` | CASCADE | Log entries meaningless without invite |
+| `proposal.request_respondent_id` → `request_respondent` | CASCADE + UNIQUE | Ownership + one-proposal-per-invite rule |
+| `proposal_score.proposal_id` → `proposal` | CASCADE | Scores meaningless without proposal |
+| `proposal_score.scoring_criterion_id` → `scoring_criterion` | RESTRICT | Never corrupt existing score breakdowns by deleting a criterion in use |
+
+### Business rules locked in
+
+- **Soft delete**: `respondent.deleted_at` and `respondent_group.deleted_at`, both nullable, no default. `NULL` = active.
+- **Group deletion policy** (app-layer, transactional with `SELECT ... FOR UPDATE` row lock on the group to avoid check-then-act races):
+    - Linked to any **OPEN** request → deletion rejected; error surfaces the offending request's title.
+    - Linked only to **CLOSED** requests → soft-delete (`deleted_at` set). Closed-request historical views still resolve the group name (they don't filter on `deleted_at`); the "pick a group" UI for new requests does filter it.
+    - **Orphan** group (no request ever referenced it) → hard `DELETE`, cascades to its `respondent` rows via the `CASCADE` FK above.
+- **One proposal per invite**: enforced via `UNIQUE(request_respondent_id)` on `proposal`; late/duplicate submissions rejected silently, no app-level dedup logic needed.
+- **Webhook idempotency**: enforced via `UNIQUE(provider_event_id)` on `email_event`; duplicate webhook deliveries fail the insert.
+- **Enums via `CREATE DOMAIN`**: `oauth_provider`, `llm_generation_status` (PENDING/PROCESSING/COMPLETED/FAILED — shared across summary/criteria/scoring statuses), `request_status` (OPEN/CLOSED), `outbound_email_event` (QUEUED/SENT/BOUNCED/COMPLAINED/DELIVERED/FAILED).
+
+### Open items from LLD (not yet decided)
+
+- Whether `scoring_criterion` needs a `sort_order` column for stable UI display ordering — deferred, not yet added.
+- `scoring_criterion.weight` currently `NOT NULL` — confirmed intentional (no "equal weighting by omission" path).
+- `proposal.content_raw` / `received_at` nullability — left nullable in migration; revisit if a placeholder-row-before-receipt pattern is ever needed.
+
+---
+
+## 6. Key learnings & gotchas
 
 **Maven/POM**
 - Parent `<packaging>` must be `pom`
@@ -66,6 +136,9 @@ ProposifyAI/
 - Use `TIMESTAMPTZ`, not bare `TIMESTAMP`
 - `gen_random_uuid()` works on Supabase PG13+ with no extension needed
 - Explicit snake_case identifiers — unquoted mixed-case gets folded lowercase, mismatches Hibernate's naming strategy
+- `FOREIGN KEY (column)` requires parens around the column name — omitting them is a syntax error, easy to miss across many constraints
+- PK/ID defaults must use `gen_random_uuid()`, not `NOW()` — the latter returns a timestamp, not a UUID
+- Changing a column's type (e.g. TEXT → UUID) via `ALTER COLUMN ... TYPE` may need an explicit `USING column::uuid` cast
 
 **JPA/Hibernate**
 - UUID PK w/ DB-side default → `@UuidGenerator`, not `@GeneratedValue(IDENTITY)`
@@ -85,7 +158,7 @@ ProposifyAI/
 
 ---
 
-## 5. Current status
+## 7. Current status
 
 - ✅ Parent POM, `common`, `core-api`, `workers/email-worker` scaffolded
 - ✅ `core-api` boots on `:8080` against live Supabase via Hikari
@@ -95,15 +168,16 @@ ProposifyAI/
 - ✅ `HealthController` — `GET /api/health`, returns `{status, date}`. Deliberately dependency-free (no DB/Kafka check) — avoids cold-start hang if Supabase is also asleep. Note: uses `LocalDate` currently; consider `OffsetDateTime` for actual wake-up timestamp/latency visibility.
 - ✅ `SecurityConfig` created — first security config in project. `SecurityFilterChain` bean: `/api/health/**` → `permitAll()`, everything else → `authenticated()`. CSRF and session management left at default (stateful) — revisit together when OAuth2 login is wired in.
 - ✅ Verified: `/api/health` returns 200, other paths return 403 (no auth mechanism registered yet)
+- ✅ Full LLD for RFP domain designed — entities, FK rules, soft-delete/group-deletion policy, one-proposal-per-invite, webhook idempotency all locked in (see §5)
+- ✅ `V2__initial_schema_setup.sql` written (app_user, oauth_identity, respondent_group, request, scoring_criterion, request_respondent, email_event, proposal, proposal_score + respondent FK/soft-delete retrofit) — reviewed, corrections applied, ready to commit
 - `workers/email-worker` — pom scaffolded, not yet run/tested
 - `infra/docker-compose.yml` — needs 2nd internal Kafka listener (`kafka:29092`) for container-to-container resolution — not yet fixed
 - No `jjwt` dependency yet
 - `mapstruct`, `springdoc-openapi` — planned, not added
-- FK `group_id` → `respondent_group` — deferred (see §3)
 
 ---
 
-## 6. Completed tasks (chronological)
+## 8. Completed tasks (chronological)
 
 1. Scaffolded parent + 3 modules; resolved Maven misconfigs (packaging, BOM, artifact IDs, `relativePath`, compiler release)
 2. `core-api` boots against Supabase; fixed `spring-dotenv` → `springboot4-dotenv`
@@ -116,13 +190,17 @@ ProposifyAI/
 9. Wrote `RespondentRepository` (`findByGroupId` derived query)
 10. Wrote `HealthController` (`GET /api/health`, dependency-free)
 11. Wrote `SecurityConfig` — first `SecurityFilterChain`, health permitAll, rest authenticated, CSRF deferred. Verified 200 vs 403 behavior.
+12. Designed full RFP domain LLD (entities, FK rules, soft-delete, group deletion policy, idempotency, correlation token strategy) — see §5
+13. Wrote `V2__initial_schema_setup.sql` covering full LLD; reviewed and corrected (missing PK/columns, FK paren syntax, typos, soft-delete default bug, idempotency key fix)
 
 ---
 
-## 7. Next steps (in order)
+## 9. Next steps (in order)
 
-1. Fix docker-compose Kafka listener (internal listener for container-to-container, e.g. kafka-ui)
-2. Get `email-worker` booting standalone — watch for same Boot 4 per-feature-autoconfig gotcha with Kafka
-3. Wire OAuth2 login (`oauth2Login()` in `SecurityConfig`) — then revisit CSRF (disable) + session management (stateless) together
-4. Add `jjwt`, mint app JWT after OAuth2 login success
-5. Health-check-before-OAuth-call pattern for free-tier cold starts: ping `/api/health` first to wake server, then start OAuth flow — implement once OAuth wiring begins
+1. Apply `V2__initial_schema_setup.sql`, confirm clean Flyway apply against Supabase
+2. Write `@Entity` classes + repositories for the new tables (app_user, respondent_group, request, scoring_criterion, request_respondent, email_event, proposal, proposal_score)
+3. Fix docker-compose Kafka listener (internal listener for container-to-container, e.g. kafka-ui)
+4. Get `email-worker` booting standalone — watch for same Boot 4 per-feature-autoconfig gotcha with Kafka
+5. Wire OAuth2 login (`oauth2Login()` in `SecurityConfig`) — then revisit CSRF (disable) + session management (stateless) together
+6. Add `jjwt`, mint app JWT after OAuth2 login success
+7. Health-check-before-OAuth-call pattern for free-tier cold starts: ping `/api/health` first to wake server, then start OAuth flow — implement once OAuth wiring begins
