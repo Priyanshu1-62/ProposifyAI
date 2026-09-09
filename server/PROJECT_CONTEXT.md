@@ -58,18 +58,18 @@ ProposifyAI/
 
 ### Entities
 
-| Entity | Purpose |
-|---|---|
-| `app_user` | Owner of groups/requests, authenticated via OAuth2 |
-| `oauth_identity` | Per-provider social login identity, 1:N from `app_user` |
-| `respondent_group` | Reusable, user-owned named list of respondents |
-| `respondent` | Individual vendor contact; belongs to one group; soft-deletable |
-| `request` | The RFP; snapshots which group it targeted |
-| `scoring_criterion` | LLM-generated evaluation criteria, owned by a `request` |
-| `request_respondent` | Join row = one invite; holds email status + correlation token |
-| `email_event` | Append-only webhook log per invite (SENT/DELIVERED/BOUNCED/...) |
-| `proposal` | Vendor's incoming reply for one invite (1:1, enforced) |
-| `proposal_score` | Score + reasoning per (proposal, criterion) pair |
+| Entity                 | Purpose |
+|------------------------|---|
+| `app_user`             | Owner of groups/requests, authenticated via OAuth2 |
+| `oauth_identity`       | Per-provider social login identity, 1:N from `app_user` |
+| `respondent_group`     | Reusable, user-owned named list of respondents |
+| `respondent`           | Individual vendor contact; belongs to one group; soft-deletable |
+| `request`              | The RFP; snapshots which group it targeted |
+| `scoring_criterion`    | LLM-generated evaluation criteria, owned by a `request` |
+| `request_respondent`   | Join row = one invite; holds email status + correlation token |
+| `outbound_email_event` | Append-only webhook log per invite (SENT/DELIVERED/BOUNCED/...) |
+| `proposal`             | Vendor's incoming reply for one invite (1:1, enforced) |
+| `proposal_score`       | Score + reasoning per (proposal, criterion) pair |
 
 ### Key relationships & why
 
@@ -77,24 +77,24 @@ ProposifyAI/
 - `request.group_id` is a durable snapshot of "who was targeted" — independent of later edits to `respondent_group` membership.
 - `proposal` → `request_respondent` is `UNIQUE`, enforcing **one accepted proposal per invite**; later resubmissions are silently rejected (DB-level guarantee, race-proof).
 - `correlation_token` lives on `request_respondent` as its own `UUID NOT NULL UNIQUE` column (not the PK) — needed so it can be rotated independently of row identity if a reply goes unmatched. Used to match inbound vendor replies back to the correct invite regardless of email provider.
-- `email_event.provider_event_id` (not `request_respondent_id`) is the idempotency key — a single invite legitimately produces multiple lifecycle events (QUEUED→SENT→DELIVERED), so only the *provider's* per-webhook event ID can dedupe safely.
+- `outbound_email_event.provider_event_id` (not `request_respondent_id`) is the idempotency key — a single invite legitimately produces multiple lifecycle events (QUEUED→SENT→DELIVERED), so only the *provider's* per-webhook event ID can dedupe safely.
 
 ### FK cascade rules
 
-| Child → Parent | Rule | Why |
-|---|---|---|
-| `oauth_identity.user_id` → `app_user` | CASCADE | Identity meaningless without user |
-| `respondent_group.owner_user_id` → `app_user` | RESTRICT | Never silently drop groups on user delete |
-| `respondent.group_id` → `respondent_group` | **CASCADE** | Safe because orphan groups (only ones hard-deleted) have no respondents referenced elsewhere |
-| `request.owner_user_id` → `app_user` | RESTRICT | Requests are permanent records |
-| `request.group_id` → `respondent_group` | RESTRICT | Safety net; group deletion path never hard-deletes a group referenced by any request anyway |
-| `scoring_criterion.request_id` → `request` | CASCADE | Criteria owned wholly by request |
-| `request_respondent.request_id` → `request` | CASCADE | Invites owned wholly by request |
-| `request_respondent.respondent_id` → `respondent` | RESTRICT | Never hard-delete a respondent with invite history — soft-delete only |
-| `email_event.request_respondent_id` → `request_respondent` | CASCADE | Log entries meaningless without invite |
-| `proposal.request_respondent_id` → `request_respondent` | CASCADE + UNIQUE | Ownership + one-proposal-per-invite rule |
-| `proposal_score.proposal_id` → `proposal` | CASCADE | Scores meaningless without proposal |
-| `proposal_score.scoring_criterion_id` → `scoring_criterion` | RESTRICT | Never corrupt existing score breakdowns by deleting a criterion in use |
+| Child → Parent                                                     | Rule | Why |
+|--------------------------------------------------------------------|---|---|
+| `oauth_identity.user_id` → `app_user`                              | CASCADE | Identity meaningless without user |
+| `respondent_group.owner_user_id` → `app_user`                      | RESTRICT | Never silently drop groups on user delete |
+| `respondent.group_id` → `respondent_group`                         | **CASCADE** | Safe because orphan groups (only ones hard-deleted) have no respondents referenced elsewhere |
+| `request.owner_user_id` → `app_user`                               | RESTRICT | Requests are permanent records |
+| `request.group_id` → `respondent_group`                            | RESTRICT | Safety net; group deletion path never hard-deletes a group referenced by any request anyway |
+| `scoring_criterion.request_id` → `request`                         | CASCADE | Criteria owned wholly by request |
+| `request_respondent.request_id` → `request`                        | CASCADE | Invites owned wholly by request |
+| `request_respondent.respondent_id` → `respondent`                  | RESTRICT | Never hard-delete a respondent with invite history — soft-delete only |
+| `outbound_email_event.request_respondent_id` → `request_respondent` | CASCADE | Log entries meaningless without invite |
+| `proposal.request_respondent_id` → `request_respondent`            | CASCADE + UNIQUE | Ownership + one-proposal-per-invite rule |
+| `proposal_score.proposal_id` → `proposal`                          | CASCADE | Scores meaningless without proposal |
+| `proposal_score.scoring_criterion_id` → `scoring_criterion`        | RESTRICT | Never corrupt existing score breakdowns by deleting a criterion in use |
 
 ### Business rules locked in
 
@@ -104,8 +104,8 @@ ProposifyAI/
     - Linked only to **CLOSED** requests → soft-delete (`deleted_at` set). Closed-request historical views still resolve the group name (they don't filter on `deleted_at`); the "pick a group" UI for new requests does filter it.
     - **Orphan** group (no request ever referenced it) → hard `DELETE`, cascades to its `respondent` rows via the `CASCADE` FK above.
 - **One proposal per invite**: enforced via `UNIQUE(request_respondent_id)` on `proposal`; late/duplicate submissions rejected silently, no app-level dedup logic needed.
-- **Webhook idempotency**: enforced via `UNIQUE(provider_event_id)` on `email_event`; duplicate webhook deliveries fail the insert.
-- **Enums via `CREATE DOMAIN`**: `oauth_provider`, `llm_generation_status` (PENDING/PROCESSING/COMPLETED/FAILED — shared across summary/criteria/scoring statuses), `request_status` (OPEN/CLOSED), `outbound_email_event` (QUEUED/SENT/BOUNCED/COMPLAINED/DELIVERED/FAILED).
+- **Webhook idempotency**: enforced via `UNIQUE(provider_event_id)` on `outbound_email_event`; duplicate webhook deliveries fail the insert.
+- **Enums via `CREATE DOMAIN`**: `oauth_provider`, `llm_generation_status` (PENDING/PROCESSING/COMPLETED/FAILED — shared across summary/criteria/scoring statuses), `request_status` (OPEN/CLOSED), `outbound_event_type` (QUEUED/SENT/BOUNCED/COMPLAINED/DELIVERED/FAILED).
 
 ### Open items from LLD (not yet decided)
 
@@ -169,7 +169,7 @@ ProposifyAI/
 - ✅ `SecurityConfig` created — first security config in project. `SecurityFilterChain` bean: `/api/health/**` → `permitAll()`, everything else → `authenticated()`. CSRF and session management left at default (stateful) — revisit together when OAuth2 login is wired in.
 - ✅ Verified: `/api/health` returns 200, other paths return 403 (no auth mechanism registered yet)
 - ✅ Full LLD for RFP domain designed — entities, FK rules, soft-delete/group-deletion policy, one-proposal-per-invite, webhook idempotency all locked in (see §5)
-- ✅ `V2__initial_schema_setup.sql` written (app_user, oauth_identity, respondent_group, request, scoring_criterion, request_respondent, email_event, proposal, proposal_score + respondent FK/soft-delete retrofit) — reviewed, corrections applied, ready to commit
+- ✅ `V2__initial_schema_setup.sql` written (app_user, oauth_identity, respondent_group, request, scoring_criterion, request_respondent, outbound_email_event, proposal, proposal_score + respondent FK/soft-delete retrofit) — reviewed, corrections applied, ready to commit
 - `workers/email-worker` — pom scaffolded, not yet run/tested
 - `infra/docker-compose.yml` — needs 2nd internal Kafka listener (`kafka:29092`) for container-to-container resolution — not yet fixed
 - No `jjwt` dependency yet
@@ -198,7 +198,7 @@ ProposifyAI/
 ## 9. Next steps (in order)
 
 1. Apply `V2__initial_schema_setup.sql`, confirm clean Flyway apply against Supabase
-2. Write `@Entity` classes + repositories for the new tables (app_user, respondent_group, request, scoring_criterion, request_respondent, email_event, proposal, proposal_score)
+2. Write `@Entity` classes + repositories for the new tables (app_user, respondent_group, request, scoring_criterion, request_respondent, outbound_email_event, proposal, proposal_score)
 3. Fix docker-compose Kafka listener (internal listener for container-to-container, e.g. kafka-ui)
 4. Get `email-worker` booting standalone — watch for same Boot 4 per-feature-autoconfig gotcha with Kafka
 5. Wire OAuth2 login (`oauth2Login()` in `SecurityConfig`) — then revisit CSRF (disable) + session management (stateless) together

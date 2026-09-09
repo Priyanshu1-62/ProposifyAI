@@ -7,8 +7,8 @@ CREATE DOMAIN llm_generation_status AS VARCHAR(20)
 CREATE DOMAIN request_status AS VARCHAR(20)
     CONSTRAINT check_request_status CHECK(VALUE IN ('OPEN', 'CLOSED'));
 
-CREATE DOMAIN outbound_email_event AS VARCHAR(20)
-    CONSTRAINT check_event_status CHECK(VALUE IN ('QUEUED', 'SENT', 'BOUNCED', 'COMPLAINED', 'DELIVERED', 'FAILED'));
+CREATE DOMAIN outbound_event_type AS VARCHAR(20)
+    CONSTRAINT check_event_type CHECK(VALUE IN ('QUEUED', 'SENT', 'BOUNCED', 'COMPLAINED', 'DELIVERED', 'FAILED'));
 
 CREATE TABLE app_user (
     id                            UUID                         PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -85,7 +85,7 @@ CREATE TABLE scoring_criterion (
     request_id                    UUID                           NOT NULL,
     name                          VARCHAR(100)                   NOT NULL,
     description                   TEXT                           NOT NULL,
-    weight                        NUMERIC                        NOT NULL CHECK (weight >= 0 AND weight <=1),
+    weight                        NUMERIC(5, 4)                  NOT NULL CHECK (weight >= 0 AND weight <=1),
     created_at                    TIMESTAMPTZ                    NOT NULL DEFAULT NOW(),
 
     CONSTRAINT FK_request_id
@@ -99,7 +99,7 @@ CREATE TABLE request_respondent (
     request_id                    UUID                           NOT NULL,
     respondent_id                 UUID                           NOT NULL,
     correlation_id                UUID                           NOT NULL UNIQUE DEFAULT gen_random_uuid(),
-    email_status                  outbound_email_event           NOT NULL DEFAULT 'QUEUED',
+    email_status                  outbound_event_type            NOT NULL DEFAULT 'QUEUED',
     email_message_id              TEXT                           NULL,
     created_at                    TIMESTAMPTZ                    NOT NULL DEFAULT NOW(),
     updated_at                    TIMESTAMPTZ                    NOT NULL DEFAULT NOW(),
@@ -117,11 +117,11 @@ CREATE TABLE request_respondent (
     UNIQUE (request_id, respondent_id)
 );
 
-CREATE TABLE email_event (
+CREATE TABLE outbound_email_event (
     id                             UUID                          PRIMARY KEY DEFAULT gen_random_uuid(),
     request_respondent_id          UUID                          NOT NULL,
     provider_event_id              TEXT                          NOT NULL UNIQUE,
-    event_type                     outbound_email_event          NOT NULL DEFAULT 'QUEUED',
+    event_type                     outbound_event_type           NOT NULL DEFAULT 'QUEUED',
     payload                        JSONB                         NOT NULL,
     occurred_at                    TIMESTAMPTZ                   NOT NULL,
     received_at                    TIMESTAMPTZ                   NOT NULL DEFAULT NOW(),
@@ -154,7 +154,7 @@ CREATE TABLE proposal_score (
     id                              UUID                         PRIMARY KEY DEFAULT gen_random_uuid(),
     proposal_id                     UUID                         NOT NULL,
     scoring_criterion_id            UUID                         NOT NULL,
-    score                           NUMERIC                      NOT NULL CHECK (score >= 0 AND score <= 1),
+    score                           NUMERIC(5, 4)                NOT NULL CHECK (score >= 0 AND score <= 1),
     reasoning                       TEXT                         NULL,
     created_at                      TIMESTAMPTZ                  NOT NULL DEFAULT NOW(),
 
