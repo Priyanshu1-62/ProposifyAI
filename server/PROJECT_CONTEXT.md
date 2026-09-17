@@ -197,7 +197,7 @@ ProposifyAI/
 
 ## 9. Next steps (in order)
 
-1. Apply `V2__initial_schema_setup.sql`, confirm clean Flyway apply against Supabase
+1. Apply `V2__initial_schema_setup.sql`, confirm clean Flyway apply against Supabase (Done)
 2. Write `@Entity` classes + repositories for the new tables (app_user, respondent_group, request, scoring_criterion, request_respondent, outbound_email_event, proposal, proposal_score)
 3. Fix docker-compose Kafka listener (internal listener for container-to-container, e.g. kafka-ui)
 4. Get `email-worker` booting standalone — watch for same Boot 4 per-feature-autoconfig gotcha with Kafka
