@@ -34,11 +34,14 @@ public class Respondent {
     private String email;
 
     @Column(name = "group_id", nullable = false)
-    private String groupId;
+    private UUID groupId;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "outbound_status", nullable = false, columnDefinition = "outbound_email_status")
