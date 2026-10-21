@@ -1,13 +1,4 @@
-"""Normalized LLM errors.
-
-Adapters catch vendor SDK exceptions and re-raise these (use `raise ... from exc`
-to keep the original). Retry/fallback logic in the agent depends only on this
-hierarchy, never on a vendor's exception classes.
-
-`retryable` says whether the failure is transient. Whether a retry is actually
-safe is a separate rule: retry only if no token has been emitted yet.
-"""
-
+from pydantic import Field
 
 class LLMError(Exception):
     retryable: bool = False
@@ -17,19 +8,12 @@ class LLMError(Exception):
         self.provider = provider
 
 
-# --- Transient: safe to retry (before first token) ---------------------------
-
-
 class LLMConnectionError(LLMError):
-    """Could not reach the provider (DNS, connection reset, etc.)."""
-
-    retryable = True
+    retryable = Field(default=True, description="Could not reach the provider (DNS, connection reset, etc).")
 
 
 class LLMTimeoutError(LLMError):
-    """No first token, or total call time, exceeded the configured timeout."""
-
-    retryable = True
+    retryable = Field(default=True, description="No first token, or total call time, exceeded the configured timeout.")
 
 
 class LLMRateLimitError(LLMError):
@@ -47,9 +31,7 @@ class LLMRateLimitError(LLMError):
 
 
 class LLMServerError(LLMError):
-    """Provider-side 5xx / overloaded."""
-
-    retryable = True
+    retryable = Field(default=True, description="Provider-side 5xx / overloaded.")
 
 
 # --- Permanent: retrying will not help ---------------------------------------
