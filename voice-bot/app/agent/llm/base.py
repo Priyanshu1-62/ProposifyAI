@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncGenerator, Sequence
 
 from app.agent.llm.types import (
     GenerationParams,
@@ -41,7 +41,7 @@ class LLMProvider(ABC):
         messages: Sequence[Message],
         tools: Sequence[ToolSpec] = (),
         params: GenerationParams = GenerationParams(),
-    ) -> AsyncIterator[LLMEvent]:
+    ) -> AsyncGenerator[LLMEvent]:
 
         pass
     
